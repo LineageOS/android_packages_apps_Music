@@ -86,13 +86,12 @@ public class MediaPlaybackService extends Service {
     public static final String QUEUE_CHANGED = "com.android.music.queuechanged";
     public static final String PLAYBACK_COMPLETE = "com.android.music.playbackcomplete";
     public static final String ASYNC_OPEN_COMPLETE = "com.android.music.asyncopencomplete";
+    public static final String REFRESH_PROGRESSBAR = "com.android.music.refreshui";
 
     public static final String REPEAT_CHANGED = "com.android.music.repeatmodechanged";
     public static final String SHUFFLE_CHANGED = "com.android.music.shufflemodechanged";
     public static final String PROGRESSBAR_CHANGED = "com.android.music.progressbarchnaged";
     
-    public static final String REFRESH_PROGRESSBAR = "com.android.music.refreshui";
-
     public static final String SERVICECMD = "com.android.music.musicservicecommand";
     public static final String CMDNAME = "command";
     public static final String CMDTOGGLEPAUSE = "togglepause";
@@ -1987,6 +1986,7 @@ public class MediaPlaybackService extends Service {
                 // and allow the device to go to sleep.
                 // This temporary wakelock is released when the RELEASE_WAKELOCK
                 // message is processed, but just in case, put a timeout on it.
+                notifyChange(REFRESH_PROGRESSBAR);
                 mWakeLock.acquire(30000);
                 mHandler.sendEmptyMessage(TRACK_ENDED);
                 mHandler.sendEmptyMessage(RELEASE_WAKELOCK);

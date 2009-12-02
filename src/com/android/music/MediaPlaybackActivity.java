@@ -527,6 +527,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         f.addAction(MediaPlaybackService.META_CHANGED);
         f.addAction(MediaPlaybackService.PLAYBACK_COMPLETE);
         f.addAction(Intent.ACTION_BATTERY_CHANGED);
+        f.addAction(MediaPlaybackService.REFRESH_PROGRESSBAR);
         registerReceiver(mStatusListener, new IntentFilter(f));
         updateTrackInfo();
         long next = refreshNow();
@@ -543,7 +544,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     public void onResume() {
         super.onResume();
         updateTrackInfo();
-	setFullscreen();
+        setFullscreen();
         setPauseButtonImage();
     }
     
@@ -1318,8 +1319,8 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             long pos = mPosOverride < 0 ? mService.position() : mPosOverride;
             long remaining = 1000 - (pos % 1000);
             if ((pos >= 0) && (mDuration > 0)) {
-                mCurrentTime.setText(MusicUtils.makeTimeString(this, pos / 1000));
-                
+                mCurrentTime.setText(MusicUtils.makeTimeString(this, (pos + 500) / 1000));
+
                 if (mService.isPlaying()) {
                     mCurrentTime.setVisibility(View.VISIBLE);
                 } else {
@@ -1399,6 +1400,8 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             } else if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
             	int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
             	setPluggedIn(status);
+            } else if (action.equals(MediaPlaybackService.REFRESH_PROGRESSBAR)) {
+                refreshNow();
             }
         }
     };
