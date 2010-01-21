@@ -304,7 +304,7 @@ public class MediaPlaybackService extends Service {
     public void onDestroy() {
         // Check that we're not being destroyed while something is still playing.
         if (isPlaying()) {
-            Log.e("MediaPlaybackService", "Service being destroyed while still playing.");
+            Log.e(LOGTAG, "Service being destroyed while still playing.");
         }
         // release all MediaPlayer resources, including the native player and wakelocks
         mPlayer.release();
@@ -493,6 +493,9 @@ public class MediaPlaybackService extends Service {
             
             long seekpos = mPreferences.getLong("seekpos", 0);
             seek(seekpos >= 0 && seekpos < duration() ? seekpos : 0);
+            Log.d(LOGTAG, "restored queue, currently at position "
+                    + position() + "/" + duration()
+                    + " (requested " + seekpos + ")");
             
             int repmode = mPreferences.getInt("repeatmode", REPEAT_NONE);
             if (repmode != REPEAT_ALL && repmode != REPEAT_CURRENT) {
@@ -573,7 +576,12 @@ public class MediaPlaybackService extends Service {
             if (CMDNEXT.equals(cmd) || NEXT_ACTION.equals(action)) {
                 next(true);
             } else if (CMDPREVIOUS.equals(cmd) || PREVIOUS_ACTION.equals(action)) {
-                prev();
+                if (position() < 2000) {
+                    prev();
+                } else {
+                    seek(0);
+                    play();
+                }
             } else if (CMDTOGGLEPAUSE.equals(cmd) || TOGGLEPAUSE_ACTION.equals(action)) {
                 if (isPlaying()) {
                     pause();
@@ -1016,6 +1024,7 @@ public class MediaPlaybackService extends Service {
                     if (!mQuietMode) {
                         Toast.makeText(this, R.string.playback_failed, Toast.LENGTH_SHORT).show();
                     }
+                    Log.d(LOGTAG, "Failed to open file for playback");
                 }
             } else {
                 mOpenFailedCounter = 0;
@@ -1066,7 +1075,8 @@ public class MediaPlaybackService extends Service {
             status.flags |= Notification.FLAG_ONGOING_EVENT;
             status.icon = R.drawable.stat_notify_musicplayer;
             status.contentIntent = PendingIntent.getActivity(this, 0,
-                    new Intent("com.android.music.PLAYBACK_VIEWER"), 0);
+                    new Intent("com.android.music.PLAYBACK_VIEWER")
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), 0);
             startForeground(PLAYBACKSERVICE_STATUS, status);
             if (!mIsSupposedToBePlaying) {
                 mIsSupposedToBePlaying = true;
@@ -1197,6 +1207,7 @@ public class MediaPlaybackService extends Service {
             }
 
             if (mPlayListLen <= 0) {
+                Log.d(LOGTAG, "No play queue");
                 return;
             }
 
@@ -1546,6 +1557,9 @@ public class MediaPlaybackService extends Service {
             openCurrent();
             play();
             notifyChange(META_CHANGED);
+            if (mShuffleMode == SHUFFLE_AUTO) {
+                doAutoShuffleUpdate();
+            }
         }
     }
 
@@ -1771,6 +1785,7 @@ public class MediaPlaybackService extends Service {
                     mHandler.sendMessageDelayed(mHandler.obtainMessage(SERVER_DIED), 2000);
                     return true;
                 default:
+                    Log.d("MultiPlayer", "Error: " + what + "," + extra);
                     break;
                 }
                 return false;
