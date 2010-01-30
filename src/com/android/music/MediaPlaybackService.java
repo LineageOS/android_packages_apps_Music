@@ -86,6 +86,7 @@ public class MediaPlaybackService extends Service {
     public static final String SERVICECMD = "com.android.music.musicservicecommand";
     public static final String CMDNAME = "command";
     public static final String CMDTOGGLEPAUSE = "togglepause";
+    public static final String CMDUNPAUSE = "unpause";
     public static final String CMDSTOP = "stop";
     public static final String CMDPAUSE = "pause";
     public static final String CMDPREVIOUS = "previous";
@@ -247,6 +248,10 @@ public class MediaPlaybackService extends Service {
                 } else {
                     play();
                 }
+            } else if (CMDUNPAUSE.equals(cmd)) {
+            	if (!isPlaying()) {
+            		play();
+            	}
             } else if (CMDPAUSE.equals(cmd) || PAUSE_ACTION.equals(action)) {
                 pause();
             } else if (CMDSTOP.equals(cmd)) {

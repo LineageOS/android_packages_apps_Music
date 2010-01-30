@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings">
+
+    <CheckBoxPreference
+        android:key="screen_on_while_plugged_in"
+        android:defaultValue="false"
+        android:title="@string/screen_on_while_plugged_in_title"
+        android:summary="@string/screen_on_while_plugged_in_summary" />
+
+    <CheckBoxPreference
+        android:key="unpause_on_headset_plug"
+        android:defaultValue="false"
+        android:title="@string/unpause_on_headset_plug_title"
+        android:summary="@string/unpause_on_headset_plug_summary" />
+
+</PreferenceScreen>

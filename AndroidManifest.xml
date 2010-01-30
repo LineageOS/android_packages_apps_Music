@@ -22,6 +22,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
 
     <application android:icon="@drawable/app_music"
         android:label="@string/musicbrowserlabel"
@@ -226,6 +227,11 @@
         <activity android:name="WeekSelector" android:theme="@android:style/Theme.Dialog" />
         <activity android:name="DeleteItems" android:theme="@android:style/Theme.Dialog" />
         <activity android:name="ScanningProgress" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="MusicSettingsActivity" android:label="@string/settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
         <service android:name="MediaPlaybackService" android:exported="true" />
 
         <receiver android:name="MediaAppWidgetProvider">
