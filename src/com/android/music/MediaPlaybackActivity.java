@@ -36,6 +36,7 @@ import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaFile;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.Handler;
@@ -87,7 +88,8 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     private Toast mToast;
     private int mTouchSlop;
     private boolean mIntentDeRegistered = false;
-
+    private boolean pluggedIn;
+    
     public MediaPlaybackActivity()
     {
     }
@@ -159,6 +161,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         }
 
         mTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
+        
     }
     
     int mInitialX = -1;
@@ -503,6 +506,8 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         f.addAction(MediaPlaybackService.META_CHANGED);
         f.addAction(MediaPlaybackService.PLAYBACK_COMPLETE);
         f.addAction(MediaPlaybackService.REFRESH_PROGRESSBAR);
+        f.addAction(Intent.ACTION_BATTERY_CHANGED);
+        f.addAction(Intent.ACTION_HEADSET_PLUG);
         registerReceiver(mStatusListener, new IntentFilter(f));
 
         IntentFilter s = new IntentFilter();
@@ -559,6 +564,8 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                     .setIcon(R.drawable.ic_menu_set_as_ringtone);
             menu.add(1, DELETE_ITEM, 0, R.string.delete_item)
                     .setIcon(R.drawable.ic_menu_delete);
+            
+            menu.add(0, SETTINGS, 0, R.string.settings).setIcon(com.android.internal.R.drawable.ic_menu_preferences);
             return true;
         }
         return false;
@@ -635,7 +642,14 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                     }
                     return true;
                 }
-            }
+                
+                case SETTINGS:
+                    intent = new Intent();
+                    intent.setClass(this, MusicSettingsActivity.class);
+                    startActivityForResult(intent, SETTINGS);
+                    return true;
+                }
+            
         } catch (RemoteException ex) {
         }
         return super.onOptionsItemSelected(item);
@@ -1287,8 +1301,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                 updateTrackInfo();
                 long next = refreshNow();
                 queueNextRefresh(next);
-            }
-            else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+            } else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
                 paused = true;
 
                 if (!mIntentDeRegistered) {
@@ -1296,11 +1309,47 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                     unregisterReceiver(mStatusListener);
                     mIntentDeRegistered = true;
                 }
+            } else if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
+                int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
+                setPluggedIn(status);
+            } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                if (MusicUtils.getBooleanPref(context, MusicSettingsActivity.KEY_UNPAUSE_ON_HEADSET_PLUG, false)
+                        && "Headset".equals(intent.getStringExtra("name"))
+                        && intent.getIntExtra("state", 0) == 1) {
+                    Log.d(getClass().getSimpleName(), "Headset connected, resuming playback");
+                    if(mService != null) {
+                        try {
+                            if (!mService.isPlaying()) {
+                                mService.play();
+                            }
+                            refreshNow();
+                            setPauseButtonImage();
+                        } catch (RemoteException e) {
+                            // nothing
+                        }
+                    }
+                }
             }
         }
     };
 
-	private static class AlbumSongIdWrapper {
+    private void setPluggedIn(int status) {
+        
+        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_SCREEN_ON_WHILE_PLUGGED_IN, false)) {
+            if (!pluggedIn && (status == BatteryManager.BATTERY_STATUS_CHARGING
+                    || status == BatteryManager.BATTERY_STATUS_FULL
+                    || status == BatteryManager.BATTERY_PLUGGED_AC
+                    || status == BatteryManager.BATTERY_PLUGGED_USB)) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                pluggedIn = true;
+            } else if (pluggedIn) {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                pluggedIn = false;
+            }
+        }
+    }
+    
+    private static class AlbumSongIdWrapper {
         public long albumid;
         public long songid;
         AlbumSongIdWrapper(long aid, long sid) {

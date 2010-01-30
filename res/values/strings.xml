@@ -287,5 +287,17 @@
     
     <!-- The string used to describe Music as a searchable item within system search settings. -->
     <string name="search_settings_description">Artists, albums, and tracks</string>
+
+    <!-- Settings title -->
+    <string name="settings">Settings</string>
+
+    <!-- Setting for keeping screen on while plugged in -->
+    <string name="screen_on_while_plugged_in_title">Screen on while charging</string>
+    <string name="screen_on_while_plugged_in_summary">Keep the screen on while playing and plugged in</string>
+
+    <!-- Setting for auto-unpause when headset is plugged in -->
+    <string name="unpause_on_headset_plug_title">Unpause on connect</string>
+    <string name="unpause_on_headset_plug_summary">Unpause the player when a headset is connected</string>
+
 </resources>
 
