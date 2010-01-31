@@ -138,4 +138,14 @@
     <string name="gadget_track" msgid="3186569295893300114">"トラック<xliff:g id="TRACK_NUMBER">%d</xliff:g>"</string>
     <string name="fail_to_start_stream" msgid="3605390187703912835">"要求されたストリームを再生できませんでした。"</string>
     <string name="search_settings_description" msgid="6520975349259883368">"アーティスト、アルバム、トラック"</string>
+    <!-- Settings title -->
+    <string name="settings">設定</string>
+
+    <!-- Setting for keeping screen on while plugged in -->
+    <string name="screen_on_while_plugged_in_title">スリープモードにしない</string>
+    <string name="screen_on_while_plugged_in_summary">充電中に画面をスリープにしない</string>
+
+    <!-- Setting for auto-unpause when headset is plugged in -->
+    <string name="unpause_on_headset_plug_title">接続時に演奏停止しない</string>
+    <string name="unpause_on_headset_plug_summary">ヘッドセットの接続時に演奏停止しない</string>
 </resources>
