@@ -1164,7 +1164,7 @@ public class MusicUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         a.startActivity(intent);
         a.finish();
-        a.overridePendingTransition(0, 0);
+//      a.overridePendingTransition(0, 0);
     }
     
     static void updateNowPlaying(Activity a) {
