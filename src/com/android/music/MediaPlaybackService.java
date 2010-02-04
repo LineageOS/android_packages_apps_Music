@@ -118,6 +118,7 @@ public class MediaPlaybackService extends Service {
     private static final String LOGTAG = "MediaPlaybackService";
     private final Shuffler mRand = new Shuffler();
     private int mOpenFailedCounter = 0;
+    private static int mPrepareFailedCounter = 0;
     String[] mCursorCols = new String[] {
             "audio._id AS _id",             // index must match IDCOLIDX below
             MediaStore.Audio.Media.ARTIST,
@@ -1184,6 +1185,10 @@ public class MediaPlaybackService extends Service {
                 mPlayPos = pos.intValue();
             } else {
                 if (mPlayPos > 0) {
+                    while(mPrepareFailedCounter > 0){
+                          mPlayPos--;
+                          mPrepareFailedCounter--;
+                    }
                     mPlayPos--;
                 } else {
                     mPlayPos = mPlayListLen - 1;
@@ -1709,6 +1714,7 @@ public class MediaPlaybackService extends Service {
                 mMediaPlayer.prepare();
             } catch (IOException ex) {
                 // TODO: notify the user why the file couldn't be opened
+                mPrepareFailedCounter++;
                 mIsInitialized = false;
                 return;
             } catch (IllegalArgumentException ex) {
