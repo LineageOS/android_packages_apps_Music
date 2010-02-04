@@ -1786,6 +1786,11 @@ public class MediaPlaybackService extends Service {
                     return true;
                 default:
                     Log.d("MultiPlayer", "Error: " + what + "," + extra);
+                    mIsInitialized = false;
+                    mMediaPlayer.release();
+                    mMediaPlayer = new MediaPlayer();
+                    Toast.makeText(MediaPlaybackService.this, R.string.playback_failed, Toast.LENGTH_SHORT).show();
+                    next(false);
                     break;
                 }
                 return false;
