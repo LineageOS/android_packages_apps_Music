@@ -103,7 +103,6 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     private boolean mIntentDeRegistered = false;
     private GestureLibrary mLibrary;
 
-
     public MediaPlaybackActivity()
     {
     }
@@ -498,8 +497,13 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             } catch (RemoteException ex) {
             }
         }
-        mHandler.removeMessages(REFRESH);
-        unregisterReceiver(mStatusListener);
+
+        if (!mIntentDeRegistered) {
+            mHandler.removeMessages(REFRESH);
+            unregisterReceiver(mStatusListener);
+        }
+
+        unregisterReceiver(mScreenTimeoutListener);
         MusicUtils.unbindFromService(mToken);
         mService = null;
         super.onStop();
@@ -521,7 +525,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             // something went wrong
             mHandler.sendEmptyMessage(QUIT);
         }
-        
+
         IntentFilter f = new IntentFilter();
         f.addAction(MediaPlaybackService.PLAYSTATE_CHANGED);
         f.addAction(MediaPlaybackService.META_CHANGED);
@@ -529,6 +533,12 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         f.addAction(Intent.ACTION_BATTERY_CHANGED);
         f.addAction(MediaPlaybackService.REFRESH_PROGRESSBAR);
         registerReceiver(mStatusListener, new IntentFilter(f));
+
+        IntentFilter s = new IntentFilter();
+        s.addAction(Intent.ACTION_SCREEN_ON);
+        s.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mScreenTimeoutListener, new IntentFilter(s));
+
         updateTrackInfo();
         long next = refreshNow();
         queueNextRefresh(next);
@@ -545,6 +555,10 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         super.onResume();
         updateTrackInfo();
         setFullscreen();
+
+        if (mIntentDeRegistered) {
+            paused = false;
+        }
         setPauseButtonImage();
     }
     
@@ -1313,6 +1327,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     }
 
     private long refreshNow() {
+
         if(mService == null)
             return 500;
         try {
