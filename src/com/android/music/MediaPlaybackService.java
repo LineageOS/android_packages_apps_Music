@@ -139,6 +139,7 @@ public class MediaPlaybackService extends Service {
     private int mServiceStartId = -1;
     private boolean mServiceInUse = false;
     private boolean mResumeAfterCall = false;
+    private boolean mPausedInCall = false;
     private boolean mIsSupposedToBePlaying = false;
     private boolean mQuietMode = false;
     
@@ -161,11 +162,15 @@ public class MediaPlaybackService extends Service {
                 if (ringvolume > 0) {
                     mResumeAfterCall = (isPlaying() || mResumeAfterCall) && (getAudioId() >= 0);
                     pause();
+		    if(mResumeAfterCall)
+			mPausedInCall=true;
                 }
             } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
                 // pause the music while a conversation is in progress
                 mResumeAfterCall = (isPlaying() || mResumeAfterCall) && (getAudioId() >= 0);
                 pause();
+		if(mResumeAfterCall)
+		    mPausedInCall=true;
             } else if (state == TelephonyManager.CALL_STATE_IDLE) {
                 // start playing again
                 if (mResumeAfterCall) {
@@ -173,6 +178,7 @@ public class MediaPlaybackService extends Service {
                     // when the call was answered
                     startAndFadeIn();
                     mResumeAfterCall = false;
+                    mPausedInCall=false;
                 }
             }
         }
@@ -1126,6 +1132,10 @@ public class MediaPlaybackService extends Service {
             if (isPlaying()) {
                 mPlayer.pause();
                 gotoIdleState();
+                if(mPausedInCall) {
+                    mResumeAfterCall=false;
+                    mPausedInCall=false;
+                }
                 mIsSupposedToBePlaying = false;
                 notifyChange(PLAYSTATE_CHANGED);
                 saveBookmarkIfNeeded();
