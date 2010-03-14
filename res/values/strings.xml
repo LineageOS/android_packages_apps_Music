@@ -298,6 +298,10 @@
     <!-- Setting for auto-unpause when headset is plugged in -->
     <string name="unpause_on_headset_plug_title">Unpause on connect</string>
     <string name="unpause_on_headset_plug_summary">Unpause the player when a headset is connected</string>
+    
+    <!-- Setting for double tap trackball to skip song -->
+    <string name="doubletap_trackball_next_title">Use trackball to skip</string>
+    <string name="doubletap_trackball_next_summary">Double tap trackball while sleeping to skip song</string>
 
 </resources>
 

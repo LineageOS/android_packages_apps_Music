@@ -239,7 +239,15 @@ public class MediaPlaybackService extends Service {
             String action = intent.getAction();
             String cmd = intent.getStringExtra("command");
             if (CMDNEXT.equals(cmd) || NEXT_ACTION.equals(action)) {
-                next(true);
+                boolean trackballSource = intent.getBooleanExtra("trackball", false);
+                
+                // Trackball initiated, but preference not set
+                if (trackballSource && !MusicUtils.getBooleanPref(context, 
+                        MusicSettingsActivity.KEY_DOUBLETAP_TRACKBALL_SKIP, false)) {
+                    // Do nothing
+                }
+                else
+                    next(true);
             } else if (CMDPREVIOUS.equals(cmd) || PREVIOUS_ACTION.equals(action)) {
                 prev();
             } else if (CMDTOGGLEPAUSE.equals(cmd) || TOGGLEPAUSE_ACTION.equals(action)) {
@@ -1809,6 +1817,7 @@ public class MediaPlaybackService extends Service {
         public void setVolume(float vol) {
             mMediaPlayer.setVolume(vol, vol);
         }
+        
     }
 
     /*
