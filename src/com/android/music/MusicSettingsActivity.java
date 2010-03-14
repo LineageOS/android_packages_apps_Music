@@ -14,6 +14,8 @@ public class MusicSettingsActivity extends PreferenceActivity {
 	
 	static final String KEY_UNPAUSE_ON_HEADSET_PLUG = "unpause_on_headset_plug";
 	
+	static final String KEY_DOUBLETAP_TRACKBALL_SKIP = "doubletap_trackball_skip";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
