@@ -501,6 +501,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         f.addAction(MediaPlaybackService.PLAYBACK_COMPLETE);
         f.addAction(Intent.ACTION_BATTERY_CHANGED);
         f.addAction(Intent.ACTION_HEADSET_PLUG);
+        f.addAction(MediaPlaybackService.REFRESH_PROGRESSBAR);
         registerReceiver(mStatusListener, new IntentFilter(f));
         updateTrackInfo();
         long next = refreshNow();
@@ -1180,8 +1181,8 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             long pos = mPosOverride < 0 ? mService.position() : mPosOverride;
             long remaining = 1000 - (pos % 1000);
             if ((pos >= 0) && (mDuration > 0)) {
-                mCurrentTime.setText(MusicUtils.makeTimeString(this, pos / 1000));
-                
+                mCurrentTime.setText(MusicUtils.makeTimeString(this, (pos + 500) / 1000));
+
                 if (mService.isPlaying()) {
                     mCurrentTime.setVisibility(View.VISIBLE);
                 } else {
@@ -1278,6 +1279,8 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             			}
                     }
             	}
+            } else if (action.equals(MediaPlaybackService.REFRESH_PROGRESSBAR)) {
+                refreshNow();
             }
         }
     };
@@ -1349,7 +1352,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                 mAlbum.setVisibility(View.VISIBLE);
             }
             mDuration = mService.duration();
-            mTotalTime.setText(MusicUtils.makeTimeString(this, mDuration / 1000));
+            mTotalTime.setText(MusicUtils.makeTimeString(this, (mDuration + 500) / 1000));
         } catch (RemoteException ex) {
             finish();
         }
