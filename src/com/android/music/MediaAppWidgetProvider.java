@@ -26,6 +26,10 @@ import android.content.res.Resources;
 import android.os.Environment;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 /**
  * Simple widget to show currently playing album art along
@@ -110,6 +114,7 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
         }
     }
     
+
     /**
      * Update all active widget instances by pushing changes 
      */
@@ -119,6 +124,9 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
         
         CharSequence titleName = service.getTrackName();
         CharSequence artistName = service.getArtistName();
+	long albumId = service.getAlbumId();
+	long songId = service.getAudioId();
+	Bitmap bm = MusicUtils.getArtwork(service, songId, albumId);
         CharSequence errorState = null;
         
         // Format title string with track number, or show SD card message
@@ -136,12 +144,14 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
             // Show error state to user
             views.setViewVisibility(R.id.title, View.GONE);
             views.setTextViewText(R.id.artist, errorState);
+	    views.setImageViewResource(R.id.albumart, R.drawable.albumart_mp_unknown_list);
             
         } else {
             // No error, so show normal titles
             views.setViewVisibility(R.id.title, View.VISIBLE);
             views.setTextViewText(R.id.title, titleName);
             views.setTextViewText(R.id.artist, artistName);
+	    views.setImageViewBitmap(R.id.albumart, bm);
         }
         
         // Set correct drawable for pause state
@@ -195,5 +205,11 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
         pendingIntent = PendingIntent.getService(context,
                 0 /* no requestCode */, intent, 0 /* no flags */);
         views.setOnClickPendingIntent(R.id.control_next, pendingIntent);
+
+        intent = new Intent(MediaPlaybackService.PREVIOUS_ACTION);
+        intent.setComponent(serviceName);
+        pendingIntent = PendingIntent.getService(context,
+                0 /* no requestCode */, intent, 0 /* no flags */);
+        views.setOnClickPendingIntent(R.id.control_prev, pendingIntent);
     }
 }
