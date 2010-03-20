@@ -149,7 +149,7 @@
     <!-- label underneath icon used to indicate that the sd card is present, but currently unavailable -->
     <string name="sdcard_busy_title">SD card unavailable</string>
     <!-- label underneath icon used to indicate sd card is mounted to your computer via USB -->
-    <string name="sdcard_busy_message">Sorry, your SD card is busy.</string>
+    <string name="sdcard_busy_message">SD card is busy.</string>
     <!-- Title of screen when there was an error accessing the sd card -->
     <string name="sdcard_error_title">SD card error</string>
     <!-- label underneath icon used to indicate there was an error accessing the sd card -->
@@ -192,7 +192,7 @@
         <item quantity="other"><xliff:g id="number" example="27">%d</xliff:g> songs added to playlist.</item>
     </plurals>
     <!-- Toast after selecting an empty playlist -->
-    <string name="emptyplaylist">Selected playlist is empty.</string>
+    <string name="emptyplaylist">playlist empty.</string>
     <!-- Button name when saving a playlist -->
     <string name="create_playlist_create_text">Save</string>
     <!-- Button name when saving a playlist and the new playlist will overwrite an existing one -->
@@ -302,6 +302,13 @@
     <!-- Setting for double tap trackball to skip song -->
     <string name="doubletap_trackball_next_title">Use trackball to skip</string>
     <string name="doubletap_trackball_next_summary">Double tap trackball while sleeping to skip song</string>
+
+    <!-- Setting for Fullscreen Now Playing Screen -->
+    <string name="fullscreen_title">Now Playing Fullscreen</string>
+    <string name="fullscreen_summary">Now Playing screen will extend to the full size of your devices screen, and the notification bar will be hidden</string>
+
+    <!-- slash for curent time in audio player -->
+        <string name="slash"> / </string>
 
 </resources>
 

@@ -22,4 +22,10 @@
         android:title="@string/doubletap_trackball_next_title"
         android:summary="@string/doubletap_trackball_next_summary" />
 
+    <CheckBoxPreference
+        android:key="now_playing_fullscreen"
+        android:defaultValue="false"
+        android:title="@string/fullscreen_title"
+        android:summary="@string/fullscreen_summary" />
+
 </PreferenceScreen>

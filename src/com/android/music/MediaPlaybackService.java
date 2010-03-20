@@ -43,6 +43,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
+import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -83,6 +84,8 @@ public class MediaPlaybackService extends Service {
     public static final String PLAYBACK_COMPLETE = "com.android.music.playbackcomplete";
     public static final String ASYNC_OPEN_COMPLETE = "com.android.music.asyncopencomplete";
     public static final String REFRESH_PROGRESSBAR = "com.android.music.refreshui";
+    public static final String REPEAT_CHANGED = "com.android.music.repeatmodechanged";
+    public static final String SHUFFLE_CHANGED = "com.android.music.shufflemodechanged";
 
     public static final String SERVICECMD = "com.android.music.musicservicecommand";
     public static final String CMDNAME = "command";
@@ -92,11 +95,15 @@ public class MediaPlaybackService extends Service {
     public static final String CMDPAUSE = "pause";
     public static final String CMDPREVIOUS = "previous";
     public static final String CMDNEXT = "next";
+    public static final String CMDSHUFFLE = "shuffle";
+    public static final String CMDREPEAT = "repeat";
 
     public static final String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
     public static final String PAUSE_ACTION = "com.android.music.musicservicecommand.pause";
     public static final String PREVIOUS_ACTION = "com.android.music.musicservicecommand.previous";
     public static final String NEXT_ACTION = "com.android.music.musicservicecommand.next";
+    public static final String SHUFFLE_ACTION = "com.android.music.musicservicecommand.shuffle";
+    public static final String REPEAT_ACTION = "com.android.music.musicservicecommand.repeat";
 
     private static final int TRACK_ENDED = 1;
     private static final int RELEASE_WAKELOCK = 2;
@@ -150,9 +157,17 @@ public class MediaPlaybackService extends Service {
     private int mCardId;
     
     private MediaAppWidgetProvider mAppWidgetProvider = MediaAppWidgetProvider.getInstance();
+
+    private MediaAppWidgetProvider2 mAppWidgetProvider2 = MediaAppWidgetProvider2.getInstance();
+
+    private MediaAppWidgetProvider3 mAppWidgetProvider3 = MediaAppWidgetProvider3.getInstance();
+
+    private MediaAppWidgetProvider4 mAppWidgetProvider4 = MediaAppWidgetProvider4.getInstance();
     
     // interval after which we stop the service when idle
     private static final int IDLE_DELAY = 60000; 
+
+    private IMediaPlaybackService mService = null;
 
     private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
         @Override
@@ -241,6 +256,36 @@ public class MediaPlaybackService extends Service {
         }
     };
 
+    private void toggleShuffle() {
+            int shuffle = getShuffleMode();
+            if (shuffle == SHUFFLE_NONE) {
+                setShuffleMode(SHUFFLE_NORMAL);
+                if (getRepeatMode() == REPEAT_CURRENT) {
+                    setRepeatMode(REPEAT_ALL);
+                }
+            } else if (shuffle == SHUFFLE_NORMAL ||
+                    shuffle == SHUFFLE_AUTO) {
+                setShuffleMode(SHUFFLE_NONE);
+            } else {
+            }
+	notifyChange(SHUFFLE_CHANGED);
+    }
+    
+    private void cycleRepeat() {
+            int mode = getRepeatMode();
+            if (mode == REPEAT_NONE) {
+                setRepeatMode(REPEAT_ALL);
+            } else if (mode == REPEAT_ALL) {
+                setRepeatMode(REPEAT_CURRENT);
+                if (getShuffleMode() != SHUFFLE_NONE) {
+                    setShuffleMode(SHUFFLE_NONE);
+                }
+            } else {
+                setRepeatMode(REPEAT_NONE);
+            }
+	notifyChange(REPEAT_CHANGED);
+    }
+
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -273,11 +318,34 @@ public class MediaPlaybackService extends Service {
             } else if (CMDSTOP.equals(cmd)) {
                 pause();
                 seek(0);
+            } else if (CMDSHUFFLE.equals(cmd) || SHUFFLE_ACTION.equals(action)) {
+		toggleShuffle();
+            } else if (CMDREPEAT.equals(cmd) || REPEAT_ACTION.equals(action)) {
+		cycleRepeat();
             } else if (MediaAppWidgetProvider.CMDAPPWIDGETUPDATE.equals(cmd)) {
                 // Someone asked us to refresh a set of specific widgets, probably
                 // because they were just added.
                 int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
                 mAppWidgetProvider.performUpdate(MediaPlaybackService.this, appWidgetIds);
+		Log.d("MediaAppWidgetProvider1", "MediaAppWidgetProvider1 is recieving");
+            } else if (MediaAppWidgetProvider2.CMDAPPWIDGETUPDATE.equals(cmd)) {
+                // Someone asked us to refresh a set of specific widgets, probably
+                // because they were just added.
+                int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+                mAppWidgetProvider2.performUpdate(MediaPlaybackService.this, appWidgetIds);
+		Log.d("MediaAppWidgetProvider2", "MediaAppWidgetProvider2 is recieving");
+            } else if (MediaAppWidgetProvider3.CMDAPPWIDGETUPDATE.equals(cmd)) {
+                // Someone asked us to refresh a set of specific widgets, probably
+                // because they were just added.
+                int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+                mAppWidgetProvider3.performUpdate(MediaPlaybackService.this, appWidgetIds);
+		Log.d("MediaAppWidgetProvider3", "MediaAppWidgetProvider3 is recieving");
+            } else if (MediaAppWidgetProvider4.CMDAPPWIDGETUPDATE.equals(cmd)) {
+                // Someone asked us to refresh a set of specific widgets, probably
+                // because they were just added.
+                int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+                mAppWidgetProvider4.performUpdate(MediaPlaybackService.this, appWidgetIds);
+		Log.d("MediaAppWidgetProvider4", "MediaAppWidgetProvider4 is recieving");
             }
         }
     };
@@ -306,6 +374,8 @@ public class MediaPlaybackService extends Service {
         commandFilter.addAction(PAUSE_ACTION);
         commandFilter.addAction(NEXT_ACTION);
         commandFilter.addAction(PREVIOUS_ACTION);
+	commandFilter.addAction(SHUFFLE_ACTION);
+	commandFilter.addAction(REPEAT_ACTION);
         registerReceiver(mIntentReceiver, commandFilter);
         
         TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -613,6 +683,10 @@ public class MediaPlaybackService extends Service {
             } else if (CMDSTOP.equals(cmd)) {
                 pause();
                 seek(0);
+            } else if (CMDSHUFFLE.equals(cmd) || SHUFFLE_ACTION.equals(action)) {
+		toggleShuffle();
+            } else if (CMDREPEAT.equals(cmd) || REPEAT_ACTION.equals(action)) {
+		cycleRepeat();
             }
         }
         
@@ -749,6 +823,9 @@ public class MediaPlaybackService extends Service {
         
         // Share this notification directly with our widgets
         mAppWidgetProvider.notifyChange(this, what);
+        mAppWidgetProvider2.notifyChange(this, what);
+	mAppWidgetProvider3.notifyChange(this, what);
+        mAppWidgetProvider4.notifyChange(this, what);
     }
 
     private void ensurePlayListCapacity(int size) {

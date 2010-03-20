@@ -66,6 +66,15 @@ import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
+import android.graphics.ColorFilter;
+
 public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     View.OnTouchListener, View.OnLongClickListener
 {
@@ -530,6 +539,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     public void onResume() {
         super.onResume();
         updateTrackInfo();
+    	setFullscreen();
 
         if (mIntentDeRegistered) {
             paused = false;
@@ -1123,13 +1133,13 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         try {
             switch (mService.getRepeatMode()) {
                 case MediaPlaybackService.REPEAT_ALL:
-                    mRepeatButton.setImageResource(R.drawable.ic_mp_repeat_all_btn);
+                    mRepeatButton.setImageResource(R.drawable.repeat_all);
                     break;
                 case MediaPlaybackService.REPEAT_CURRENT:
-                    mRepeatButton.setImageResource(R.drawable.ic_mp_repeat_once_btn);
+                    mRepeatButton.setImageResource(R.drawable.repeat_once);
                     break;
                 default:
-                    mRepeatButton.setImageResource(R.drawable.ic_mp_repeat_off_btn);
+                    mRepeatButton.setImageResource(R.drawable.repeat_off);
                     break;
             }
         } catch (RemoteException ex) {
@@ -1140,13 +1150,13 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         try {
             switch (mService.getShuffleMode()) {
                 case MediaPlaybackService.SHUFFLE_NONE:
-                    mShuffleButton.setImageResource(R.drawable.ic_mp_shuffle_off_btn);
+                    mShuffleButton.setImageResource(R.drawable.shuffle_off);
                     break;
                 case MediaPlaybackService.SHUFFLE_AUTO:
-                    mShuffleButton.setImageResource(R.drawable.ic_mp_partyshuffle_on_btn);
+                    mShuffleButton.setImageResource(R.drawable.party_shuffle);
                     break;
                 default:
-                    mShuffleButton.setImageResource(R.drawable.ic_mp_shuffle_on_btn);
+                    mShuffleButton.setImageResource(R.drawable.shuffle_on);
                     break;
             }
         } catch (RemoteException ex) {
@@ -1156,9 +1166,9 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     private void setPauseButtonImage() {
         try {
             if (mService != null && mService.isPlaying()) {
-                mPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+                mPauseButton.setImageResource(R.drawable.pause_button);
             } else {
-                mPauseButton.setImageResource(android.R.drawable.ic_media_play);
+                mPauseButton.setImageResource(R.drawable.play_button);
             }
         } catch (RemoteException ex) {
         }
@@ -1278,10 +1288,55 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                 setPauseButtonImage();
             } else if (action.equals(MediaPlaybackService.REFRESH_PROGRESSBAR)) {
                 refreshNow();
+            } else if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
+                int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
+                setPluggedIn(status);
+            } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                if (MusicUtils.getBooleanPref(context, MusicSettingsActivity.KEY_UNPAUSE_ON_HEADSET_PLUG, false)
+                        && "Headset".equals(intent.getStringExtra("name"))
+                        && intent.getIntExtra("state", 0) == 1) {
+                    Log.d(getClass().getSimpleName(), "Headset connected, resuming playback");
+                    if(mService != null) {
+                        try {
+                            if (!mService.isPlaying()) {
+                                mService.play();
+                            }
+                            refreshNow();
+                            setPauseButtonImage();
+                        } catch (RemoteException e) {
+                            // nothing
+                        }
+                    }
+                }
             }
         }
     };
 
+    private void setFullscreen() {
+        
+        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_NOW_PLAYING_FULLSCREEN, false)) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+    }
+
+    private void setPluggedIn(int status) {
+        
+        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_SCREEN_ON_WHILE_PLUGGED_IN, false)) {
+            if (!pluggedIn && (status == BatteryManager.BATTERY_STATUS_CHARGING
+                    || status == BatteryManager.BATTERY_STATUS_FULL
+                    || status == BatteryManager.BATTERY_PLUGGED_AC
+                    || status == BatteryManager.BATTERY_PLUGGED_USB)) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                pluggedIn = true;
+            } else if (pluggedIn) {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                pluggedIn = false;
+            }
+        }
+    }
+    
     private BroadcastReceiver mScreenTimeoutListener = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -1309,46 +1364,10 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                     unregisterReceiver(mStatusListener);
                     mIntentDeRegistered = true;
                 }
-            } else if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
-                int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
-                setPluggedIn(status);
-            } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
-                if (MusicUtils.getBooleanPref(context, MusicSettingsActivity.KEY_UNPAUSE_ON_HEADSET_PLUG, false)
-                        && "Headset".equals(intent.getStringExtra("name"))
-                        && intent.getIntExtra("state", 0) == 1) {
-                    Log.d(getClass().getSimpleName(), "Headset connected, resuming playback");
-                    if(mService != null) {
-                        try {
-                            if (!mService.isPlaying()) {
-                                mService.play();
-                            }
-                            refreshNow();
-                            setPauseButtonImage();
-                        } catch (RemoteException e) {
-                            // nothing
-                        }
-                    }
-                }
-            }
+           }
         }
     };
 
-    private void setPluggedIn(int status) {
-        
-        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_SCREEN_ON_WHILE_PLUGGED_IN, false)) {
-            if (!pluggedIn && (status == BatteryManager.BATTERY_STATUS_CHARGING
-                    || status == BatteryManager.BATTERY_STATUS_FULL
-                    || status == BatteryManager.BATTERY_PLUGGED_AC
-                    || status == BatteryManager.BATTERY_PLUGGED_USB)) {
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                pluggedIn = true;
-            } else if (pluggedIn) {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                pluggedIn = false;
-            }
-        }
-    }
-    
     private static class AlbumSongIdWrapper {
         public long albumid;
         public long songid;
@@ -1477,5 +1496,58 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             mLooper.quit();
         }
     }
-}
+    /** 
+     * wallpaper in background
+     */
+    static private class FastBitmapDrawable extends Drawable {
+        private Bitmap mBitmap;
+        private int mOpacity;
 
+        private FastBitmapDrawable(Bitmap bitmap) {
+            mBitmap = bitmap;
+            mOpacity = mBitmap.hasAlpha() ? PixelFormat.TRANSLUCENT : PixelFormat.OPAQUE;   
+        }
+
+        @Override
+        public void draw(Canvas canvas) {
+            canvas.drawBitmap(
+                    mBitmap,
+                    (getBounds().width() - mBitmap.getWidth()) / 2,
+                    (getBounds().height() - mBitmap.getHeight()) / 2,
+                    null);
+        }
+
+        @Override
+        public int getOpacity() {
+            return mOpacity;
+        }
+
+        @Override
+        public void setAlpha(int alpha) {
+        }
+
+        @Override
+        public void setColorFilter(ColorFilter cf) {
+        }
+
+        @Override
+        public int getIntrinsicWidth() {
+            return mBitmap.getWidth();
+        }
+
+        @Override
+        public int getIntrinsicHeight() {   
+            return mBitmap.getHeight();
+        }
+
+        @Override
+        public int getMinimumWidth() {  
+            return mBitmap.getWidth();
+        }   
+
+        @Override   
+        public int getMinimumHeight() { 
+            return mBitmap.getHeight(); 
+        }   
+    }
+}
