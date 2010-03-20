@@ -124,9 +124,9 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
         
         CharSequence titleName = service.getTrackName();
         CharSequence artistName = service.getArtistName();
-	long albumId = service.getAlbumId();
-	long songId = service.getAudioId();
-	Bitmap bm = MusicUtils.getArtwork(service, songId, albumId);
+        long albumId = service.getAlbumId();
+        long songId = service.getAudioId();
+        Bitmap bm = MusicUtils.getArtwork(service, songId, albumId);
         CharSequence errorState = null;
         
         // Format title string with track number, or show SD card message
@@ -144,14 +144,14 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
             // Show error state to user
             views.setViewVisibility(R.id.title, View.GONE);
             views.setTextViewText(R.id.artist, errorState);
-	    views.setImageViewResource(R.id.albumart, R.drawable.albumart_mp_unknown_list);
+            views.setImageViewResource(R.id.albumart, R.drawable.albumart_mp_unknown_list);
             
         } else {
             // No error, so show normal titles
             views.setViewVisibility(R.id.title, View.VISIBLE);
             views.setTextViewText(R.id.title, titleName);
             views.setTextViewText(R.id.artist, artistName);
-	    views.setImageViewBitmap(R.id.albumart, bm);
+            views.setImageViewBitmap(R.id.albumart, bm);
         }
         
         // Set correct drawable for pause state
