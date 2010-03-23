@@ -138,4 +138,18 @@
     <string name="gadget_track" msgid="3186569295893300114">"Stopa <xliff:g id="TRACK_NUMBER">%d</xliff:g>"</string>
     <string name="fail_to_start_stream" msgid="3605390187703912835">"Přehrání požadovaného datového proudu se nezdařilo."</string>
     <string name="search_settings_description" msgid="6520975349259883368">"Interpreti, alba a stopy"</string>
+ <!-- Settings title -->
+    <string name="settings">Nastavení</string>
+
+    <!-- Setting for keeping screen on while plugged in -->
+    <string name="screen_on_while_plugged_in_title">Zapnutá obrazovka</string>
+    <string name="screen_on_while_plugged_in_summary">Obrazovka bude stále zapnutá při přehrávání s nabíječkou</string>
+
+    <!-- Setting for auto-unpause when headset is plugged in -->
+    <string name="unpause_on_headset_plug_title">Pokračování při připojení</string>
+    <string name="unpause_on_headset_plug_summary">Po připojení sluchátek se pokračuje v přehrávání pozastavené skladby</string>
+
+    <!-- Setting for double tap trackball to skip song -->
+    <string name="doubletap_trackball_next_title">Použít trackball k přeskočení</string>
+    <string name="doubletap_trackball_next_summary">Dvakrát stisknout trackball při vypnuté obrazovce pro přeskočení skladby</string>
 </resources>
