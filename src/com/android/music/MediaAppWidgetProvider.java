@@ -151,7 +151,11 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
             views.setViewVisibility(R.id.title, View.VISIBLE);
             views.setTextViewText(R.id.title, titleName);
             views.setTextViewText(R.id.artist, artistName);
-            views.setImageViewBitmap(R.id.albumart, bm);
+            if (bm == null) {
+                views.setImageViewResource(R.id.albumart, R.drawable.albumart_mp_unknown_list);
+            } else {
+                views.setImageViewBitmap(R.id.albumart, bm);
+            }
         }
         
         // Set correct drawable for pause state
