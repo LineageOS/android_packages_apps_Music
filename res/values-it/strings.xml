@@ -138,4 +138,22 @@
     <string name="gadget_track" msgid="3186569295893300114">"Traccia <xliff:g id="TRACK_NUMBER">%d</xliff:g>"</string>
     <string name="fail_to_start_stream" msgid="3605390187703912835">"Impossibile riprodurre lo stream richiesto."</string>
     <string name="search_settings_description" msgid="6520975349259883368">"Artisti, album e tracce"</string>
+
+    
+    <!-- Settings title -->
+    <string name="settings">Impostazioni</string>
+
+    <!-- Setting for keeping screen on while plugged in -->
+    <string name="screen_on_while_plugged_in_title">Schermo acceso</string>
+    <string name="screen_on_while_plugged_in_summary">Tieni lo schermo acceso durante la riproduzione se il telefono è in carica</string>
+
+    <!-- Setting for auto-unpause when headset is plugged in -->
+    <string name="unpause_on_headset_plug_title">Togli pausa</string>
+    <string name="unpause_on_headset_plug_summary">Avvia la riproduzione automaticamente quando connetti gli auricolari</string>
+
+    <!-- Setting for double tap trackball to skip song -->
+    <string name="doubletap_trackball_next_title">Skip con trackball</string>
+    <string name="doubletap_trackball_next_summary">Premi due volte la trackball quando in standby per lo skip</string>
 </resources>
+
+

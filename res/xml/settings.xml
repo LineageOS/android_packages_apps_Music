@@ -15,5 +15,11 @@
         android:defaultValue="false"
         android:title="@string/unpause_on_headset_plug_title"
         android:summary="@string/unpause_on_headset_plug_summary" />
+    
+    <CheckBoxPreference
+        android:key="doubletap_trackball_skip"
+        android:defaultValue="false"
+        android:title="@string/doubletap_trackball_next_title"
+        android:summary="@string/doubletap_trackball_next_summary" />
 
 </PreferenceScreen>
