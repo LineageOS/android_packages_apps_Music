@@ -924,9 +924,13 @@ public class MediaPlaybackService extends Service {
                 return;
             }
             stop(false);
-
-            String id = String.valueOf(mPlayList[mPlayPos]);
-            
+            String id = " ";
+            try {
+                id = String.valueOf(mPlayList[mPlayPos]);
+            }
+            catch (ArrayIndexOutOfBoundsException ex) {
+                  return;
+            }
             mCursor = getContentResolver().query(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     mCursorCols, "_id=" + id , null, null);
