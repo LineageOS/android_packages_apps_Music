@@ -118,7 +118,7 @@ public class MediaPlaybackService extends Service {
     private static final String LOGTAG = "MediaPlaybackService";
     private final Shuffler mRand = new Shuffler();
     private int mOpenFailedCounter = 0;
-    private static int mPrepareFailedCounter = 0;
+    private static boolean mPlayPrev = false;
     String[] mCursorCols = new String[] {
             "audio._id AS _id",             // index must match IDCOLIDX below
             MediaStore.Audio.Media.ARTIST,
@@ -1027,7 +1027,11 @@ public class MediaPlaybackService extends Service {
                 stop(true);
                 if (mOpenFailedCounter++ < 10 &&  mPlayListLen > 1) {
                     // beware: this ends up being recursive because next() calls open() again.
-                    next(false);
+                    if(mPlayPrev == true){
+                        prev();
+                    } else {
+                        next(false);
+                    }
                 }
                 if (! mPlayer.isInitialized() && mOpenFailedCounter != 0) {
                     // need to make sure we only shows this once
@@ -1188,6 +1192,7 @@ public class MediaPlaybackService extends Service {
                 play();
                 return;
             }
+            mPlayPrev = true;
             if (mShuffleMode == SHUFFLE_NORMAL) {
                 // go to previously-played track and remove it from the history
                 int histsize = mHistory.size();
@@ -1199,10 +1204,6 @@ public class MediaPlaybackService extends Service {
                 mPlayPos = pos.intValue();
             } else {
                 if (mPlayPos > 0) {
-                    while(mPrepareFailedCounter > 0){
-                          mPlayPos--;
-                          mPrepareFailedCounter--;
-                    }
                     mPlayPos--;
                 } else {
                     mPlayPos = mPlayListLen - 1;
@@ -1238,7 +1239,7 @@ public class MediaPlaybackService extends Service {
             if (mHistory.size() > MAX_HISTORY_SIZE) {
                 mHistory.removeElementAt(0);
             }
-
+            mPlayPrev = false;
             if (mShuffleMode == SHUFFLE_NORMAL) {
                 // Pick random next track from the not-yet-played ones
                 // TODO: make it work right after adding/removing items in the queue.
@@ -1730,7 +1731,6 @@ public class MediaPlaybackService extends Service {
                 mMediaPlayer.prepare();
             } catch (IOException ex) {
                 // TODO: notify the user why the file couldn't be opened
-                mPrepareFailedCounter++;
                 mIsInitialized = false;
                 return;
             } catch (IllegalArgumentException ex) {
