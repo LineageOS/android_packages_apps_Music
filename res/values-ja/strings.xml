@@ -138,14 +138,24 @@
     <string name="gadget_track" msgid="3186569295893300114">"トラック<xliff:g id="TRACK_NUMBER">%d</xliff:g>"</string>
     <string name="fail_to_start_stream" msgid="3605390187703912835">"要求されたストリームを再生できませんでした。"</string>
     <string name="search_settings_description" msgid="6520975349259883368">"アーティスト、アルバム、トラック"</string>
+
     <!-- Settings title -->
     <string name="settings">設定</string>
 
     <!-- Setting for keeping screen on while plugged in -->
-    <string name="screen_on_while_plugged_in_title">スリープモードにしない</string>
-    <string name="screen_on_while_plugged_in_summary">充電中に画面をスリープにしない</string>
+    <string name="screen_on_while_plugged_in_title">充電中はスクリーンオン</string>
+    <string name="screen_on_while_plugged_in_summary">充電中の再生ではスクリーンを消さない</string>
 
     <!-- Setting for auto-unpause when headset is plugged in -->
-    <string name="unpause_on_headset_plug_title">接続時に演奏停止しない</string>
-    <string name="unpause_on_headset_plug_summary">ヘッドセットの接続時に演奏停止しない</string>
+    <string name="unpause_on_headset_plug_title">接続時にポーズを解除</string>
+    <string name="unpause_on_headset_plug_summary">ヘッドフォンが接続されたらポーズを解除する</string>
+    
+    <!-- Setting for double tap trackball to skip song -->
+    <string name="doubletap_trackball_next_title">トラックボールでスキップ</string>
+    <string name="doubletap_trackball_next_summary">スリープ中トラックボールダブルタップで曲をスキップする</string>
+
+    <!-- Setting for Fullscreen Now Playing Screen -->
+    <string name="fullscreen_title">フルスクリーンで再生</string>
+    <string name="fullscreen_summary">ステータスバーを隠し、端末の画面いっぱいに現在再生中の曲を表示する</string>
+
 </resources>
