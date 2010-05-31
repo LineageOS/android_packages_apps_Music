@@ -138,4 +138,23 @@
     <string name="gadget_track" msgid="3186569295893300114">"Track <xliff:g id="TRACK_NUMBER">%d</xliff:g>"</string>
     <string name="fail_to_start_stream" msgid="3605390187703912835">"Der angeforderte Stream konnte nicht wiedergegeben werden."</string>
     <string name="search_settings_description" msgid="6520975349259883368">"Interpreten, Alben und Tracks"</string>
+
+    <!-- Settings title -->
+    <string name="settings">Einstellungen</string>
+
+    <!-- Setting for keeping screen on while plugged in -->
+    <string name="screen_on_while_plugged_in_title">Display aktiv beim Laden</string>
+    <string name="screen_on_while_plugged_in_summary">Display aktiv lassen während Wiedergabe und Laden</string>
+
+    <!-- Setting for auto-unpause when headset is plugged in -->
+    <string name="unpause_on_headset_plug_title">Fortsetzen bei KH-Anschluss</string>
+    <string name="unpause_on_headset_plug_summary">Wiedergabe fortsetzen, wenn Kopfhörer angeschlossen wurden</string>
+
+    <!-- Setting for double tap trackball to skip song -->
+    <string name="doubletap_trackball_next_title">Trackball zum überspringen</string>
+    <string name="doubletap_trackball_next_summary">Trackball während Ruhemodus doppelt drücken, um Titel zu überspringen</string>
+
+    <!-- Setting for Fullscreen Now Playing Screen -->
+    <string name="fullscreen_title">Aktuelle Wiedergabe Vollbild</string>
+    <string name="fullscreen_summary">Aktuelle Wiedergabe zu Vollbild erweitern und Benachrichtigungsanzeige verbergen</string>
 </resources>
