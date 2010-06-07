@@ -75,8 +75,18 @@ import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.ColorFilter;
 
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.Prediction;
+import android.gesture.GestureOverlayView.OnGesturePerformedListener;
+
+import java.util.ArrayList;
+
+
 public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
-    View.OnTouchListener, View.OnLongClickListener
+    View.OnTouchListener, View.OnLongClickListener, OnGesturePerformedListener
 {
     private static final int USE_AS_RINGTONE = CHILD_MENU_BASE;
     
@@ -98,7 +108,9 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     private int mTouchSlop;
     private boolean mIntentDeRegistered = false;
     private boolean pluggedIn;
-    
+    private GestureLibrary mLibrary;
+
+
     public MediaPlaybackActivity()
     {
     }
@@ -115,6 +127,21 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.audio_player);
+
+	// Gestures Code
+	mLibrary = GestureLibraries.fromRawResource(this, R.raw.music);
+	if (!mLibrary.load()) {
+	    finish();
+	}
+
+	GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.gestures);
+	gestures.addOnGesturePerformedListener(this);
+
+        // wallpaper as backround image obsolite	
+        //Window window = getWindow();
+        //final BitmapDrawable drawable = (BitmapDrawable) getWallpaper();	
+        //window.setBackgroundDrawable(
+        //        new FastBitmapDrawable(drawable.getBitmap()));
 
         mCurrentTime = (TextView) findViewById(R.id.currenttime);
         mTotalTime = (TextView) findViewById(R.id.totaltime);
@@ -900,7 +927,85 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         }
         return super.onKeyDown(keyCode, event);
     }
-    
+
+	// gestures code
+
+	public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_ENABLE_GESTURES, false)) {
+		overlay.setGestureVisible(true);
+		ArrayList<Prediction> predictions = mLibrary.recognize(gesture);
+
+		if (predictions.size() > 0) {
+			Prediction prediction = predictions.get(0);
+			if (prediction.score > 1.0) {
+				String what = predictions.get(0).name;
+				if ("play".equals(what)) {
+				        try {
+				            if(mService != null) {
+				                if (mService.isPlaying()) {
+				                    mService.pause();
+						Toast.makeText(this, "Pause", Toast.LENGTH_SHORT).show();
+				                } else {
+				                    mService.play();
+						Toast.makeText(this, "Play", Toast.LENGTH_SHORT).show();
+				                }
+				                refreshNow();
+				                setPauseButtonImage();
+				            }
+				        } catch (RemoteException ex) {
+				        }
+				} else if ("play2".equals(what)) {
+				        try {
+				            if(mService != null) {
+				                if (mService.isPlaying()) {
+				                    mService.pause();
+						Toast.makeText(this, "Pause", Toast.LENGTH_SHORT).show();
+				                } else {
+				                    mService.play();
+						Toast.makeText(this, "Play", Toast.LENGTH_SHORT).show();
+				                }
+				                refreshNow();
+				                setPauseButtonImage();
+				            }
+				        } catch (RemoteException ex) {
+				        }
+				} else if ("next".equals(what)) {
+			            if (mService == null) return;
+				            try {
+			                mService.next();
+			            } catch (RemoteException ex) {
+			            }
+					Toast.makeText(this, "Next Track", Toast.LENGTH_SHORT).show();
+				} else if ("previous".equals(what)) {
+			            if (mService == null) return;
+				            try {
+			                    mService.prev();
+					    Toast.makeText(this, "Previous Track", Toast.LENGTH_SHORT).show();
+			            } catch (RemoteException ex) {
+			            }
+				} else if ("restart".equals(what)) {
+			            if (mService == null) return;
+				            try {
+			                    mService.seek(0);
+			                    mService.play();
+					    Toast.makeText(this, "Restart Track", Toast.LENGTH_SHORT).show();
+			            } catch (RemoteException ex) {
+			            }
+				} else if ("repeat".equals(what)) {
+					cycleRepeat();
+				} else if ("shuffle".equals(what)) {
+					toggleShuffle();
+				} else if ("shuffle2".equals(what)) {
+					toggleShuffle();
+				}
+
+			}
+		}
+	} else {
+	overlay.setGestureVisible(false);
+	}
+	}
+
     private void scanBackward(int repcnt, long delta) {
         if(mService == null) return;
         try {
@@ -1455,7 +1560,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             }
         }
     }
-    
+
     private static class Worker implements Runnable {
         private final Object mLock = new Object();
         private Looper mLooper;

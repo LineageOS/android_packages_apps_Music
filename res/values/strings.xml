@@ -307,6 +307,41 @@
     <string name="fullscreen_title">Now Playing Fullscreen</string>
     <string name="fullscreen_summary">Now Playing screen will extend to the full size of your devices screen, and the notification bar will be hidden</string>
 
+    <!-- Setting for Fullscreen Now Playing Screen -->
+    <string name="enable_gestures_title">Enable Gesture Control</string>
+    <string name="enable_gestures_summary">Enable Music Control via Gestures</string>
+
+    <!-- Gesture Explainations -->  
+    <string name="gestures_list_title">Gestures</string>
+    <string name="gestures_list_summary">diagram and description of all avaliable gestures</string>
+
+    <string name="play_pause_title">Play/Pause</string>
+    <string name="play_pause_summary"> draw to toggle Play/Pause</string>
+
+    <string name="next_title">Next Track</string>
+    <string name="next_summary">swipe right for Next Track</string>
+
+    <string name="prev_restart_title">Previous/Restart Track</string>
+    <string name="prev_restart_summary">swipe left to got to Previous Track or restart current Track</string>
+
+    <string name="repeat_title">Toggle Repeat Mode</string>
+    <string name="repeat_summary">draw to toggle between all 3 repeat modes</string>
+
+    <string name="shuffle_title">Toggle Shuffle Mode</string>
+    <string name="shuffle_summary">draw to toggle shuffle on and off</string>
+
+    <!-- Credits -->    
+    <string name="credits">About and Credits</string>
+    <string name="credits_mod_name">Music Mod</string>
+    <string name="credits_mod_name_summary">Eliot Stocker</string>
+    <string name="credits_mod_version">Version</string>
+    <string name="credits_mod_version_summary">1.6</string>
+    <string name="credits_mod_credits">Credits</string>
+    <string name="credits_mod_credits_summary">Cyanogen, Dan Josiah, AOSP and all others.</string>
+
+    <!-- alphaben for fast scroll -->
+    <string name="fast_scroll_music_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+
     <!-- slash for curent time in audio player -->
         <string name="slash"> / </string>
 

@@ -28,4 +28,52 @@
         android:title="@string/fullscreen_title"
         android:summary="@string/fullscreen_summary" />
 
+    <CheckBoxPreference
+        android:key="enable_gestures"
+        android:defaultValue="false"
+        android:title="@string/enable_gestures_title"
+        android:summary="@string/enable_gestures_summary" />
+
+<!-- need to add a screen with a list all gestures and pics -->
+    <PreferenceScreen
+        android:key="gestures_list"
+        android:title="@string/gestures_list_title"
+	android:summary="@string/gestures_list_summary"
+	android:dependency="enable_gestures">
+	<Preference
+	android:key="playPause"
+	android:layout="@layout/play_pause_layout"/>
+	<Preference
+	android:key="next"
+	android:layout="@layout/next_layout"/>
+	<Preference
+	android:key="prevRestart"
+	android:layout="@layout/prev_restart_layout"/>
+	<Preference
+	android:key="shuffle"
+	android:layout="@layout/shuffle_layout"/>
+	<Preference
+	android:key="repeat"
+	android:layout="@layout/repeat_layout"/>
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        android:key="credits"
+        android:title="@string/credits"> 
+        <Preference
+            android:key="mod_name"
+            android:title="@string/credits_mod_name"
+            android:summary="@string/credits_mod_name_summary"
+            android:enabled="false" />
+        <Preference
+            android:key="mod_version"
+            android:title="@string/credits_mod_version"
+            android:summary="@string/credits_mod_version_summary"
+            android:enabled="false" />
+        <Preference
+            android:key="mod_credits"
+            android:title="@string/credits_mod_credits"
+            android:summary="@string/credits_mod_credits_summary"
+            android:enabled="false" />
+    </PreferenceScreen>
 </PreferenceScreen>

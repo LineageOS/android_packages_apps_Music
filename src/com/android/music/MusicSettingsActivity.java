@@ -17,6 +17,8 @@ public class MusicSettingsActivity extends PreferenceActivity {
 	static final String KEY_DOUBLETAP_TRACKBALL_SKIP = "doubletap_trackball_skip";
 
 	static final String KEY_NOW_PLAYING_FULLSCREEN = "now_playing_fullscreen";
+
+	static final String KEY_ENABLE_GESTURES = "enable_gestures";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
