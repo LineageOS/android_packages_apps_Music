@@ -152,11 +152,40 @@
     
     <!-- Setting for double tap trackball to skip song -->
     <string name="doubletap_trackball_next_title">Skip con trackball</string>
-    <string name="doubletap_trackball_next_summary">Premi due volte la trackball durante lo standy per saltare la canzone</string>
+    <string name="doubletap_trackball_next_summary">Premi due volte la trackball durante lo standby per saltare la canzone</string>
 
     <!-- Setting for Fullscreen Now Playing Screen -->
     <string name="fullscreen_title">Schermo intero</string>
-    <string name="fullscreen_summary">La schermata In Riproduzione si estenderà a schermo intero nascondeno la barra delle notifiche</string>
+    <string name="fullscreen_summary">La schermata In Riproduzione si estenderà a schermo intero nascondendo la barra delle notifiche</string>
+
+    <!-- Setting for Fullscreen Now Playing Screen -->
+    <string name="enable_gestures_title">Attiva Gestures</string>
+    <string name="enable_gestures_summary">Controlla il player musicale tramite gesture</string>
+
+    <!-- Gesture Explainations -->  
+    <string name="gestures_list_title">Gestures</string>
+    <string name="gestures_list_summary">Descrizione delle gesture disponibili</string>
+
+    <string name="play_pause_title">Play/Pause</string>
+    <string name="play_pause_summary">disegna per Play/Pause</string>
+
+    <string name="next_title">Canzone successiva</string>
+    <string name="next_summary">swipe a destra per passare alla canzone successiva</string>
+
+    <string name="prev_restart_title">Rinizia/Torna alla precednte</string>
+    <string name="prev_restart_summary">swipe a sinistra per tornare alla canzone precedente o riniziare quella in riproduzione</string>
+
+    <string name="repeat_title">Attiva/Disattiva Ripetizione</string>
+    <string name="repeat_summary">disegna per passare tra le 3 modalità di ripetizione</string>
+
+    <string name="shuffle_title">Attiva/Disattiva Shuffle</string>
+    <string name="shuffle_summary">disegna per attivare o disattivare la riproduzione casuale</string>
+
+    <!-- Credits -->    
+    <string name="credits">Info e crediti</string>
+    <string name="credits_mod_version">Versione</string>
+    <string name="credits_mod_credits">Crediti</string>
+    <string name="credits_mod_credits_summary">Cyanogen, Dan Josiah, AOSP and all others.</string>
 
     <!-- slash for curent time in audio player -->
         <string name="slash"> / </string>
