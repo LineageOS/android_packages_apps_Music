@@ -158,4 +158,32 @@
     <string name="fullscreen_title">フルスクリーンで再生</string>
     <string name="fullscreen_summary">ステータスバーを隠し、端末の画面いっぱいに現在再生中の曲を表示する</string>
 
+    <!-- Setting for Fullscreen Now Playing Screen -->
+    <string name="enable_gestures_title">ジェスチャーコントロール</string>
+    <string name="enable_gestures_summary">ジェスチャーで再生をコントロールする</string>
+
+    <!-- Gesture Explainations -->  
+    <string name="gestures_list_title">ジェスチャー</string>
+    <string name="gestures_list_summary">利用できるジェスチャーの一覧と説明</string>
+
+    <string name="play_pause_title">再生/停止</string>
+    <string name="play_pause_summary">再生と停止をトグルするジェスチャー</string>
+
+    <string name="next_title">次の曲</string>
+    <string name="next_summary">右へスワイプして次の曲へ進む</string>
+
+    <string name="prev_restart_title">前の曲/リスタート</string>
+    <string name="prev_restart_summary">左へスワイプして前の曲へ戻る、または現在の曲を最初からスタート</string>
+
+    <string name="repeat_title">リピートモードのトグル</string>
+    <string name="repeat_summary">3つのリピートモードをトグルするジェスチャー</string>
+
+    <string name="shuffle_title">シャッフルモードのトグル</string>
+    <string name="shuffle_summary">シャッフルモードをオン/オフするジェスチャー</string>
+
+    <!-- Credits -->    
+    <string name="credits">クレジット・情報</string>
+    <string name="credits_mod_version">バージョン</string>
+    <string name="credits_mod_credits">クレジット</string>
+
 </resources>
