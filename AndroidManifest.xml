@@ -25,6 +25,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application android:icon="@drawable/app_music"
         android:label="@string/musicbrowserlabel"
@@ -62,12 +64,11 @@
              recents since this is accessible through a notification when
              appropriate. -->
         <activity android:name="com.android.music.MediaPlaybackActivity"
-                android:theme="@android:style/Theme.NoTitleBar"
                 android:label="@string/mediaplaybacklabel"
                 android:taskAffinity=""
                 android:launchMode="singleTask"
                 android:clearTaskOnLaunch="true"
-                android:excludeFromRecents="true" >
+                android:excludeFromRecents="true" android:theme="@android:style/Theme.Wallpaper.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -82,6 +83,9 @@
                 <action android:name="com.android.music.PLAYBACK_VIEWER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+        <activity android:name="MediaPlaybackActivity"
+                android:label="@string/mediaplaybacklabel" android:theme="@android:style/Theme.Wallpaper.NoTitleBar">
         </activity>
 
         <activity android:name="com.android.music.StreamStarter"
@@ -115,6 +119,7 @@
                 <data android:mimeType="vnd.android.cursor.dir/album"/>
             </intent-filter>
         </activity>
+<!--
         <activity android:name="com.android.music.NowPlayingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.PICK" />
@@ -122,6 +127,7 @@
                 <data android:mimeType="vnd.android.cursor.dir/nowplaying"/>
             </intent-filter>
         </activity>
+-->
         <activity android:name="com.android.music.TrackBrowserActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
@@ -238,14 +244,43 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name="com.android.music.ScanningProgress"
             android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="MusicSettingsActivity" android:label="@string/settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
         <service android:name="com.android.music.MediaPlaybackService"
             android:exported="true" />
 
-        <receiver android:name="com.android.music.MediaAppWidgetProvider">
+        <receiver android:name="MediaAppWidgetProvider" android:label="Music (4x1)">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget_info" />
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget1_info" />
+        </receiver>
+        <receiver android:name="MediaAppWidgetProvider2" android:label="Music (4x2)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget2_info" />
+        </receiver>
+        <receiver android:name="MediaAppWidgetProvider3" android:label="Music (2x2)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget3_info" />
+        </receiver>
+        <receiver android:name="MediaAppWidgetProvider5" android:label="Music (4x3)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget5_info" />
+        </receiver>
+        <receiver android:name="MediaAppWidgetProvider4" android:label="Music (4x4)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4_info" />
         </receiver>
     </application>
 </manifest>

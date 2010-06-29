@@ -291,10 +291,82 @@
     <!-- Shown in the search box as a hint -->
     <string name="search_hint">Search Music</string>
 
+    <!-- Settings title -->
+    <string name="settings">Settings</string>
+
+    <!-- Setting for keeping screen on while plugged in -->
+    <string name="screen_on_while_plugged_in_title">Screen on while charging</string>
+    <string name="screen_on_while_plugged_in_summary">Keep the screen on while playing and plugged in</string>
+
+    <!-- Setting for auto-unpause when headset is plugged in -->
+    <string name="unpause_on_headset_plug_title">Unpause on connect</string>
+    <string name="unpause_on_headset_plug_summary">Unpause the player when a headset is connected</string>
+    
+    <!-- Setting for double tap trackball to skip song -->
+    <string name="doubletap_trackball_next_title">Use trackball to skip</string>
+    <string name="doubletap_trackball_next_summary">Double tap trackball while sleeping to skip song</string>
+
+    <!-- Setting for Fullscreen Now Playing Screen -->
+    <string name="fullscreen_title">Now Playing Fullscreen</string>
+    <string name="fullscreen_summary">Now Playing screen will extend to the full size of your devices screen, and the notification bar will be hidden</string>
+
+    <!-- Setting for Fullscreen Now Playing Screen -->
+    <string name="enable_gestures_title">Enable Gesture Control</string>
+    <string name="enable_gestures_summary">Enable Music Control via Gestures</string>
+
+    <!-- Gesture Explainations -->  
+    <string name="gestures_list_title">Gestures</string>
+    <string name="gestures_list_summary">diagram and description of all avaliable gestures</string>
+
+    <string name="play_pause_title">Play/Pause</string>
+    <string name="play_pause_summary"> draw to toggle Play/Pause</string>
+
+    <string name="next_title">Next Track</string>
+    <string name="next_summary">swipe right to go to the Next Track</string>
+
+    <string name="prev_restart_title">Previous Track</string>
+    <string name="prev_restart_summary">swipe left to got to the Previous Track</string>
+
+    <string name="repeat_title">Toggle Repeat Mode</string>
+    <string name="repeat_summary">draw to toggle between all 3 repeat modes</string>
+
+    <string name="shuffle_title">Toggle Shuffle Mode</string>
+    <string name="shuffle_summary">draw to toggle shuffle on and off</string>
+
+    <!-- Credits -->
+    <string name="credits_cat">Credits</string>
+    <string name="credits">About and Credits</string>
+    <string name="credits_mod_name">Music Mod</string>
+    <string name="credits_mod_name_summary">Eliot Stocker</string>
+    <string name="credits_mod_version">Version</string>
+    <string name="credits_mod_version_summary">1.7</string>
+    <string name="credits_mod_credits">Credits</string>
+    <string name="credits_mod_credits_summary">Cyanogen, Dan Josiah, AOSP and all others.</string>
+    
+    <!-- Gesture Invert Settings -->
+    <string name="invert_gestures_title">Invert Previous and Next Gestures</string>
+	<string name="invert_gestures_summary_on">Currently inverted - Previous is Right and Next is left</string>
+	<string name="invert_gestures_summary_off">Currently Normal - Previous is Left and Next is Right</string>
+	<string name="gestures_title">Gesture Settings</string>
+	<string name="prev_restart_summary_inv">swipe right to got to the Previous Track</string>
+	<string name="next_summary_inv">swipe left to go to the Next Track</string>
+	
+	<!-- Haptic Feedback -->
+	<string name="haptic_feedback_title">Haptic Feedback for Gestures</string>
+	<string name="haptic_feedback_summary_on">The Phone will vibrate to when you complete a gesture</string>
+	<string name="haptic_feedback_summary_off">The Phone will not Vibrate when A Gesture is completed</string>
+
+    <!-- alphaben for fast scroll -->
+    <string name="fast_scroll_music_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+
+    <!-- slash for curent time in audio player -->
+        <string name="slash"> / </string>
+
     <!--The fast scroll thumb will show one character from this string depending on the position in the list -->
     <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
     <!-- Text shown on widget when first loaded -->
     <string name="widget_initial_text">Touch to select music.</string>
+
 </resources>
 

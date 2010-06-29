@@ -15,81 +15,92 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="horizontal"
     android:background="@drawable/appwidget_bg">
+
+   <ImageView
+        android:id="@+id/albumart"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="2dip"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"/>
 
    <LinearLayout
         android:id="@+id/album_appwidget"
         android:layout_width="0dip"
-        android:layout_weight="3"
-        android:layout_height="match_parent"
+        android:layout_weight="5"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
         android:gravity="center_vertical"
         android:clickable="true"
         android:focusable="true"
-	    android:background="@drawable/appwidget_button_left"
-        android:paddingLeft="18dip"
+        android:background="@drawable/appwidget_button_center"
+        android:paddingLeft="8dip"
         android:paddingRight="8dip"
         >
-
+ 
         <TextView
             android:id="@+id/title"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/appwidget_text"
+            android:textColor="#FFFFFFFF"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="16sp"
+            android:singleLine="true"
+            android:fadingEdge="horizontal"
+            android:fadingEdgeLength="10dip"
+            android:ellipsize="none"
+            />
+ 
+        <TextView
+            android:id="@+id/artist"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp"
             android:singleLine="true"
             android:fadingEdge="horizontal"
             android:fadingEdgeLength="10dip"
             android:ellipsize="none"
             />
 
-        <TextView
-            android:id="@+id/artist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/appwidget_text"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:fadingEdge="horizontal"
-            android:fadingEdgeLength="10dip"
-            android:ellipsize="none"
-            />
     </LinearLayout>
-    
- 	<ImageView
-        android:layout_width="1dip"
-        android:layout_height="match_parent"
-        android:background="@drawable/appwidget_divider"
-        />
-        
+
     <ImageButton
-        android:id="@+id/control_play"
+        android:id="@+id/control_prev"
         android:layout_width="0dip"
         android:layout_weight="1"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_appwidget_music_play"
+        android:layout_height="fill_parent"
+        android:src="@drawable/ic_appwidget_music_prev"
         android:background="@drawable/appwidget_button_center"
         android:scaleType="center"
         />
 
- 	<ImageView
-        android:layout_width="1dip"
-        android:layout_height="match_parent"
-        android:background="@drawable/appwidget_divider"
+    <ImageButton
+        android:id="@+id/control_play"
+        android:layout_width="0dip"
+        android:layout_weight="1"
+        android:layout_height="fill_parent"
+        android:src="@drawable/ic_appwidget_music_play"
+        android:background="@drawable/appwidget_button_center"
+        android:scaleType="center"
         />
-        
+ 
     <ImageButton
         android:id="@+id/control_next"
         android:layout_width="0dip"
         android:layout_weight="1"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:src="@drawable/ic_appwidget_music_next"
         android:background="@drawable/appwidget_button_right"
         android:scaleType="center"
+        android:paddingRight="10dip"
         />
-
+ 
 </LinearLayout>

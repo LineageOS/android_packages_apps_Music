@@ -87,7 +87,8 @@ public class MusicUtils {
         public final static int DELETE_ITEM = 10;
         public final static int SCAN_DONE = 11;
         public final static int QUEUE = 12;
-        public final static int CHILD_MENU_BASE = 13; // this should be the last item
+        public final static int SETTINGS = 13;
+        public final static int CHILD_MENU_BASE = 14; // this should be the last item
     }
 
     public static String makeAlbumsLabel(Context context, int numalbums, int numsongs, boolean isUnknown) {
@@ -1082,6 +1083,12 @@ public class MusicUtils {
         ed.commit();
     }
 
+    static boolean getBooleanPref(Context context, String name, boolean def) {
+    	SharedPreferences prefs =
+    		context.getSharedPreferences("com.android.music_preferences", Context.MODE_PRIVATE);
+    	return prefs.getBoolean(name, def);
+    }
+    
     static void setRingtone(Context context, long id) {
         ContentResolver resolver = context.getContentResolver();
         // Set the flag in the database to mark this as a ringtone

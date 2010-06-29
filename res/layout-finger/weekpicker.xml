@@ -21,7 +21,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
     <TextView
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content" />
 
     <!-- weeks -->
-    <com.android.music.VerticalTextSpinner
+    <com.android.internal.widget.VerticalTextSpinner
         android:id="@+id/weeks"
         android:layout_width="120dip"
         android:layout_height="120dip"
@@ -45,7 +45,7 @@
     
     <!-- Set button -->
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="6dip"
         android:background="#ffffff" >
