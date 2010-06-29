@@ -155,7 +155,7 @@ public class MediaAppWidgetProvider2 extends AppWidgetProvider {
             views.setTextViewText(R.id.title, titleName);
             views.setTextViewText(R.id.albumname, albumName);
             views.setTextViewText(R.id.artist, artistName);
-//            views.setProgressBar(R.id.progress, 1000, (int) (1000 * pos / dur), false);
+            views.setProgressBar(R.id.progress, 1000, (int) (1000 * pos / dur), false);
 	    if (bm == null) {
 		views.setImageViewResource(R.id.albumart, R.drawable.albumart_mp_unknown);
 	} else {

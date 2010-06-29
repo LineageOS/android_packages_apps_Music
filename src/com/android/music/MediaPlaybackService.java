@@ -54,6 +54,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.ref.WeakReference;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 /**
@@ -150,12 +152,11 @@ public class MediaPlaybackService extends Service {
     private boolean mResumeAfterCall = false;
     private boolean mPausedInCall = false;
     private boolean mIsSupposedToBePlaying = false;
-    private boolean endThread = true;
-    private boolean done;
     private boolean mQuietMode = false;
     private AudioManager mAudioManager;
     // used to track what type of audio focus loss caused the playback to pause
     private boolean mPausedByTransientLossOfFocus = false;
+    private Timer timer = new Timer();
 
     private SharedPreferences mPreferences;
     // We use this to distinguish between different cards when saving/restoring playlists.
@@ -871,6 +872,8 @@ public class MediaPlaybackService extends Service {
         i.putExtra("artist", getArtistName());
         i.putExtra("album",getAlbumName());
         i.putExtra("track", getTrackName());
+        i.putExtra("pos", position());
+        i.putExtra("dur", duration());
         sendBroadcast(i);
         
         if (what.equals(QUEUE_CHANGED)) {
@@ -882,7 +885,7 @@ public class MediaPlaybackService extends Service {
         // Share this notification directly with our widgets
         mAppWidgetProvider.notifyChange(this, what);
         mAppWidgetProvider2.notifyChange(this, what);
-	mAppWidgetProvider3.notifyChange(this, what);
+        mAppWidgetProvider3.notifyChange(this, what);
         mAppWidgetProvider4.notifyChange(this, what);
         mAppWidgetProvider5.notifyChange(this, what);
     }
@@ -1182,10 +1185,7 @@ public class MediaPlaybackService extends Service {
                     }
                     Log.d(LOGTAG, "Failed to open file for playback");
                 }
-//                 endThread = false;
-//                if (!progress.isAlive()) {
-//                    progress.start();
-//                    }
+                startProgressUpdate();
             } else {
                 mOpenFailedCounter = 0;
             }
@@ -1201,10 +1201,7 @@ public class MediaPlaybackService extends Service {
         mAudioManager.registerMediaButtonEventReceiver(new ComponentName(this.getPackageName(),
                 MediaButtonIntentReceiver.class.getName()));
         if (mPlayer.isInitialized()) {
-            endThread = false;
-//            if (!progress.isAlive()) {
-//                progress.start();
-//                }
+        	startProgressUpdate();
             // if we are at the end of the song, go to the next song first
             long duration = mPlayer.duration();
             if (mRepeatMode != REPEAT_CURRENT && duration > 2000 &&
@@ -1250,11 +1247,6 @@ public class MediaPlaybackService extends Service {
             }
 
         } else if (mPlayListLen <= 0) {
-            endThread = false;
-//            if (!progress.isAlive()) {
-//                progress.start();
-//                }
-
             // This is mostly so that if you press 'play' on a bluetooth headset
             // without every having played anything before, it will still play
             // something.
@@ -1286,7 +1278,7 @@ public class MediaPlaybackService extends Service {
      */
     public void stop() {
         stop(true);
-//            endThread = true;
+        stopProgressUpdate();
     }
 
     /**
@@ -1297,7 +1289,7 @@ public class MediaPlaybackService extends Service {
             if (isPlaying()) {
                 mPlayer.pause();
                 gotoIdleState();
-//                    endThread = true;
+                stopProgressUpdate();
                 if(mPausedInCall) {
                     mResumeAfterCall=false;
                     mPausedInCall=false;
@@ -1370,10 +1362,7 @@ public class MediaPlaybackService extends Service {
             stop(false);
             openCurrent();
             play();
-//            endThread = false;
-//            if (!progress.isAlive()) {
-//                progress.start();
-//                }
+            startProgressUpdate();
             notifyChange(META_CHANGED);
         }
     }
@@ -1476,10 +1465,7 @@ public class MediaPlaybackService extends Service {
             stop(false);
             openCurrent();
             play();
-//            endThread = false;
-//            if (!progress.isAlive()) {
-//                progress.start();
-//                }
+            startProgressUpdate();
             notifyChange(META_CHANGED);
         }
     }
@@ -2108,25 +2094,28 @@ public class MediaPlaybackService extends Service {
         }
 
     }
+    
+    private void startProgressUpdate() {
+    	timer.scheduleAtFixedRate( new TimerTask() {
 
-    Thread progress = new Thread (new Runnable() {
-        public void run() {
-                    while (!endThread) {
-                    	synchronized (this) {
-                    		if (done) break;
-                    		}
-                    	notifyChange(PROGRESSBAR_CHANGED);
-						try {
-							Thread.sleep(500);
-						} catch (InterruptedException e) {
-							return;
-						}
-                    }
-					Log.d("Progress", "End Progress Update Thread");
-					return;
-        }
-    });
-     
+    	public void run() {
+
+    	notifyChange(PROGRESSBAR_CHANGED);
+
+    	}
+
+    	}, 0, 500);
+    	; }
+
+    private void stopProgressUpdate() {
+
+    	if (timer != null){
+
+    	timer.cancel();
+    	timer = new Timer();
+    	}
+
+    	}
     
     @Override
     protected void dump(FileDescriptor fd, PrintWriter writer, String[] args) {

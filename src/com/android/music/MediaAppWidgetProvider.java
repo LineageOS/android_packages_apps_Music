@@ -66,7 +66,7 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
      */
     private void defaultAppWidget(Context context, int[] appWidgetIds) {
         final Resources res = context.getResources();
-        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.album_appwidget);
+        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.album_appwidget4x1);
         
         views.setViewVisibility(R.id.title, View.GONE);
         views.setTextViewText(R.id.artist, res.getText(R.string.emptyplaylist));
@@ -114,7 +114,7 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
      */
     void performUpdate(MediaPlaybackService service, int[] appWidgetIds) {
         final Resources res = service.getResources();
-        final RemoteViews views = new RemoteViews(service.getPackageName(), R.layout.album_appwidget);
+        final RemoteViews views = new RemoteViews(service.getPackageName(), R.layout.album_appwidget4x1);
         
         CharSequence titleName = service.getTrackName();
         CharSequence artistName = service.getArtistName();

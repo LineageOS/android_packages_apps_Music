@@ -15,8 +15,8 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="horizontal"
     android:gravity="center">
 
@@ -48,7 +48,7 @@
 </LinearLayout>
 
    <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="right"
@@ -102,20 +102,20 @@
             android:textSize="14sp"
             android:singleLine="true"
             />
-<!--    need to finish work on the server            
+        
 		<ProgressBar android:id="@+id/progress"
 			style="?android:attr/progressBarStyleHorizontal"
 		android:progressDrawable="@drawable/progress"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="8dip"
         android:paddingTop="1dip"
         android:paddingLeft="2dip"
         android:paddingRight="2dip"/>
--->
+
 </LinearLayout>
 
 <LinearLayout
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center"

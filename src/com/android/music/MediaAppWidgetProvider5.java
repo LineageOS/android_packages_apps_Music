@@ -204,7 +204,7 @@ public class MediaAppWidgetProvider5 extends AppWidgetProvider {
             views.setViewVisibility(R.id.title, View.VISIBLE);
             views.setTextViewText(R.id.title, titleName);
             views.setTextViewText(R.id.artist, artistName);
-//            views.setProgressBar(R.id.progress, 1000, (int) (1000 * pos / dur), false);
+            views.setProgressBar(R.id.progress, 1000, (int) (1000 * pos / dur), false);
 	    if (art == null) {
 		views.setImageViewBitmap(R.id.albumart, noart);
 		views.setImageViewBitmap(R.id.albumartreflect, reflectnoart);

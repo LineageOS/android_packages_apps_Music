@@ -15,8 +15,8 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="horizontal"
     android:gravity="center_vertical">
 
@@ -33,7 +33,7 @@
         android:layout_marginBottom="15dip"/>
 
 <LinearLayout
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_marginLeft="-2dip"
@@ -41,7 +41,7 @@
 
    <LinearLayout
         android:id="@+id/album_appwidget4x2"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_vertical"
@@ -53,7 +53,7 @@
  
         <TextView
             android:id="@+id/title"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFFFFFFF"
             android:shadowColor="#ff000000"
@@ -71,7 +71,7 @@
 
         <TextView
             android:id="@+id/albumname"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFFFFFFF"
             android:shadowColor="#ff000000"
@@ -88,7 +88,7 @@
  
         <TextView
             android:id="@+id/artist"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFFFFFFF"
             android:shadowColor="#ff000000"
@@ -100,21 +100,19 @@
             android:fadingEdge="horizontal"
             android:fadingEdgeLength="10dip"
             android:ellipsize="none"
-            />
-<!--    need to finish work on the server            
+            />            
         <ProgressBar android:id="@+id/progress"
 			style="?android:attr/progressBarStyleHorizontal"
 		android:progressDrawable="@drawable/progress"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="8dip"
         android:paddingTop="1dip"
         android:paddingLeft="2dip"
         android:paddingRight="2dip"/>
--->
     </LinearLayout>
 
 <LinearLayout
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
@@ -122,7 +120,7 @@
         android:id="@+id/control_prev"
         android:layout_width="0dip"
         android:layout_weight="1"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/widget_back"
         android:background="@android:color/transparent"
         android:scaleType="center"
@@ -132,7 +130,7 @@
         android:id="@+id/control_play"
         android:layout_width="0dip"
         android:layout_weight="1"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/widget_play"
         android:background="@android:color/transparent"
         android:scaleType="center"
@@ -142,7 +140,7 @@
         android:id="@+id/control_next"
         android:layout_width="0dip"
         android:layout_weight="1"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/widget_next"
         android:background="@android:color/transparent"
         android:scaleType="center"
