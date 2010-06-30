@@ -47,7 +47,6 @@ public class MusicSettingsActivity extends PreferenceActivity {
         CheckBoxPreference invert = (CheckBoxPreference) screen.findPreference(KEY_INVERT_GESTURES);
         
         invert.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-        	@Override
             public boolean onPreferenceClick(Preference preference) {
             	invertGestures();
             	return true;
