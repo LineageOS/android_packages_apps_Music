@@ -426,8 +426,8 @@ public class MediaPlaybackService extends Service {
         commandFilter.addAction(PAUSE_ACTION);
         commandFilter.addAction(NEXT_ACTION);
         commandFilter.addAction(PREVIOUS_ACTION);
-	commandFilter.addAction(SHUFFLE_ACTION);
-	commandFilter.addAction(REPEAT_ACTION);
+        commandFilter.addAction(SHUFFLE_ACTION);
+        commandFilter.addAction(REPEAT_ACTION);
         registerReceiver(mIntentReceiver, commandFilter);
         
         TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -1247,6 +1247,7 @@ public class MediaPlaybackService extends Service {
             }
 
         } else if (mPlayListLen <= 0) {
+        	startProgressUpdate();
             // This is mostly so that if you press 'play' on a bluetooth headset
             // without every having played anything before, it will still play
             // something.

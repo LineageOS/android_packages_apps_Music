@@ -150,13 +150,30 @@ public class MediaAppWidgetProvider5 extends AppWidgetProvider {
         if (hasInstances(service)) {
             if (MediaPlaybackService.PLAYBACK_COMPLETE.equals(what) ||
                     MediaPlaybackService.META_CHANGED.equals(what) ||
-                    MediaPlaybackService.PLAYSTATE_CHANGED.equals(what) ||
-                    MediaPlaybackService.PROGRESSBAR_CHANGED.equals(what)) {
+                    MediaPlaybackService.PLAYSTATE_CHANGED.equals(what)) {
                 performUpdate(service, null);
+                
+            } else if (MediaPlaybackService.PROGRESSBAR_CHANGED.equals(what)) {
+            	progRunner(service, null);
+                    
             }
         }
     }
 
+    /**
+     * Update all active widget instances by pushing changes to progress bar only 
+     */    
+    void progRunner(MediaPlaybackService service, int[] appWidgetIds) {
+
+        final RemoteViews views = new RemoteViews(service.getPackageName(), R.layout.album_appwidget4x4);
+	long pos = service.position();
+	long dur = service.duration();
+
+            views.setProgressBar(R.id.progress, 1000, (int) (1000 * pos / dur), false);
+            
+        pushUpdate(service, appWidgetIds, views);
+    }
+    
     /**
      * Update all active widget instances by pushing changes 
      */
