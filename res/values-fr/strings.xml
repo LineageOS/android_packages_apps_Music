@@ -153,9 +153,9 @@
     <string name="fullscreen_title">"En écoute plein écran"</string>
     <string name="fullscreen_summary">"L\'écran en écoute prendra toute la place sur l\'écran, et la barre de notifications sera masquée"</string>
     <string name="enable_gestures_title">"Activer le contrôle par gestes"</string>
-    <string name="enable_gestures_summary">"Activer le contrôle de la musique pas gestes"</string>
+    <string name="enable_gestures_summary">"Activer le contrôle de la musique par gestes"</string>
     <string name="gestures_list_title">"Gestes"</string>
-    <string name="gestures_list_summary">"Schéma et description de gestes possibles"</string>
+    <string name="gestures_list_summary">"Schéma et description des gestes possibles"</string>
     <string name="play_pause_title">"Lecture/Pause"</string>
     <string name="play_pause_summary">"Dessinez pour alterner Lecture/Pause"</string>
     <string name="next_title">"Piste suivante"</string>
@@ -165,7 +165,7 @@
     <string name="repeat_title">"Changer de mode de répétition"</string>
     <string name="repeat_summary">"Dessinez pour passer par les 3 modes de répétition possibles"</string>
     <string name="shuffle_title">"Activer/désactiver le mode aléatoire"</string>
-    <string name="shuffle_summary">"Dessinez pour activer et désactiver le mode aléatoire"</string>
+    <string name="shuffle_summary">"Dessinez pour activer ou désactiver le mode aléatoire"</string>
     <string name="credits_cat">"Crédits"</string>
     <string name="credits">"A propos et crédits"</string>
     <string name="credits_mod_version">"Version"</string>
