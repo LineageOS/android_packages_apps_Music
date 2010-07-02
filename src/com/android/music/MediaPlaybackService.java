@@ -2105,7 +2105,7 @@ public class MediaPlaybackService extends Service {
 
     	}
 
-    	}, 0, 500);
+    	}, 0, 1000);
     	; }
 
     private void stopProgressUpdate() {

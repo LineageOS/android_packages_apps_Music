@@ -121,7 +121,7 @@ public class MediaAppWidgetProvider2 extends AppWidgetProvider {
      */    
     void progRunner(MediaPlaybackService service, int[] appWidgetIds) {
 
-        final RemoteViews views = new RemoteViews(service.getPackageName(), R.layout.album_appwidget4x4);
+        final RemoteViews views = new RemoteViews(service.getPackageName(), R.layout.album_appwidget4x2);
 	long pos = service.position();
 	long dur = service.duration();
 
