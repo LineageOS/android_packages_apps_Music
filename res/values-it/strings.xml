@@ -145,4 +145,67 @@
     <string name="search_hint" msgid="3766854898072633001">"Cerca musica"</string>
     <string name="fast_scroll_alphabet" msgid="5548732936480723311">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="widget_initial_text" msgid="6334545155963910952">"Tocca per selezionare musica."</string>
+    
+    <!-- Settings title -->
+    <string name="settings">Impostazioni</string>
+
+    <!-- Setting for keeping screen on while plugged in -->
+    <string name="screen_on_while_plugged_in_title">Schermo acceso</string>
+    <string name="screen_on_while_plugged_in_summary">Tieni lo schermo acceso durante la riproduzione se il telefono è in carica</string>
+
+    <!-- Setting for auto-unpause when headset is plugged in -->
+    <string name="unpause_on_headset_plug_title">Togli pausa</string>
+    <string name="unpause_on_headset_plug_summary">Avvia la riproduzione automaticamente quando connetti gli auricolari</string>
+    
+    <!-- Setting for double tap trackball to skip song -->
+    <string name="doubletap_trackball_next_title">Skip con trackball</string>
+    <string name="doubletap_trackball_next_summary">Premi due volte la trackball durante lo standby per saltare la canzone</string>
+
+    <!-- Setting for Fullscreen Now Playing Screen -->
+    <string name="fullscreen_title">Schermo intero</string>
+    <string name="fullscreen_summary">La schermata In Riproduzione si estenderà a schermo intero nascondendo la barra delle notifiche</string>
+
+    <!-- Setting for Fullscreen Now Playing Screen -->
+    <string name="enable_gestures_title">Attiva Gestures</string>
+    <string name="enable_gestures_summary">Controlla il player musicale tramite gesture</string>
+
+    <!-- Gesture Explainations -->  
+    <string name="gestures_list_title">Gestures</string>
+    <string name="gestures_list_summary">Descrizione delle gesture disponibili</string>
+
+    <string name="play_pause_title">Play/Pause</string>
+    <string name="play_pause_summary">disegna per Play/Pause</string>
+
+    <string name="next_title">Canzone successiva</string>
+    <string name="next_summary">swipe a destra per passare alla canzone successiva</string>
+
+    <string name="prev_restart_title">Rinizia/Torna alla precednte</string>
+    <string name="prev_restart_summary">swipe a sinistra per tornare alla canzone precedente o riniziare quella in riproduzione</string>
+
+    <string name="repeat_title">Attiva/Disattiva Ripetizione</string>
+    <string name="repeat_summary">disegna per passare tra le 3 modalità di ripetizione</string>
+
+    <string name="shuffle_title">Attiva/Disattiva Shuffle</string>
+    <string name="shuffle_summary">disegna per attivare o disattivare la riproduzione casuale</string>
+    
+    <!-- Gesture Invert Settings -->
+    <string name="invert_gestures_title">Inverti Gesture</string>
+	<string name="invert_gestures_summary_on">Invertite - Destra per precedente e sinistra per successiva</string>
+	<string name="invert_gestures_summary_off">Normali - Sinistra per precedente e destra per successiva</string>
+	<string name="gestures_title">Impostazioni Gesture</string>
+	<string name="prev_restart_summary_inv">swipe a destra per tornare alla canzone precedente</string>
+	<string name="next_summary_inv">swipe a sinistra per passare alla canzone successiva</string>
+	
+	<!-- Haptic Feedback -->
+	<string name="haptic_feedback_title">Feedback aptico per Gesture</string>
+	<string name="haptic_feedback_summary_on">Il telefono vibrerà al completamento di una gesture</string>
+	<string name="haptic_feedback_summary_off">Il telefono non vibrerà al completamento di una gesture</string>
+
+    <!-- Credits -->    
+    <string name="credits">Info e crediti</string>
+    <string name="credits_mod_version">Versione</string>
+    <string name="credits_mod_credits">Crediti</string>
+    <string name="credits_mod_credits_summary">Cyanogen, Dan Josiah, AOSP and all others.</string>
+
+    
 </resources>
