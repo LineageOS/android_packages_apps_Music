@@ -159,7 +159,7 @@
     
     <!-- Setting for double tap trackball to skip song -->
     <string name="doubletap_trackball_next_title">Skip con trackball</string>
-    <string name="doubletap_trackball_next_summary">Premi due volte la trackball durante lo standby per saltare la canzone</string>
+    <string name="doubletap_trackball_next_summary">Premi due volte la trackball durante lo standby per saltare il brano</string>
 
     <!-- Setting for Fullscreen Now Playing Screen -->
     <string name="fullscreen_title">Schermo intero</string>
@@ -176,11 +176,11 @@
     <string name="play_pause_title">Play/Pause</string>
     <string name="play_pause_summary">disegna per Play/Pause</string>
 
-    <string name="next_title">Canzone successiva</string>
-    <string name="next_summary">swipe a destra per passare alla canzone successiva</string>
+    <string name="next_title">Brano successivo</string>
+    <string name="next_summary">swipe a destra per passare al brano successivo</string>
 
-    <string name="prev_restart_title">Rinizia/Torna alla precednte</string>
-    <string name="prev_restart_summary">swipe a sinistra per tornare alla canzone precedente o riniziare quella in riproduzione</string>
+    <string name="prev_restart_title">Rinizia/Torna al precedente</string>
+    <string name="prev_restart_summary">swipe a sinistra per tornare al brano precedente o riniziare quello in riproduzione</string>
 
     <string name="repeat_title">Attiva/Disattiva Ripetizione</string>
     <string name="repeat_summary">disegna per passare tra le 3 modalità di ripetizione</string>
@@ -190,11 +190,11 @@
     
     <!-- Gesture Invert Settings -->
     <string name="invert_gestures_title">Inverti Gesture</string>
-	<string name="invert_gestures_summary_on">Invertite - Destra per precedente e sinistra per successiva</string>
-	<string name="invert_gestures_summary_off">Normali - Sinistra per precedente e destra per successiva</string>
+	<string name="invert_gestures_summary_on">Invertite - Destra per precedente e sinistra per successivo</string>
+	<string name="invert_gestures_summary_off">Normali - Sinistra per precedente e destra per successivo</string>
 	<string name="gestures_title">Impostazioni Gesture</string>
-	<string name="prev_restart_summary_inv">swipe a destra per tornare alla canzone precedente</string>
-	<string name="next_summary_inv">swipe a sinistra per passare alla canzone successiva</string>
+	<string name="prev_restart_summary_inv">swipe a destra per tornare al brano precedente</string>
+	<string name="next_summary_inv">swipe a sinistra per passare al brano successivo</string>
 	
 	<!-- Haptic Feedback -->
 	<string name="haptic_feedback_title">Feedback aptico per Gesture</string>
