@@ -200,6 +200,10 @@
 	<string name="haptic_feedback_title">Feedback aptico per Gesture</string>
 	<string name="haptic_feedback_summary_on">Il telefono vibrerà al completamento di una gesture</string>
 	<string name="haptic_feedback_summary_off">Il telefono non vibrerà al completamento di una gesture</string>
+     
+        <!-- Next and Previous track toast messages -->	
+        <string name="next_toast">Brano Successivo</string>	
+        <string name="prev_toast">Brano Precedente</string>
 
     <!-- Credits -->    
     <string name="credits">Info e crediti</string>

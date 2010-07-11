@@ -949,7 +949,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
 			            if (mService == null) return;
 			            try {
 		                    mService.prev();
-				    Toast.makeText(this, "Previous Track", Toast.LENGTH_SHORT).show();
+				    Toast.makeText(this, R.string.prev_toast, Toast.LENGTH_SHORT).show();
 		            } catch (RemoteException ex) {
 		            }
 		            if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
@@ -963,7 +963,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
 			                mService.next();
 			            } catch (RemoteException ex) {
 			            }
-					Toast.makeText(this, "Next Track", Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, R.string.next_toast, Toast.LENGTH_SHORT).show();
 					if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
 					v.vibrate(500);
 					}
@@ -975,7 +975,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
 		                mService.next();
 		            } catch (RemoteException ex) {
 		            }
-				Toast.makeText(this, "Next Track", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, R.string.next_toast, Toast.LENGTH_SHORT).show();
 				if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
 				v.vibrate(500);
 				}
@@ -984,7 +984,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
 						if (mService == null) return;
 			            try {
 		                    mService.prev();
-				    Toast.makeText(this, "Previous Track", Toast.LENGTH_SHORT).show();
+				    Toast.makeText(this, R.string.prev_toast, Toast.LENGTH_SHORT).show();
 		            } catch (RemoteException ex) {
 		            }
 		            if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {

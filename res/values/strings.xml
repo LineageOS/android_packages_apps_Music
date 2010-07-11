@@ -355,6 +355,10 @@
 	<string name="haptic_feedback_title">Haptic Feedback for Gestures</string>
 	<string name="haptic_feedback_summary_on">The Phone will vibrate to when you complete a gesture</string>
 	<string name="haptic_feedback_summary_off">The Phone will not Vibrate when A Gesture is completed</string>
+   
+        <!-- Next and Previous track toast messages -->	
+        <string name="next_toast">Next Track</string>	
+        <string name="prev_toast">Previous Track</string>
 
     <!-- alphaben for fast scroll -->
     <string name="fast_scroll_music_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
