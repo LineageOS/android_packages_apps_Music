@@ -575,7 +575,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             menu.add(1, DELETE_ITEM, 0, R.string.delete_item)
                     .setIcon(R.drawable.ic_menu_delete);
             
-            menu.add(0, SETTINGS, 0, R.string.settings);
+            menu.add(0, SETTINGS, 0, R.string.settings).setIcon(android.R.drawable.ic_menu_preferences);
             return true;
         }
         return false;
