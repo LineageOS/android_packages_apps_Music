@@ -310,7 +310,11 @@
     <string name="fullscreen_title">Now Playing Fullscreen</string>
     <string name="fullscreen_summary">Now Playing screen will extend to the full size of your devices screen, and the notification bar will be hidden</string>
 
-    <!-- Setting for Fullscreen Now Playing Screen -->
+    <!-- Setting for Transient duck attenuation -->
+    <string name="duck_attenuation_title">Audio focus loss action</string>
+    <string name="duck_attenuation_summary">Select action to take upon transient loss of audio focus (short alerts from other apps)</string>
+
+    <!-- Setting for Gesture control -->
     <string name="enable_gestures_title">Enable Gesture Control</string>
     <string name="enable_gestures_summary">Enable Music Control via Gestures</string>
 

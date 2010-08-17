@@ -35,6 +35,8 @@ public class MusicSettingsActivity extends PreferenceActivity {
 	
 	static final String PREV_LAYOUT = "prevRestart";
 	
+	static final String KEY_DUCK_ATTENUATION = "duck_attenuation";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

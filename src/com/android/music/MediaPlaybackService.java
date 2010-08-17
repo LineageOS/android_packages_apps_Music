@@ -42,6 +42,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -113,6 +114,7 @@ public class MediaPlaybackService extends Service {
     private static final int RELEASE_WAKELOCK = 2;
     private static final int SERVER_DIED = 3;
     private static final int FADEIN = 4;
+    private static final int FADEIN_FROM_DUCK = 5;
     private static final int MAX_HISTORY_SIZE = 100;
     
     private MultiPlayer mPlayer;
@@ -157,6 +159,7 @@ public class MediaPlaybackService extends Service {
     private AudioManager mAudioManager;
     // used to track what type of audio focus loss caused the playback to pause
     private boolean mPausedByTransientLossOfFocus = false;
+    private float mTransientDuckVolume = 1.0f;
     private Timer timer = new Timer();
 
     private SharedPreferences mPreferences;
@@ -220,6 +223,15 @@ public class MediaPlaybackService extends Service {
         public void handleMessage(Message msg) {
             MusicUtils.debugLog("mMediaplayerHandler.handleMessage " + msg.what);
             switch (msg.what) {
+                case FADEIN_FROM_DUCK:
+                    if (isPlaying()) {
+                        mCurrentVolume = mTransientDuckVolume;
+                        mTransientDuckVolume = 1.0f;
+                    } else {
+                        mTransientDuckVolume = 1.0f;
+                        break;
+                    }
+                    // Fall through if playing
                 case FADEIN:
                     if (!isPlaying()) {
                         mCurrentVolume = 0f;
@@ -388,8 +400,23 @@ public class MediaPlaybackService extends Service {
                         pause();
                     }
                     break;
-                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                    Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
+                    if(isPlaying()) {
+                        int attenuation = getTransientDuckAttenuation();
+                        if (attenuation < 0) {
+                            // Pause
+                            mPausedByTransientLossOfFocus = true;
+                            pause();
+                        } else if (attenuation > 0) {
+                            // 0 Means no ducking wanted so do nothing in that case
+                            // setVolume wants a scalar value, not logarithmic
+                            mTransientDuckVolume = (float) Math.pow(10, -attenuation / 20f);
+                            mPlayer.setVolume(mTransientDuckVolume);
+                        }
+                    }
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                     Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
                     if(isPlaying()) {
                         mPausedByTransientLossOfFocus = true;
@@ -401,6 +428,8 @@ public class MediaPlaybackService extends Service {
                     if(!isPlaying() && mPausedByTransientLossOfFocus) {
                         mPausedByTransientLossOfFocus = false;
                         startAndFadeIn();
+                    } else if (isPlaying()) {
+                        mMediaplayerHandler.sendEmptyMessageDelayed(FADEIN_FROM_DUCK, 10);
                     }
                     break;
                 default:
@@ -494,6 +523,11 @@ public class MediaPlaybackService extends Service {
             '8', '9', 'a', 'b',
             'c', 'd', 'e', 'f'
     };
+
+    private int getTransientDuckAttenuation() {
+        return Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(this).
+                getString(MusicSettingsActivity.KEY_DUCK_ATTENUATION, "10"));
+    }
 
     private void saveQueue(boolean full) {
         if (mOneShot) {
@@ -1214,6 +1248,7 @@ public class MediaPlaybackService extends Service {
     public void play() {
         mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
                 AudioManager.AUDIOFOCUS_GAIN);
+        mPlayer.setVolume(1.0f);
         mAudioManager.registerMediaButtonEventReceiver(new ComponentName(this.getPackageName(),
                 MediaButtonIntentReceiver.class.getName()));
         if (mPlayer.isInitialized()) {
