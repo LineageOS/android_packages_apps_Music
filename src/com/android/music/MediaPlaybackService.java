@@ -322,6 +322,16 @@ public class MediaPlaybackService extends Service {
                 } else {
                     play();
                 }
+            } else if (Intent.ACTION_HEADSET_PLUG.equals(action)) {
+                if (MusicUtils.getBooleanPref(context,
+                        MusicSettingsActivity.KEY_UNPAUSE_ON_HEADSET_PLUG, false)
+                        && "Headset".equals(intent.getStringExtra("name"))
+                        && intent.getIntExtra("state", 0) == 1) {
+                    if (!isPlaying()) {
+                        Log.d(LOGTAG, "Headset connected, resuming playback");
+                        play();
+                    }
+                }
             } else if (CMDPAUSE.equals(cmd) || PAUSE_ACTION.equals(action)) {
                 pause();
                 mPausedByTransientLossOfFocus = false;
@@ -429,6 +439,7 @@ public class MediaPlaybackService extends Service {
         commandFilter.addAction(PREVIOUS_ACTION);
         commandFilter.addAction(SHUFFLE_ACTION);
         commandFilter.addAction(REPEAT_ACTION);
+        commandFilter.addAction(Intent.ACTION_HEADSET_PLUG);
         registerReceiver(mIntentReceiver, commandFilter);
         
         TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);

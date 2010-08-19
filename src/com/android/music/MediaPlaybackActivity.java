@@ -527,7 +527,6 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         f.addAction(MediaPlaybackService.META_CHANGED);
         f.addAction(MediaPlaybackService.PLAYBACK_COMPLETE);
         f.addAction(Intent.ACTION_BATTERY_CHANGED);
-        f.addAction(Intent.ACTION_HEADSET_PLUG);
         registerReceiver(mStatusListener, new IntentFilter(f));
         updateTrackInfo();
         long next = refreshNow();
@@ -1400,23 +1399,6 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             } else if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
             	int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
             	setPluggedIn(status);
-            } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
-            	if (MusicUtils.getBooleanPref(context, MusicSettingsActivity.KEY_UNPAUSE_ON_HEADSET_PLUG, false)
-            			&& "Headset".equals(intent.getStringExtra("name"))
-            			&& intent.getIntExtra("state", 0) == 1) {
-            		Log.d(getClass().getSimpleName(), "Headset connected, resuming playback");
-            		if(mService != null) {
-            			try {
-            				if (!mService.isPlaying()) {
-            					mService.play();
-            				}
-            				refreshNow();
-            				setPauseButtonImage();
-            			} catch (RemoteException e) {
-            				// nothing
-            			}
-                    }
-            	}
             }
         }
     };
