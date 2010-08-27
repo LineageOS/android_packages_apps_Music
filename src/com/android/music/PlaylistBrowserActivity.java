@@ -260,6 +260,7 @@ public class PlaylistBrowserActivity extends ListActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mCreateShortcut) {
             menu.add(0, PARTY_SHUFFLE, 0, R.string.party_shuffle); // icon will be set in onPrepareOptionsMenu()
+            menu.add(0, SETTINGS, 0, R.string.settings).setIcon(android.R.drawable.ic_menu_preferences);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -277,6 +278,12 @@ public class PlaylistBrowserActivity extends ListActivity
             case PARTY_SHUFFLE:
                 MusicUtils.togglePartyShuffle();
                 break;
+
+            case SETTINGS:
+                     intent = new Intent();
+                     intent.setClass(this, MusicSettingsActivity.class);
+                     startActivityForResult(intent, SETTINGS);
+                     return true;
         }
         return super.onOptionsItemSelected(item);
     }
