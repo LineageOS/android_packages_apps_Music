@@ -155,6 +155,10 @@
     <string name="doubletap_trackball_next_summary">スリープ中トラックボールダブルタップで曲をスキップする</string>
     <string name="fullscreen_title">フルスクリーンで再生</string>
     <string name="fullscreen_summary">ステータスバーを隠し、端末の画面いっぱいに現在再生中の曲を表示する</string>
+
+    <string name="duck_attenuation_title">オーディオフォーカスアクション</string>
+    <string name="duck_attenuation_summary">一時的にオーディオフォーカスを失ったときの挙動を選択(他のアプリによる短い通知など)</string>
+
     <string name="enable_gestures_title">ジェスチャーコントロール</string>
     <string name="enable_gestures_summary">ジェスチャーで再生をコントロールする</string>
     <string name="gestures_list_title">ジェスチャー</string>
@@ -182,5 +186,8 @@
     <string name="haptic_feedback_title">タッチフィードバック</string>
     <string name="haptic_feedback_summary_on">携帯端末はジェスチャーが完了すると振動します</string>
     <string name="haptic_feedback_summary_off">携帯端末はジェスチャーが完了しても振動しません</string>
+
+    <string name="next_toast">次の曲</string>
+    <string name="prev_toast">前の曲</string>
 
 </resources>
