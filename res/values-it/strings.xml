@@ -156,7 +156,7 @@
     <!-- Setting for auto-unpause when headset is plugged in -->
     <string name="unpause_on_headset_plug_title">Togli pausa</string>
     <string name="unpause_on_headset_plug_summary">Avvia la riproduzione automaticamente quando connetti gli auricolari</string>
-    
+
     <!-- Setting for double tap trackball to skip song -->
     <string name="doubletap_trackball_next_title">Skip con trackball</string>
     <string name="doubletap_trackball_next_summary">Premi due volte la trackball durante lo standby per saltare il brano</string>
@@ -165,11 +165,15 @@
     <string name="fullscreen_title">Schermo intero</string>
     <string name="fullscreen_summary">La schermata In Riproduzione si estenderà a schermo intero nascondendo la barra delle notifiche</string>
 
+    <!-- Setting for Transient duck attenuation -->
+    <string name="duck_attenuation_title">Azione Audio focus</string>
+    <string name="duck_attenuation_summary">Seleziona che azione vuoi che venga eseguita alla richiesta di audio focus da parte di altre app (brevi notifiche)</string>
+
     <!-- Setting for Fullscreen Now Playing Screen -->
     <string name="enable_gestures_title">Attiva Gestures</string>
     <string name="enable_gestures_summary">Controlla il player musicale tramite gesture</string>
 
-    <!-- Gesture Explainations -->  
+    <!-- Gesture Explainations -->
     <string name="gestures_list_title">Gestures</string>
     <string name="gestures_list_summary">Descrizione delle gesture disponibili</string>
 
@@ -190,19 +194,19 @@
     
     <!-- Gesture Invert Settings -->
     <string name="invert_gestures_title">Inverti Gesture</string>
-	<string name="invert_gestures_summary_on">Invertite - Destra per precedente e sinistra per successivo</string>
-	<string name="invert_gestures_summary_off">Normali - Sinistra per precedente e destra per successivo</string>
-	<string name="gestures_title">Impostazioni Gesture</string>
-	<string name="prev_restart_summary_inv">swipe a destra per tornare al brano precedente</string>
-	<string name="next_summary_inv">swipe a sinistra per passare al brano successivo</string>
-	
-	<!-- Haptic Feedback -->
-	<string name="haptic_feedback_title">Feedback aptico per Gesture</string>
-	<string name="haptic_feedback_summary_on">Il telefono vibrerà al completamento di una gesture</string>
-	<string name="haptic_feedback_summary_off">Il telefono non vibrerà al completamento di una gesture</string>
-     
-        <!-- Next and Previous track toast messages -->	
-        <string name="next_toast">Brano Successivo</string>	
+        <string name="invert_gestures_summary_on">Invertite - Destra per precedente e sinistra per successivo</string>
+        <string name="invert_gestures_summary_off">Normali - Sinistra per precedente e destra per successivo</string>
+        <string name="gestures_title">Impostazioni Gesture</string>
+        <string name="prev_restart_summary_inv">swipe a destra per tornare al brano precedente</string>
+        <string name="next_summary_inv">swipe a sinistra per passare al brano successivo</string>
+
+    <!-- Haptic Feedback -->
+    <string name="haptic_feedback_title">Feedback aptico per Gesture</string>
+    <string name="haptic_feedback_summary_on">Il telefono vibrerà al completamento di una gesture</string>
+    <string name="haptic_feedback_summary_off">Il telefono non vibrerà al completamento di una gesture</string>
+
+        <!-- Next and Previous track toast messages -->
+        <string name="next_toast">Brano Successivo</string>
         <string name="prev_toast">Brano Precedente</string>
 
     <!-- Credits -->    
@@ -211,5 +215,5 @@
     <string name="credits_mod_credits">Crediti</string>
     <string name="credits_mod_credits_summary">Cyanogen, Dan Josiah, AOSP and all others.</string>
 
-    
+
 </resources>
