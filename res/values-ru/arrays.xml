@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="entries_duck_attenuation">
+        <item>Пауза</item>
+        <item>Нечего</item>
+        <item>Громкость -3 dB</item>
+        <item>Громкость -6 dB</item>
+        <item>Громкость -10 dB</item>
+        <item>Громкость -15 dB</item>
+    </string-array>
+</resources>
+

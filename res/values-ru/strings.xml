@@ -145,4 +145,49 @@
     <string name="search_hint" msgid="3766854898072633001">"Поиск музыки"</string>
     <string name="fast_scroll_alphabet" msgid="5548732936480723311">" АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"</string>
     <string name="widget_initial_text" msgid="6334545155963910952">"Нажмите ,чтобы выбрать музыку."</string>
+
+    <string name="settings">Настройки</string>
+    <string name="screen_on_while_plugged_in_title">Держать экран при зарядке</string>
+    <string name="screen_on_while_plugged_in_summary">Держать экран включенным, если устройство подключено к зарядке и происходит воспроизведение</string>
+    <string name="unpause_on_headset_plug_title">Снять с паузы при подключении</string>
+    <string name="unpause_on_headset_plug_summary">Снять с паузы когда подключены наушники</string>
+    <string name="doubletap_trackball_next_title">Trackball для пропуска</string>
+    <string name="doubletap_trackball_next_summary">Двойное нажатие на Trackball, когда устройство спит, приводит к пропуску текущего трека</string>
+    <string name="fullscreen_title">Полноэкранное проигрывание</string>
+    <string name="fullscreen_summary">Проигрывание на полный экран, статус бар будет скрыт</string>
+    <string name="duck_attenuation_title">При потери фокуса</string>
+    <string name="duck_attenuation_summary">Задайте действие на потерю звукового фокусу (при коротких оповещениях от других приложений)</string>
+    <string name="enable_gestures_title">Включить жесты</string>
+    <string name="enable_gestures_summary">Включить управление музыкой через жесты</string>
+    <string name="gestures_list_title">Жесты</string>
+    <string name="gestures_list_summary">Схема и описание всех доступных жестов</string>
+    <string name="play_pause_title">Играть/Пауза</string>
+    <string name="play_pause_summary">нарисуйте для переключения Играть/Пауза</string>
+    <string name="next_title">Следующий трек</string>
+    <string name="next_summary">проведите вправо для включения следующего трека</string>
+    <string name="prev_restart_title">Предыдущий трек</string>
+    <string name="prev_restart_summary">проведите влево для включение предыдущего трека</string>
+    <string name="repeat_title">Режим повтора</string>
+    <string name="repeat_summary">нарисуйте для переключения между тремя режимами повтора</string>
+    <string name="shuffle_title">Режим перемешивания</string>
+    <string name="shuffle_summary">нарисуйте для включения/отключения режима перемешивания</string>
+    <string name="credits_cat">О программе и благодарности</string>
+    <string name="credits">О программе</string>
+    <string name="credits_mod_name">Music Mod</string>
+    <string name="credits_mod_name_summary">Eliot Stocker</string>
+    <string name="credits_mod_version">Версия</string>
+    <string name="credits_mod_version_summary">1.7.5.2</string>
+    <string name="credits_mod_credits">Благодарность</string>
+    <string name="credits_mod_credits_summary">Cyanogen, Dan Josiah, AOSP и всем другим.</string>
+    <string name="invert_gestures_title">Инвертировать Предыдущий и Следующий</string>
+	<string name="invert_gestures_summary_on">Сейчас инвертировано - Предыдущий вправо и Следущий влево</string>
+	<string name="invert_gestures_summary_off">Сейчас нормально -  Предыдущий влево и Следующий вправо</string>
+	<string name="gestures_title">Настройки жестов</string>
+	<string name="prev_restart_summary_inv">проведите вправо для включения предыдущего трека</string>
+	<string name="next_summary_inv">проведите влево для включения следующего трека</string>
+	<string name="haptic_feedback_title">Отклик на жест</string>
+	<string name="haptic_feedback_summary_on">Устройство будет вибрировать после завершения жеста</string>
+	<string name="haptic_feedback_summary_off">Устройство не будет вибрировать после завершения жеста</string>
+    <string name="next_toast">Следующий трек</string>	
+    <string name="prev_toast">Предыдущий трек</string>
 </resources>
