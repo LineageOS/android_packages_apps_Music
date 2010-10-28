@@ -40,7 +40,7 @@
     android:gravity="center_vertical">
 
    <LinearLayout
-        android:id="@+id/album_appwidget4x2"
+        android:id="@+id/album_appwidget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -100,15 +100,7 @@
             android:fadingEdge="horizontal"
             android:fadingEdgeLength="10dip"
             android:ellipsize="none"
-            />            
-        <ProgressBar android:id="@+id/progress"
-			style="?android:attr/progressBarStyleHorizontal"
-		android:progressDrawable="@drawable/progress"
-        android:layout_width="match_parent"
-        android:layout_height="8dip"
-        android:paddingTop="1dip"
-        android:paddingLeft="2dip"
-        android:paddingRight="2dip"/>
+            />
     </LinearLayout>
 
 <LinearLayout

@@ -102,15 +102,6 @@
             android:textSize="14sp"
             android:singleLine="true"
             />
-        
-		<ProgressBar android:id="@+id/progress"
-			style="?android:attr/progressBarStyleHorizontal"
-		android:progressDrawable="@drawable/progress"
-        android:layout_width="match_parent"
-        android:layout_height="8dip"
-        android:paddingTop="1dip"
-        android:paddingLeft="2dip"
-        android:paddingRight="2dip"/>
 
 </LinearLayout>
 
