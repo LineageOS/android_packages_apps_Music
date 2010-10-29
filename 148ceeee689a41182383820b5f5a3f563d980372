@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAABH////Q\u003d",
+        "filename": "src/com/android/music/MediaPlaybackService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 18
+      },
+      "writtenOn": "2010-10-29T06:51:41Z",
+      "side": 0,
+      "message": "I should have removed this, together with the references below.",
+      "revId": "148ceeee689a41182383820b5f5a3f563d980372",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAABH////k\u003d",
+        "filename": "src/com/android/music/MediaPlaybackService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 18
+      },
+      "writtenOn": "2010-10-29T06:51:41Z",
+      "side": 0,
+      "message": "This was unused",
+      "revId": "148ceeee689a41182383820b5f5a3f563d980372",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAABH////g\u003d",
+        "filename": "src/com/android/music/MediaPlaybackService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 18
+      },
+      "writtenOn": "2010-10-29T06:51:41Z",
+      "side": 0,
+      "message": "This is never used, just initialized, and then conditionally set to true below.",
+      "revId": "148ceeee689a41182383820b5f5a3f563d980372",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAABH////c\u003d",
+        "filename": "src/com/android/music/MediaPlaybackService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 18
+      },
+      "writtenOn": "2010-10-29T06:51:41Z",
+      "side": 0,
+      "message": "This is also never read.",
+      "revId": "148ceeee689a41182383820b5f5a3f563d980372",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAABH////Y\u003d",
+        "filename": "src/com/android/music/MediaPlaybackService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 18
+      },
+      "writtenOn": "2010-10-29T06:51:41Z",
+      "side": 0,
+      "message": "Oops - overzealous formatter. I\u0027ll fix.",
+      "revId": "148ceeee689a41182383820b5f5a3f563d980372",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}

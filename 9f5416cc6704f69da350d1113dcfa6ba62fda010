@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAABH////U\u003d",
+        "filename": "src/com/android/music/MediaPlaybackService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2145,
+      "author": {
+        "id": 18
+      },
+      "writtenOn": "2010-10-29T06:51:41Z",
+      "side": 1,
+      "message": "I missed this - I\u0027ll get rid of it, and all references.",
+      "revId": "9f5416cc6704f69da350d1113dcfa6ba62fda010",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
