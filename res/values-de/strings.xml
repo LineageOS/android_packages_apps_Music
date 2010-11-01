@@ -145,4 +145,80 @@
     <string name="search_hint" msgid="3766854898072633001">"Musik durchsuchen"</string>
     <string name="fast_scroll_alphabet" msgid="5548732936480723311">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="widget_initial_text" msgid="6334545155963910952">"Zur Musikauswahl berühren"</string>
+
+    <!-- Settings title -->
+    <string name="settings">Einstellungen</string>
+
+    <!-- Setting for keeping screen on while plugged in -->
+    <string name="screen_on_while_plugged_in_title">Bildschirm an lassen</string>
+    <string name="screen_on_while_plugged_in_summary">Den Bildschirm während des Ladevorgangs eingeschaltet lassen.</string>
+
+    <!-- Setting for auto-unpause when headset is plugged in -->
+    <string name="unpause_on_headset_plug_title">Weiterspielen</string>
+    <string name="unpause_on_headset_plug_summary">Die Wiedergabe fortsetzen, wenn ein Kopfhöhrer angeschlossen wird.</string>
+
+    <!-- Setting for double tap trackball to skip song -->
+    <string name="doubletap_trackball_next_title">Nächster mit Trackball</string>
+    <string name="doubletap_trackball_next_summary">Wenn Bildschirm aus, den Trackball zwei mal drücken, um zum nächsten Titel zu springen.</string>
+
+    <!-- Setting for Fullscreen Now Playing Screen -->
+    <string name="fullscreen_title">Vollbild aktueller Titel</string>
+    <string name="fullscreen_summary">Die Anzeige des aktuellen Titels wird auf den gesamten Bildschirm ausgedehnt und die Benachrichtigungszeile wird ausgeblendet.</string>
+
+    <!-- Setting for Transient duck attenuation -->
+    <string name="duck_attenuation_title">Aktion bei Audiofokus</string>
+    <string name="duck_attenuation_summary">Aktion bei aktivem Audiofokus auswählen (Kurze akustische Hinweise anderer Apps).</string>
+
+    <!-- Setting for Gesture control -->
+    <string name="enable_gestures_title">Gestensteuerung</string>
+    <string name="enable_gestures_summary">Die Musiksteuerung über Gesten kontrollieren.</string>
+
+    <!-- Gesture Explainations -->
+    <string name="gestures_list_title">Gesten</string>
+    <string name="gestures_list_summary">Diagramm und Beschreibung aller verfügbarer Gesten</string>
+
+    <string name="play_pause_title">Wiedergabe/Pause</string>
+    <string name="play_pause_summary">zeichnen für Wiedergabe/Pause</string>
+
+    <string name="next_title">Nächster Titel</string>
+    <string name="next_summary">nach rechts wischen für nächsten Titel</string>
+
+    <string name="prev_restart_title">Letzter Titel</string>
+    <string name="prev_restart_summary">nach links wischen für letzten Titel</string>
+
+    <string name="repeat_title">Wiederholungsmodus wechslen</string>
+    <string name="repeat_summary">zeichnen für anderen Wiederholungsmodus</string>
+
+    <string name="shuffle_title">Zufallsmodus</string>
+    <string name="shuffle_summary">zeichnen um Zufallsmodus ein/auszuschalten</string>
+
+    <!-- Credits -->
+    <string name="credits_cat">Über</string>
+    <string name="credits">Über Music Mod</string>
+    <string name="credits_mod_version">Version</string>
+    <string name="credits_mod_credits">Danksagung</string>
+    <string name="credits_mod_credits_summary">Cyanogen, Dan Josiah, AOSP and alle anderen.</string>
+
+    <!-- Gesture Invert Settings -->
+    <string name="invert_gestures_title">Gesten invertieren</string>
+    <string name="invert_gestures_summary_on">Momentan invertiert - letzter Titel ist rechts, Nächster ist links</string>
+    <string name="invert_gestures_summary_off">Momentan normal - letzter Titel ist links, Nächster ist rechts</string>
+    <string name="gestures_title">Gesteneinstellungen</string>
+    <string name="prev_restart_summary_inv">nach rechts wischen für letzten Titel</string>
+    <string name="next_summary_inv">nach links wischen für nächsten Titel</string>
+
+    <!-- Haptic Feedback -->
+    <string name="haptic_feedback_title">Haptisches Feedback</string>
+    <string name="haptic_feedback_summary_on">Gerät wird vibrieren, wenn eine Geste durchgeführt wird.</string>
+    <string name="haptic_feedback_summary_off">Gerät wird nicht vibrieren, wenn eine Geste durchgeführt wird.</string>
+
+    <!-- Next and Previous track toast messages -->
+    <string name="next_toast">Nächster Titel</string>
+    <string name="prev_toast">Letzter Titel</string>
+
+    <!-- alphaben for fast scroll -->
+    <string name="fast_scroll_music_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+
+    <!-- slash for curent time in audio player -->
+    <string name="slash"> / </string>
 </resources>
