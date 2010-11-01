@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="entries_duck_attenuation">
+    <item>Pause</item>
+    <item>Ncihts</item>
+    <item>Lautstärke -3dB</item>
+    <item>Lautstärke -6dB</item>
+    <item>Lautstärke -10dB</item>
+    <item>Lautstärke -15dB</item>
+  </string-array>
+</resources>
