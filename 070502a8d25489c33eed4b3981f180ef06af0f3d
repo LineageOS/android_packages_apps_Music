@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "AAAABX///rs\u003d",
+        "filename": "res/values-de/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 70
+      },
+      "writtenOn": "2010-11-02T14:08:42Z",
+      "side": 1,
+      "message": "now: \"Nächster mit Trackball\"",
+      "parentUuid": "AAAABX///yM\u003d",
+      "revId": "070502a8d25489c33eed4b3981f180ef06af0f3d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAABX///yE\u003d",
         "filename": "res/values-de/strings.xml",
         "patchSetId": 1
@@ -64,6 +82,24 @@
       "writtenOn": "2010-11-02T04:19:46Z",
       "side": 1,
       "message": "bei Audiofokus-Verlust",
+      "revId": "070502a8d25489c33eed4b3981f180ef06af0f3d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAABX///ro\u003d",
+        "filename": "res/values-de/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 70
+      },
+      "writtenOn": "2010-11-02T14:08:42Z",
+      "side": 1,
+      "message": "Its an action to perform, when Audio Fokus sets in, right? So, where\u0027s the loss?",
+      "parentUuid": "AAAABX///x8\u003d",
       "revId": "070502a8d25489c33eed4b3981f180ef06af0f3d",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
