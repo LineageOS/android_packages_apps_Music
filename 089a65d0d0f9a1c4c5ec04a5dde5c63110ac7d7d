@@ -16,6 +16,24 @@
       "revId": "089a65d0d0f9a1c4c5ec04a5dde5c63110ac7d7d",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAABX///kM\u003d",
+        "filename": "res/values-de/strings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 70
+      },
+      "writtenOn": "2010-11-04T16:55:53Z",
+      "side": 1,
+      "message": "Is a matter of taste and secondly we don\u0027t want to alter original (or official) translation in general, only by an overlay on your own.",
+      "parentUuid": "AAAABX///kU\u003d",
+      "revId": "089a65d0d0f9a1c4c5ec04a5dde5c63110ac7d7d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
