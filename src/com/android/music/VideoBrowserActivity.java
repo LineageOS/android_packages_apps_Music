@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import java.lang.Integer;
+import android.util.Log;
 
 public class VideoBrowserActivity extends ListActivity implements MusicUtils.Defs
 {
@@ -82,7 +83,8 @@ public class VideoBrowserActivity extends ListActivity implements MusicUtils.Def
         mCursor.moveToPosition(position);
         String type = mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE));
         intent.setDataAndType(ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id), type);
-        
+
+        Log.i( "VIDEOFILENAME", mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE) ) );
         startActivity(intent);
     }
 
