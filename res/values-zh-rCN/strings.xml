@@ -49,10 +49,6 @@
     5 - second%60
     -->
     <skip/>
-    <!-- Do not translate. Duration format for duration < 1 hour -->
-    <string translatable="false" name="durationformatshort"><xliff:g id="format">%2$d:%5$02d</xliff:g></string>
-    <!-- Do not translate. Duration format for duration >= 1 hour -->
-    <string translatable="false" name="durationformatlong"><xliff:g id="format">%1$d:%3$02d:%5$02d</xliff:g></string>
 
     <!-- Menu item that takes the user back to the top level screen of the music player -->
     <string name="goto_start">音乐库</string>
@@ -349,16 +345,16 @@
     
     <!-- Gesture Invert Settings -->
     <string name="invert_gestures_title">交换上一曲目和下一曲目手势的滑动方向</string>
-	<string name="invert_gestures_summary_on">交换方向模式 - 上一曲目向右滑动，下一曲目向左滑动</string>
-	<string name="invert_gestures_summary_off">默认方向模式 - 上一曲目向左滑动，下一曲目向右滑动</string>
-	<string name="gestures_title">手势设置</string>
-	<string name="prev_restart_summary_inv">向右滑动跳至上一曲目</string>
-	<string name="next_summary_inv">向左滑动跳至下一曲目</string>
-	
-	<!-- Haptic Feedback -->
-	<string name="haptic_feedback_title">启用手势触感反馈</string>
-	<string name="haptic_feedback_summary_on">当手势绘制完成时振动手机</string>
-	<string name="haptic_feedback_summary_off">当手势绘制完成时不振动手机</string>
+    <string name="invert_gestures_summary_on">交换方向模式 - 上一曲目向右滑动，下一曲目向左滑动</string>
+    <string name="invert_gestures_summary_off">默认方向模式 - 上一曲目向左滑动，下一曲目向右滑动</string>
+    <string name="gestures_title">手势设置</string>
+    <string name="prev_restart_summary_inv">向右滑动跳至上一曲目</string>
+    <string name="next_summary_inv">向左滑动跳至下一曲目</string>
+
+    <!-- Haptic Feedback -->
+    <string name="haptic_feedback_title">启用手势触感反馈</string>
+    <string name="haptic_feedback_summary_on">当手势绘制完成时振动手机</string>
+    <string name="haptic_feedback_summary_off">当手势绘制完成时不振动手机</string>
    
         <!-- Next and Previous track toast messages -->	
         <string name="next_toast">下一曲目</string>	
