@@ -194,19 +194,17 @@
             android:taskAffinity="android.task.video"
             android:label="@string/videobrowserlabel"
             android:icon="@drawable/app_video"
-            android:exported="false" >
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.PICK" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.dir/video"/>
             </intent-filter>
-<!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
--->
         </activity>
         <activity android:name="com.android.music.MediaPickerActivity"
                 android:label="@string/mediapickerlabel" android:exported="false" >
