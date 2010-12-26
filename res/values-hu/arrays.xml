@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="entries_duck_attenuation">
+    <item>Szünet</item>
+    <item>Semmi</item>
+    <item>Hangerő -3 dB</item>
+    <item>Hangerő -6 dB</item>
+    <item>Hangerő -10 dB</item>
+    <item>Hangerő -15 dB</item>
+  </string-array>
+
+  <string-array name="values_duck_attenuation">
+    <item>-1</item>
+    <item>0</item>
+    <item>3</item>
+    <item>6</item>
+    <item>10</item>
+    <item>15</item>
+  </string-array>
+</resources>

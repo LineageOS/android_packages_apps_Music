@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+** Copyright 2007, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License"); 
+** you may not use this file except in compliance with the License. 
+** You may obtain a copy of the License at 
+**
+**     http://www.apache.org/licenses/LICENSE-2.0 
+**
+** Unless required by applicable law or agreed to in writing, software 
+** distributed under the License is distributed on an "AS IS" BASIS, 
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+** See the License for the specific language governing permissions and 
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- used in various places to indicate there is one song for a given artist or album -->
+    <string name="onesong">1 szám</string>
+    <!-- used in various places to indicate there is some number other than one songs for a given artist or album. -->
+    <plurals name="Nsongs">
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> szám</item>
+    </plurals>
+
+    <!-- shows how many songs on the album are by the selected artist, out of how many total, if those two numbers are different -->
+    <plurals name="Nsongscomp">
+        <item quantity="other"><xliff:g id="count_for_artist">%2$d</xliff:g> / <xliff:g id="total_count">%1$d</xliff:g> szám</item>
+    </plurals>
+
+    <!-- Used in artists list view, indicates how many albums exist for a given artist. -->
+    <plurals name="Nalbums">
+        <!-- number of albums is one -->
+        <item quantity="one">1 album</item>
+        <!-- number of albums is not equal to one -->
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> album</item>
+    </plurals>
+
+    <!--
+    This string is used as the format string in a String.format call,
+    and 5 additional arguments are available for printing:
+    1 - hours
+    2 - minutes
+    3 - minutes%60
+    4 - seconds
+    5 - second%60
+    -->
+    <skip/>
+    <!-- Menu item that takes the user back to the top level screen of the music player -->
+    <string name="goto_start">Könyvtár</string>
+    <!-- Menu item that takes the user to the "now playing" screen of the music player -->
+    <string name="goto_playback">Visszajátszás</string>
+    <!-- Menu item that switches the music player in to party shuffle mode -->
+    <string name="party_shuffle">Party keverés</string>
+    <!-- Menu item that switches the music player out of party shuffle mode -->
+    <string name="party_shuffle_off">Party keverés ki</string>
+    <!-- Menu item that deletes the currently selected item, which might be a single song, or a collection of songs.
+         The user will be prompted to confirm before deletion actually takes place -->
+    <string name="delete_item">Törlés</string>
+    <!-- Menu item to play back all the songs in the currently showing list in shuffle mode -->
+    <string name="shuffle_all">Összes keverése</string>
+    <!-- Menu item to play back all the songs in the currently showing list in list order -->
+    <string name="play_all">Összes lejátszása</string>
+
+    <!-- Delete confirmation dialog when deleting an entire artist -->
+	<string name="delete_artist_desc">Minden <xliff:g id="artist">%s</xliff:g> számot véglegesen törölni az SD kártyáról</string>
+
+    <!-- Delete confirmation dialog when deleting an entire album -->
+	<string name="delete_album_desc">Az egész \"<xliff:g id="album">%s</xliff:g>\" albumot véglegesen törölni az SD kártyáról</string>
+
+    <!-- Delete confirmation dialog when deleting a single song -->
+    <string name="delete_song_desc">\"<xliff:g id="song">%s</xliff:g>\" végleges törlése az SD kártyáról</string>
+
+    <!-- Delete confirmation dialog, confirmation button text -->
+    <string name="delete_confirm_button_text">OK</string>
+    <!-- Toast confirming that song(s) was/were deleted. -->
+    <plurals name="NNNtracksdeleted">
+        <!-- delete confirmation message for 1 song -->
+        <item quantity="one">1 szám törölve lett</item>
+        <!-- delete confirmation message for 0 or more than 1 songs -->
+        <item quantity="other"><xliff:g id="songs_to_delete">%d</xliff:g> szám lett törölve</item>
+    </plurals>
+
+    <!-- shown in dialog while the media scanner is starting up -->
+    <string name="scanning">SD kártya vizsgálata\u2026</string>
+
+    <!-- title of the "current playlist" screen when not in party shuffle mode -->
+    <string name="nowplaying_title">Most játszott</string>
+    <!-- title of the "current playlist" screen when in party shuffle mode-->
+    <string name="partyshuffle_title">Party keverés</string>
+    <!-- Artist screen title -->
+    <string name="artists_title">Előadók</string>
+    <!-- Category label on Library screen -->
+    <string name="albums_menu">Albumok</string>
+    <!-- Albums screen title -->
+    <string name="albums_title">Albumok</string>
+    <!-- Category label on Library screen -->
+    <string name="tracks_menu">Számok</string>
+    <!-- Songs screen title -->
+    <string name="tracks_title">Számok</string>
+    <!-- Category label on Library screen -->
+    <string name="playlists_menu">Lejátszási listák</string>
+    <!-- Playlists screen title -->
+    <string name="playlists_title">Lejátszási listák</string>
+    <!-- Videos screen title -->
+    <string name="videos_title">Videók</string>
+    <!-- All media screen title -->
+    <string name="all_title">Minden média</string>
+    <!-- Category label on Library screen -->
+    <string name="browse_menu">Előadók</string>
+    <!-- Library screen, menu item -->
+    <string name="search_title">Keresés</string>
+    <!-- Title of screen when there are no songs, or if the SD card is busy -->
+    <string name="no_tracks_title">Nincsenek számok</string>
+    <!-- Title of screen when there are no videos, or if the SD card is busy -->
+    <string name="no_videos_title">Nincsenek videók</string>
+    <!-- Title of screen when there are no playlists, or if the SD card is busy -->
+    <string name="no_playlists_title">Nincsenek lejátszási listák</string>
+    <!-- Playlist context menu item to delete the selected playlist. -->
+    <string name="delete_playlist_menu">Törlés</string>
+    <!-- Playlist context menu item to edit the selected playlist -->
+    <string name="edit_playlist_menu">Szerkesztés</string>
+    <!-- Playlist context menu item to rename the selected playlist-->
+    <string name="rename_playlist_menu">Átnevezés</string>
+    <!-- Transient popup message shown after deleting a playlist -->
+    <string name="playlist_deleted_message">Lejátszási lista törölve</string>
+    <!-- Transient popup message shown after renaming a playlist -->
+    <string name="playlist_renamed_message">Lejátszási lista átnevezve</string>
+    <!-- The name of the pseudo-playlist that holds all the recently added files, shown in list view -->
+    <string name="recentlyadded">Legutóbb hozzáadott</string>
+    <!-- The name of the pseudo-playlist that holds all the recently added files, shown in title bar of songs list -->
+    <string name="recentlyadded_title">Legutóbb hozzáadott</string>
+    <!-- The name of the pseudo-playlist that holds all the podcasts, shown in list view -->
+    <string name="podcasts_listitem">Podcast fájlok</string>
+    <!-- The name of the pseudo-playlist that holds all the podcasts, shown in title bar of songs list -->
+    <string name="podcasts_title">Podcast fájlok</string>
+    <!-- Title of screen when no sd card is present -->
+    <string name="sdcard_missing_title">Nincs SD-kártya</string>
+    <!-- label underneath icon used to indicate that no sd card is present -->
+    <string name="sdcard_missing_message">Nincs SD-kártya behelyezve</string>
+    <!-- label underneath icon used to indicate that the sd card is present, but currently unavailable -->
+    <string name="sdcard_busy_title">SD-kártya nem elérhető</string>
+    <!-- label underneath icon used to indicate sd card is mounted to your computer via USB -->
+    <string name="sdcard_busy_message">Sajnáljuk, az SD kártya foglalt</string>
+    <!-- Title of screen when there was an error accessing the sd card -->
+    <string name="sdcard_error_title">SD kártya hiba</string>
+    <!-- label underneath icon used to indicate there was an error accessing the sd card -->
+    <string name="sdcard_error_message">Hiba történt az SD kártyával</string>
+    <!-- Default name of artist that doesn't have a name in the metadata -->
+    <string name="unknown_artist_name">Ismeretlen előadó</string>
+    <!-- Default name of album that doesn't have a name in the metadata -->
+    <string name="unknown_album_name">Ismeretlen album</string>
+    <!-- Toast after turning shuffle on -->
+    <string name="shuffle_on_notif">Keverés bekapcsolva</string>
+    <!-- Toast after turning shuffle off -->
+    <string name="shuffle_off_notif">Keverés kikapcsolva</string>
+    <!-- Toast after turning repeat off -->
+    <string name="repeat_off_notif">Ismétlés kikapcsolva</string>
+    <!-- Toast after turning single repeat on -->
+    <string name="repeat_current_notif">Aktuális szám ismétlése</string>
+    <!-- Toast after turning repeat all on -->
+    <string name="repeat_all_notif">Az összes szám ismétlése</string>
+    <!-- Individual song context menu item -->
+    <string name="ringtone_menu">Használja a telefon csengőhangként</string>
+    <!-- Menu item -->
+    <string name="ringtone_menu_short">Használja csengőhangként</string>
+    <!-- Toast after setting a song as phone ringtone -->
+    <string name="ringtone_set">\"<xliff:g id="name" example="Alarm Bell">%s</xliff:g>\" beállítása telefon csengőhangként</string>
+    <!-- Context menu item -->
+    <string name="play_selection">Lejátszás</string>
+    <!-- Context menu item -->
+    <string name="add_to_playlist">Hozzáadás a lejátszási listához</string>
+    <!-- Context menu item -->
+    <string name="queue">Aktuális lejátszási lista</string>
+    <!-- Context menu item -->
+    <string name="new_playlist">Új</string>
+    <!-- Template for newly created playlist name -->
+    <string name="new_playlist_name_template">Új lejátszási lista <xliff:g id="number">%d</xliff:g></string>
+    <!-- Toasts after adding song(s) to playlists -->
+    <plurals name="NNNtrackstoplaylist">
+        <!-- message shown when one song was added -->
+        <item quantity="one">1 szám hozzáadása listához</item>
+        <!-- message shown when zero or more than one song was added -->
+        <item quantity="other"><xliff:g id="number" example="27">%d</xliff:g> szám hozzáadása listához</item>
+    </plurals>
+    <!-- Toast after selecting an empty playlist -->
+    <string name="emptyplaylist">Kiválasztott lejátszási lista üres</string>
+    <!-- Button name when saving a playlist -->
+    <string name="create_playlist_create_text">Mentés</string>
+    <!-- Button name when saving a playlist and the new playlist will overwrite an existing one -->
+    <string name="create_playlist_overwrite_text">Felülírás</string>
+    <!-- Dialog box title -->
+    <string name="service_start_error_title">Lejátszási hiba</string>
+    <!-- Dialog box message -->
+    <string name="service_start_error_msg">Sajnáljuk, nem lehet lejátszani.</string>
+    <!-- Dialog box button -->
+    <string name="service_start_error_button">OK</string>
+    <!-- Time span edit options that appear when editing system playlist "Recently added" -->
+    <!-- Used to indicate the number of weeks the "recently added" playlist covers in a selector widget -->
+    <string-array name="weeklist">
+        <item>"1 hetes"</item>
+        <item>"2 hetes"</item>
+        <item>"3 hetes"</item>
+        <item>"4 hetes"</item>
+        <item>"5 hetes"</item>
+        <item>"6 hetes"</item>
+        <item>"7 hetes"</item>
+        <item>"8 hetes"</item>
+        <item>"9 hetes"</item>
+        <item>"10 hetes"</item>
+        <item>"11 hetes"</item>
+        <item>"12 hetes"</item>
+    </string-array>
+    <!-- Button name in time span picker -->
+    <string name="weekpicker_set">Kész</string>
+    <!-- Title of time span picker -->
+    <string name="weekpicker_title">Idő beállítása</string>
+    <!-- menu item to save the current list as a new playlist -->
+    <string name="save_as_playlist">Mentés lejátszási listaként</string>
+    <!-- menu item to clear the current playlist -->
+    <string name="clear_playlist">Lejátszási lista ürítése</string>
+
+    <!-- Activity label. This might show up in the activity-picker -->
+    <string name="musicbrowserlabel">Zene</string>
+    <!-- Activity label. This might show up in the activity-picker -->
+    <string name="musicshortcutlabel">Zene lejátszási lista</string>
+    <!-- Activity label. This might show up in the activity-picker -->
+    <string name="mediaplaybacklabel">Zene</string>
+    <!-- Activity label. This might show up in the activity-picker -->
+    <string name="videobrowserlabel">Videó</string>
+    <!-- Activity label. This might show up in the activity-picker -->
+    <string name="mediapickerlabel">Zene</string>
+
+    <!-- Shown as a transient message whenever a file fails to play -->
+    <string name="playback_failed">Sajnáljuk, a lejátszó nem támogatja ezt a fajta hangfájlt</string>
+
+    <!-- Text for the "cancel" button in the "delete" and "create playlist" confirmation dialogs -->
+    <string name="cancel">Mégse</string>
+
+    <!-- context menu item to remove the selected item from the playlist -->
+    <string name="remove_from_playlist">Eltávolítás a lejátszási listáról</string>
+
+    <!-- shown when connecting to a music stream, before it starts playing -->
+    <string name="streamloadingtext">Csatlakozás<xliff:g id="host">%s</xliff:g></string>
+
+    <!-- title of contextual music search menu -->
+    <string name="mediasearch">Keresés \"<xliff:g id="term" example="Beethoven">%s</xliff:g>\" kifejezésre</string>
+
+    <!-- Shown in the title bar while the list of artists is being retrieved in the background -->
+    <string name="working_artists">Előadók\u2026</string>
+    <!-- Shown in the title bar while the list of albums is being retrieved in the background -->
+    <string name="working_albums">Albumok\u2026</string>
+    <!-- Shown in the title bar while the list of songs is being retrieved in the background -->
+    <string name="working_songs">Számok\u2026</string>
+    <!-- Shown in the title bar while the list of playlists is being retrieved in the background -->
+    <string name="working_playlists">Lejátszási listák\u2026</string>
+
+    <!-- Shown in the music picker while loading the music database. -->
+    <string name="loading">Betöltés</string>
+    <!-- Menu in music picker to sort the list by track/song name. -->
+    <string name="sort_by_track">Számok</string>
+    <!-- Menu in music picker to sort the list by album name. -->
+    <string name="sort_by_album">Albumok</string>
+    <!-- Menu in music picker to sort the list by artist name. -->
+    <string name="sort_by_artist">Előadók</string>
+    <!--  Title of the music picker activity. -->
+    <string name="music_picker_title">Válassza ki a zeneszámot</string>
+
+    <!-- Title for track number in music gadget -->
+    <string name="gadget_track">Zeneszám <xliff:g id="track_number">%d</xliff:g></string>
+
+    <!-- Toast after streamStarter activity receives PLAYBACK_COMPLETE in case of an error -->
+    <string name="fail_to_start_stream">Nem sikerült lejátszani a kért adatfolyamot</string>
+
+    <!-- The string used to describe Music as a searchable item within system search settings. -->
+    <string name="search_settings_description">Előadók, albumok, és számok</string>
+
+    <!-- Shown in the search box as a hint -->
+    <string name="search_hint">Szám keresése</string>
+
+    <!-- Settings title -->
+    <string name="settings">Beállítások</string>
+
+    <!-- Setting for keeping screen on while plugged in -->
+    <string name="screen_on_while_plugged_in_title">Kijelző bekapcsolva töltés közben</string>
+    <string name="screen_on_while_plugged_in_summary">Tartsa a képernyőt bekapcsolva lejátszás és töltés közben</string>
+
+    <!-- Setting for auto-unpause when headset is plugged in -->
+    <string name="unpause_on_headset_plug_title">Lejátszás folytatása csatlakozáskor</string>
+    <string name="unpause_on_headset_plug_summary">Lejátszás folytatása fülhallgató csatlakoztatásakor</string>
+
+    <!-- Setting for double tap trackball to skip song -->
+    <string name="doubletap_trackball_next_title">Használja a trackball-t kihagyáshoz</string>
+    <string name="doubletap_trackball_next_summary">A szám átugrásához érintse meg kétszer trackball-t</string>
+
+    <!-- Setting for Fullscreen Now Playing Screen -->
+    <string name="fullscreen_title">Most játszott a teljes képernyőn</string>
+    <string name="fullscreen_summary">Most játszott a képernyőre kiterjed és az értesítő sáv rejtve marad</string>
+
+    <!-- Setting for Transient duck attenuation -->
+    <string name="duck_attenuation_title">Művelet audio fókusz elvesztésekor</string>
+    <string name="duck_attenuation_summary">Válassza ki a tevékenységet amely végrehajtódik az audio fókusz átmeneti elvesztésekor (rövid figyelmeztető jelzések más alkalmazásoktól)</string>
+
+    <!-- Setting for Gesture control -->
+    <string name="enable_gestures_title">Engedélyezze a gesztus vezérlést</string>
+    <string name="enable_gestures_summary">Engedélyezze a zene vezérlését gesztusok által</string>
+
+    <!-- Gesture Explainations -->
+    <string name="gestures_list_title">Gesztusok</string>
+    <string name="gestures_list_summary">Ábra és leírás az összes rendelkezésre álló gesztusról</string>
+
+    <string name="play_pause_title">Lejátszás/Szünet</string>
+    <string name="play_pause_summary">rajzold Lejátszás/Szünet váltásához</string>
+
+    <string name="next_title">Következő szám</string>
+    <string name="next_summary">húzd jobbra a következő szám lejátszásához</string>
+
+    <string name="prev_restart_title">Előző szám</string>
+    <string name="prev_restart_summary">húzd balra az előző szám lejátszásához</string>
+
+    <string name="repeat_title">Ismétlési mód váltása</string>
+    <string name="repeat_summary">rajzold a 3 ismétlési mód közötti váltáshoz</string>
+
+    <string name="shuffle_title">Véletlen sorrendű lejátszási mód váltása</string>
+    <string name="shuffle_summary">rajzold a véletlen sorrendű lejátszási mód ki-be kapcsolásához</string>
+
+    <!-- Credits -->
+    <string name="credits_cat">A közreműködők névsora</string>
+    <string name="credits">Névjegy és a Közreműködők névsora</string>
+    <string name="credits_mod_name">Music Mod - HU</string>
+    <string name="credits_mod_name_summary">Eliot Stocker</string>
+    <string name="credits_mod_version">Verziószám</string>
+    <string name="credits_mod_version_summary">1.7.5.2</string>
+    <string name="credits_mod_credits">A közreműködők névsora</string>
+    <string name="credits_mod_credits_summary">Cyanogen, Dan Josiah, AOSP and all others.</string>
+
+    <!-- Gesture Invert Settings -->
+    <string name="invert_gestures_title">Előző és a Következő gesztusok megfordítása</string>
+    <string name="invert_gestures_summary_on">Jelenleg fordított - Előző a Jobbra és Következő a Balra</string>
+    <string name="invert_gestures_summary_off">Jelenleg normál - Előző a Balra és Következő a Jobbra</string>
+    <string name="gestures_title">Gesztus beállítások</string>
+    <string name="prev_restart_summary_inv">húzd jobbra az előző számhoz való ugráshoz</string>
+    <string name="next_summary_inv">húzd balra a következő számhoz való ugráshoz</string>
+
+    <!-- Haptic Feedback -->
+    <string name="haptic_feedback_title">Rezgő visszajelzés és gesztusok</string>
+    <string name="haptic_feedback_summary_on">A telefon rezeg, ha a gesztus befejeződött</string>
+    <string name="haptic_feedback_summary_off">A telefon nem rezeg, ha a gesztus befejeződött</string>
+
+    <!-- Next and Previous track toast messages -->
+    <string name="next_toast">Következő szám</string>
+    <string name="prev_toast">Előző szám</string>
+
+    <!-- alphaben for fast scroll -->
+    <string name="fast_scroll_music_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+
+    <!-- slash for curent time in audio player -->
+    <string name="slash">/</string>
+
+    <!--The fast scroll thumb will show one character from this string depending on the position in the list -->
+    <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+
+    <!-- Text shown on widget when first loaded -->
+    <string name="widget_initial_text">Érintse meg a szám kiválasztásához.</string>
+
+</resources>
