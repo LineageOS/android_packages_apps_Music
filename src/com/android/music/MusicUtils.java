@@ -87,8 +87,9 @@ public class MusicUtils {
         public final static int DELETE_ITEM = 10;
         public final static int SCAN_DONE = 11;
         public final static int QUEUE = 12;
-        public final static int SETTINGS = 13;
-        public final static int CHILD_MENU_BASE = 14; // this should be the last item
+        public final static int EFFECTS_PANEL = 13;
+        public final static int SETTINGS = 14;
+        public final static int CHILD_MENU_BASE = 15; // this should be the last item
     }
 
     public static String makeAlbumsLabel(Context context, int numalbums, int numsongs, boolean isUnknown) {
@@ -656,16 +657,33 @@ public class MusicUtils {
         }
 
         String status = Environment.getExternalStorageState();
-        int title = R.string.sdcard_error_title;
-        int message = R.string.sdcard_error_message;
+        int title, message;
+
+        if (android.os.Environment.isExternalStorageRemovable()) {
+            title = R.string.sdcard_error_title;
+            message = R.string.sdcard_error_message;
+        } else {
+            title = R.string.sdcard_error_title_nosdcard;
+            message = R.string.sdcard_error_message_nosdcard;
+        }
         
         if (status.equals(Environment.MEDIA_SHARED) ||
                 status.equals(Environment.MEDIA_UNMOUNTED)) {
-            title = R.string.sdcard_busy_title;
-            message = R.string.sdcard_busy_message;
+            if (android.os.Environment.isExternalStorageRemovable()) {
+                title = R.string.sdcard_busy_title;
+                message = R.string.sdcard_busy_message;
+            } else {
+                title = R.string.sdcard_busy_title_nosdcard;
+                message = R.string.sdcard_busy_message_nosdcard;
+            }
         } else if (status.equals(Environment.MEDIA_REMOVED)) {
-            title = R.string.sdcard_missing_title;
-            message = R.string.sdcard_missing_message;
+            if (android.os.Environment.isExternalStorageRemovable()) {
+                title = R.string.sdcard_missing_title;
+                message = R.string.sdcard_missing_message;
+            } else {
+                title = R.string.sdcard_missing_title_nosdcard;
+                message = R.string.sdcard_missing_message_nosdcard;
+            }
         } else if (status.equals(Environment.MEDIA_MOUNTED)){
             // The card is mounted, but we didn't get a valid cursor.
             // This probably means the mediascanner hasn't started scanning the
@@ -1080,7 +1098,7 @@ public class MusicUtils {
             context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
         Editor ed = prefs.edit();
         ed.putInt(name, value);
-        ed.commit();
+        SharedPreferencesCompat.apply(ed);
     }
 
     static boolean getBooleanPref(Context context, String name, boolean def) {

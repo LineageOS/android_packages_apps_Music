@@ -43,6 +43,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.Playlists;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -161,10 +162,12 @@ public class TrackBrowserActivity extends ListActivity
         mUseLastListPos = MusicUtils.updateButtonBar(this, R.id.songtab);
         mTrackList = getListView();
         mTrackList.setOnCreateContextMenuListener(this);
+        mTrackList.setCacheColorHint(0);
         if (mEditMode) {
             ((TouchInterceptor) mTrackList).setDropListener(mDropListener);
             ((TouchInterceptor) mTrackList).setRemoveListener(mRemoveListener);
-            mTrackList.setCacheColorHint(0);
+            mTrackList.setDivider(null);
+            mTrackList.setSelector(R.drawable.list_selector_background);
         } else {
             mTrackList.setTextFilterEnabled(true);
         }
@@ -419,18 +422,20 @@ public class TrackBrowserActivity extends ListActivity
     }
 
     private void setAlbumArtBackground() {
-        try {
-            long albumid = Long.valueOf(mAlbumId);
-            Bitmap bm = MusicUtils.getArtwork(TrackBrowserActivity.this, -1, albumid, false);
-            if (bm != null) {
-                MusicUtils.setBackground(mTrackList, bm);
-                mTrackList.setCacheColorHint(0);
-                return;
+        if (!mEditMode) {
+            try {
+                long albumid = Long.valueOf(mAlbumId);
+                Bitmap bm = MusicUtils.getArtwork(TrackBrowserActivity.this, -1, albumid, false);
+                if (bm != null) {
+                    MusicUtils.setBackground(mTrackList, bm);
+                    mTrackList.setCacheColorHint(0);
+                    return;
+                }
+            } catch (Exception ex) {
             }
-        } catch (Exception ex) {
         }
-        mTrackList.setBackgroundResource(0);
-        mTrackList.setCacheColorHint(0xff000000);
+        mTrackList.setBackgroundColor(0xff000000);
+        mTrackList.setCacheColorHint(0);
     }
 
     private void setTitle() {
@@ -601,12 +606,14 @@ public class TrackBrowserActivity extends ListActivity
                     finish();
                     return;
                 }
-                Cursor c = new NowPlayingCursor(MusicUtils.sService, mCursorCols);
-                if (c.getCount() == 0) {
-                    finish();
-                    return;
+                if (mAdapter != null) {
+                    Cursor c = new NowPlayingCursor(MusicUtils.sService, mCursorCols);
+                    if (c.getCount() == 0) {
+                        finish();
+                        return;
+                    }
+                    mAdapter.changeCursor(c);
                 }
-                mAdapter.changeCursor(c);
             }
         }
     };
@@ -710,7 +717,12 @@ public class TrackBrowserActivity extends ListActivity
                 long [] list = new long[1];
                 list[0] = (int) mSelectedId;
                 Bundle b = new Bundle();
-                String f = getString(R.string.delete_song_desc); 
+                String f;
+                if (android.os.Environment.isExternalStorageRemovable()) {
+                    f = getString(R.string.delete_song_desc); 
+                } else {
+                    f = getString(R.string.delete_song_desc_nosdcard); 
+                }
                 String desc = String.format(f, mCurrentTrackName);
                 b.putString("description", desc);
                 b.putLongArray("items", list);
@@ -1011,32 +1023,15 @@ public class TrackBrowserActivity extends ListActivity
         StringBuilder where = new StringBuilder();
         where.append(MediaStore.Audio.Media.TITLE + " != ''");
 
-        // Add in the filtering constraints
-        String [] keywords = null;
-        if (filter != null) {
-            String [] searchWords = filter.split(" ");
-            keywords = new String[searchWords.length];
-            Collator col = Collator.getInstance();
-            col.setStrength(Collator.PRIMARY);
-            for (int i = 0; i < searchWords.length; i++) {
-                String key = MediaStore.Audio.keyFor(searchWords[i]);
-                key = key.replace("\\", "\\\\");
-                key = key.replace("%", "\\%");
-                key = key.replace("_", "\\_");
-                keywords[i] = '%' + key + '%';
-            }
-            for (int i = 0; i < searchWords.length; i++) {
-                where.append(" AND ");
-                where.append(MediaStore.Audio.Media.ARTIST_KEY + "||");
-                where.append(MediaStore.Audio.Media.TITLE_KEY + " LIKE ? ESCAPE '\\'");
-            }
-        }
-        
         if (mGenre != null) {
+            Uri uri = MediaStore.Audio.Genres.Members.getContentUri("external",
+                    Integer.valueOf(mGenre));
+            if (!TextUtils.isEmpty(filter)) {
+                uri = uri.buildUpon().appendQueryParameter("filter", Uri.encode(filter)).build();
+            }
             mSortOrder = MediaStore.Audio.Genres.Members.DEFAULT_SORT_ORDER;
-            ret = queryhandler.doQuery(MediaStore.Audio.Genres.Members.getContentUri("external",
-                    Integer.valueOf(mGenre)),
-                    mCursorCols, where.toString(), keywords, mSortOrder, async);
+            ret = queryhandler.doQuery(uri,
+                    mCursorCols, where.toString(), null, mSortOrder, async);
         } else if (mPlaylist != null) {
             if (mPlaylist.equals("nowplaying")) {
                 if (MusicUtils.sService != null) {
@@ -1049,22 +1044,34 @@ public class TrackBrowserActivity extends ListActivity
                 }
             } else if (mPlaylist.equals("podcasts")) {
                 where.append(" AND " + MediaStore.Audio.Media.IS_PODCAST + "=1");
-                ret = queryhandler.doQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        mCursorCols, where.toString(), keywords,
+                Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                if (!TextUtils.isEmpty(filter)) {
+                    uri = uri.buildUpon().appendQueryParameter("filter", Uri.encode(filter)).build();
+                }
+                ret = queryhandler.doQuery(uri,
+                        mCursorCols, where.toString(), null,
                         MediaStore.Audio.Media.DEFAULT_SORT_ORDER, async);
             } else if (mPlaylist.equals("recentlyadded")) {
                 // do a query for all songs added in the last X weeks
+                Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                if (!TextUtils.isEmpty(filter)) {
+                    uri = uri.buildUpon().appendQueryParameter("filter", Uri.encode(filter)).build();
+                }
                 int X = MusicUtils.getIntPref(this, "numweeks", 2) * (3600 * 24 * 7);
                 where.append(" AND " + MediaStore.MediaColumns.DATE_ADDED + ">");
                 where.append(System.currentTimeMillis() / 1000 - X);
-                ret = queryhandler.doQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        mCursorCols, where.toString(), keywords,
+                ret = queryhandler.doQuery(uri,
+                        mCursorCols, where.toString(), null,
                         MediaStore.Audio.Media.DEFAULT_SORT_ORDER, async);
             } else {
+                Uri uri = MediaStore.Audio.Playlists.Members.getContentUri("external",
+                        Long.valueOf(mPlaylist));
+                if (!TextUtils.isEmpty(filter)) {
+                    uri = uri.buildUpon().appendQueryParameter("filter", Uri.encode(filter)).build();
+                }
                 mSortOrder = MediaStore.Audio.Playlists.Members.DEFAULT_SORT_ORDER;
-                ret = queryhandler.doQuery(MediaStore.Audio.Playlists.Members.getContentUri("external",
-                        Long.valueOf(mPlaylist)), mPlaylistMemberCols,
-                        where.toString(), keywords, mSortOrder, async);
+                ret = queryhandler.doQuery(uri, mPlaylistMemberCols,
+                        where.toString(), null, mSortOrder, async);
             }
         } else {
             if (mAlbumId != null) {
@@ -1075,8 +1082,12 @@ public class TrackBrowserActivity extends ListActivity
                 where.append(" AND " + MediaStore.Audio.Media.ARTIST_ID + "=" + mArtistId);
             }
             where.append(" AND " + MediaStore.Audio.Media.IS_MUSIC + "=1");
-            ret = queryhandler.doQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    mCursorCols, where.toString() , keywords, mSortOrder, async);
+            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            if (!TextUtils.isEmpty(filter)) {
+                uri = uri.buildUpon().appendQueryParameter("filter", Uri.encode(filter)).build();
+            }
+            ret = queryhandler.doQuery(uri,
+                    mCursorCols, where.toString() , null, mSortOrder, async);
         }
         
         // This special case is for the "nowplaying" cursor, which cannot be handled
@@ -1430,7 +1441,7 @@ public class TrackBrowserActivity extends ListActivity
                 
                 if (mIndexer != null) {
                     mIndexer.setCursor(cursor);
-                } else if (!mActivity.mEditMode) {
+                } else if (!mActivity.mEditMode && mActivity.mAlbumId == null) {
                     String alpha = mActivity.getString(R.string.fast_scroll_alphabet);
                 
                     mIndexer = new MusicAlphabetIndexer(cursor, mTitleIdx, alpha);
@@ -1442,12 +1453,7 @@ public class TrackBrowserActivity extends ListActivity
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
             View v = super.newView(context, cursor, parent);
             ImageView iv = (ImageView) v.findViewById(R.id.icon);
-            if (mActivity.mEditMode) {
-                iv.setVisibility(View.VISIBLE);
-                iv.setImageResource(R.drawable.ic_mp_move);
-            } else {
-                iv.setVisibility(View.GONE);
-            }
+            iv.setVisibility(View.GONE);
             
             ViewHolder vh = new ViewHolder();
             vh.line1 = (TextView) v.findViewById(R.id.line1);

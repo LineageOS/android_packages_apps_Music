@@ -101,8 +101,7 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
      */
     void notifyChange(MediaPlaybackService service, String what) {
         if (hasInstances(service)) {
-            if (MediaPlaybackService.PLAYBACK_COMPLETE.equals(what) ||
-                    MediaPlaybackService.META_CHANGED.equals(what) ||
+            if (MediaPlaybackService.META_CHANGED.equals(what) ||
                     MediaPlaybackService.PLAYSTATE_CHANGED.equals(what)) {
                 performUpdate(service, null);
             }
@@ -127,9 +126,17 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
         String status = Environment.getExternalStorageState();
         if (status.equals(Environment.MEDIA_SHARED) ||
                 status.equals(Environment.MEDIA_UNMOUNTED)) {
-            errorState = res.getText(R.string.sdcard_busy_title);
+            if (android.os.Environment.isExternalStorageRemovable()) {
+                errorState = res.getText(R.string.sdcard_busy_title);
+            } else {
+                errorState = res.getText(R.string.sdcard_busy_title_nosdcard);
+            }
         } else if (status.equals(Environment.MEDIA_REMOVED)) {
-            errorState = res.getText(R.string.sdcard_missing_title);
+            if (android.os.Environment.isExternalStorageRemovable()) {
+                errorState = res.getText(R.string.sdcard_missing_title);
+            } else {
+                errorState = res.getText(R.string.sdcard_missing_title_nosdcard);
+            }
         } else if (titleName == null) {
             errorState = res.getText(R.string.emptyplaylist);
         }

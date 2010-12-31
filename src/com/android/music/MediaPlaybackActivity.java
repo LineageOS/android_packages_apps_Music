@@ -31,9 +31,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.audiofx.AudioEffect;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.BatteryManager;
@@ -81,7 +83,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     View.OnTouchListener, View.OnLongClickListener, OnGesturePerformedListener
 {
     private static final int USE_AS_RINGTONE = CHILD_MENU_BASE;
-    
+
     private boolean mOneShot = false;
     private boolean mSeeking = false;
     private boolean mDeviceHasDpad;
@@ -175,12 +177,6 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             seeker.setOnSeekBarChangeListener(mSeekListener);
         }
         mProgress.setMax(1000);
-        
-        if (icicle != null) {
-            mOneShot = icicle.getBoolean("oneshot");
-        } else {
-            mOneShot = getIntent().getBooleanExtra("oneshot", false);
-        }
 
         mTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
     }
@@ -510,12 +506,6 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean("oneshot", mOneShot);
-        super.onSaveInstanceState(outState);
-    }
-    
-    @Override
     public void onStart() {
         super.onStart();
         paused = false;
@@ -547,7 +537,6 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     @Override
     public void onNewIntent(Intent intent) {
         setIntent(intent);
-        mOneShot = intent.getBooleanExtra("oneshot", false);
     }
     
     @Override
@@ -577,7 +566,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         // if we're in one shot mode. In most cases, these menu items are not
         // useful in those modes, so for consistency we never show them in these
         // modes, instead of tailoring them to the specific file being played.
-        if (MusicUtils.getCurrentAudioId() >= 0 && !mOneShot) {
+        if (MusicUtils.getCurrentAudioId() >= 0) {
             menu.add(0, GOTO_START, 0, R.string.goto_start).setIcon(R.drawable.ic_menu_music_library);
             menu.add(0, PARTY_SHUFFLE, 0, R.string.party_shuffle); // icon will be set in onPrepareOptionsMenu()
             SubMenu sub = menu.addSubMenu(0, ADD_TO_PLAYLIST, 0,
@@ -588,8 +577,12 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                     .setIcon(R.drawable.ic_menu_set_as_ringtone);
             menu.add(1, DELETE_ITEM, 0, R.string.delete_item)
                     .setIcon(R.drawable.ic_menu_delete);
-            
             menu.add(0, SETTINGS, 0, R.string.settings).setIcon(android.R.drawable.ic_menu_preferences);
+
+            Intent i = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
+            if (getPackageManager().resolveActivity(i, 0) != null) {
+                menu.add(0, EFFECTS_PANEL, 0, R.string.effectspanel).setIcon(R.drawable.ic_menu_eq);
+            }
             return true;
         }
         return false;
@@ -666,8 +659,13 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                         long [] list = new long[1];
                         list[0] = MusicUtils.getCurrentAudioId();
                         Bundle b = new Bundle();
-                        b.putString("description", getString(R.string.delete_song_desc,
-                                mService.getTrackName()));
+                        String f;
+                        if (android.os.Environment.isExternalStorageRemovable()) {
+                            f = getString(R.string.delete_song_desc, mService.getTrackName());
+                        } else {
+                            f = getString(R.string.delete_song_desc_nosdcard, mService.getTrackName());
+                        }
+                        b.putString("description", f);
                         b.putLongArray("items", list);
                         intent = new Intent();
                         intent.setClass(this, DeleteItems.class);
@@ -677,13 +675,20 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                     return true;
                 }
                 
-                case SETTINGS:
-                	intent = new Intent();
-                	intent.setClass(this, MusicSettingsActivity.class);
-                	startActivityForResult(intent, SETTINGS);
-                	return true;
+                case SETTINGS: {
+                    intent = new Intent();
+                    intent.setClass(this, MusicSettingsActivity.class);
+                    startActivityForResult(intent, SETTINGS);
+                    return true;
                 }
-            
+
+                case EFFECTS_PANEL: {
+                    Intent i = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
+                    i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mService.getAudioSessionId());
+                    startActivityForResult(i, EFFECTS_PANEL);
+                    return true;
+                }
+            }
         } catch (RemoteException ex) {
         }
         return super.onOptionsItemSelected(item);
@@ -926,103 +931,100 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         return super.onKeyDown(keyCode, event);
     }
 
-	// gestures code
+        // gestures code
 
-	public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+        public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
         if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_ENABLE_GESTURES, false)) {
-		overlay.setGestureVisible(true);
-		Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            overlay.setGestureVisible(true);
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-		ArrayList<Prediction> predictions = mLibrary.recognize(gesture);
+            ArrayList<Prediction> predictions = mLibrary.recognize(gesture);
 
-		if (predictions.size() > 0) {
-			Prediction prediction = predictions.get(0);
-			if (prediction.score > 1.0) {
-				String what = predictions.get(0).name;
-				if ("play".equals(what)) {
-					long mDuration = 2000;
-				        try {
-				            if(mService != null) {
-				                if (mService.isPlaying()) {
-				                    mService.pause();
-						Toast.makeText(this, "Pause", Toast.LENGTH_SHORT).show();
-				                } else {
-				                    mService.play();
-						Toast.makeText(this, "Play", Toast.LENGTH_SHORT).show();
-				                }
-				                refreshNow();
-				                setPauseButtonImage();
-				            }
-				        } catch (RemoteException ex) {
-				        }
-				        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
-				        v.vibrate(300);
-				        }
-				} else if ("next".equals(what)) {
-					if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_INVERT_GESTURES, false)) {
-			            if (mService == null) return;
-			            try {
-		                    mService.prev();
-				    Toast.makeText(this, R.string.prev_toast, Toast.LENGTH_SHORT).show();
-		            } catch (RemoteException ex) {
-		            }
-		            if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
-		            v.vibrate(700);
-		            }
-						}
-					else {
-						
-						if (mService == null) return;
-				            try {
-			                mService.next();
-			            } catch (RemoteException ex) {
-			            }
-					Toast.makeText(this, R.string.next_toast, Toast.LENGTH_SHORT).show();
-					if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
-					v.vibrate(500);
-					}
-					}
-				} else if ("prev".equals(what)) {
-					if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_INVERT_GESTURES, false)) {
-						if (mService == null) return;
-			            try {
-		                mService.next();
-		            } catch (RemoteException ex) {
-		            }
-				Toast.makeText(this, R.string.next_toast, Toast.LENGTH_SHORT).show();
-				if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
-				v.vibrate(500);
-				}
-						}
-					else {
-						if (mService == null) return;
-			            try {
-		                    mService.prev();
-				    Toast.makeText(this, R.string.prev_toast, Toast.LENGTH_SHORT).show();
-		            } catch (RemoteException ex) {
-		            }
-		            if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
-		            v.vibrate(700);
-					}
-					}
-				} else if ("repeat".equals(what)) {
-					cycleRepeat();
-					if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
-					v.vibrate(1000);
-					}
-				} else if ("shuffle".equals(what)) {
-					toggleShuffle();
-					if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
-					v.vibrate(100);
-					}
-				}
+            if (predictions.size() > 0) {
+                Prediction prediction = predictions.get(0);
+                if (prediction.score > 1.0) {
+                    String what = predictions.get(0).name;
+                    if ("play".equals(what)) {
+                        long mDuration = 2000;
+                        try {
+                            if(mService != null) {
+                                if (mService.isPlaying()) {
+                                    mService.pause();
+                                Toast.makeText(this, "Pause", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    mService.play();
+                                Toast.makeText(this, "Play", Toast.LENGTH_SHORT).show();
+                                }
+                                refreshNow();
+                                setPauseButtonImage();
+                            }
+                        } catch (RemoteException ex) {
+                        }
+                        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                        v.vibrate(300);
+                        }
+                    } else if ("next".equals(what)) {
+                        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_INVERT_GESTURES, false)) {
+                            if (mService == null) return;
+                            try {
+                                mService.prev();
+                                Toast.makeText(this, R.string.prev_toast, Toast.LENGTH_SHORT).show();
+                            } catch (RemoteException ex) {
+                            }
+                            if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                                v.vibrate(700);
+                            }
+                        } else {
+                            if (mService == null) return;
+                            try {
+                                mService.next();
+                            } catch (RemoteException ex) {
+                            }
+                            Toast.makeText(this, R.string.next_toast, Toast.LENGTH_SHORT).show();
+                            if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                                v.vibrate(500);
+                            }
+                        }
+                    } else if ("prev".equals(what)) {
+                        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_INVERT_GESTURES, false)) {
+                            if (mService == null) return;
+                            try {
+                                mService.next();
+                            } catch (RemoteException ex) {
+                            }
+                            Toast.makeText(this, R.string.next_toast, Toast.LENGTH_SHORT).show();
+                            if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                                v.vibrate(500);
+                            }
+                        } else {
+                            if (mService == null) return;
+                            try {
+                                mService.prev();
+                                Toast.makeText(this, R.string.prev_toast, Toast.LENGTH_SHORT).show();
+                            } catch (RemoteException ex) {
+                            }
+                            if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                                v.vibrate(700);
+                            }
+                        }
+                    } else if ("repeat".equals(what)) {
+                        cycleRepeat();
+                        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                            v.vibrate(1000);
+                        }
+                    } else if ("shuffle".equals(what)) {
+                        toggleShuffle();
+                        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                            v.vibrate(100);
+                        }
+                    }
 
-			}
-		}
-	} else {
-	overlay.setGestureVisible(false);
-	}
-	}
+                }
+            }
+        } else {
+            overlay.setGestureVisible(false);
+        }
+    }
 
     private void scanBackward(int repcnt, long delta) {
         if(mService == null) return;
@@ -1193,12 +1195,8 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                 filename = uri.toString();
             }
             try {
-                if (! ContentResolver.SCHEME_CONTENT.equals(scheme) ||
-                        ! MediaStore.AUTHORITY.equals(uri.getAuthority())) {
-                    mOneShot = true;
-                }
                 mService.stop();
-                mService.openFile(filename, mOneShot);
+                mService.openFile(filename);
                 mService.play();
                 setIntent(new Intent());
             } catch (Exception ex) {
@@ -1221,17 +1219,11 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                     if (mService.getAudioId() >= 0 || mService.isPlaying() ||
                             mService.getPath() != null) {
                         // something is playing now, we're done
-                        if (mOneShot || mService.getAudioId() < 0) {
-                            mRepeatButton.setVisibility(View.INVISIBLE);
-                            mShuffleButton.setVisibility(View.INVISIBLE);
-                            mQueueButton.setVisibility(View.INVISIBLE);
-                        } else {
-                            mRepeatButton.setVisibility(View.VISIBLE);
-                            mShuffleButton.setVisibility(View.VISIBLE);
-                            mQueueButton.setVisibility(View.VISIBLE);
-                            setRepeatButtonImage();
-                            setShuffleButtonImage();
-                        }
+                        mRepeatButton.setVisibility(View.VISIBLE);
+                        mShuffleButton.setVisibility(View.VISIBLE);
+                        mQueueButton.setVisibility(View.VISIBLE);
+                        setRepeatButtonImage();
+                        setShuffleButtonImage();
                         setPauseButtonImage();
                         return;
                     }
@@ -1404,17 +1396,11 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                 updateTrackInfo();
                 setPauseButtonImage();
                 queueNextRefresh(1);
-            } else if (action.equals(MediaPlaybackService.PLAYBACK_COMPLETE)) {
-                if (mOneShot) {
-                    finish();
-                } else {
-                    setPauseButtonImage();
-                }
             } else if (action.equals(MediaPlaybackService.PLAYSTATE_CHANGED)) {
                 setPauseButtonImage();
             } else if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
-            	int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
-            	setPluggedIn(status);
+                int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
+                setPluggedIn(status);
             } else if (action.equals(MediaPlaybackService.REFRESH_PROGRESSBAR)) {
                 refreshNow();
             }
@@ -1422,27 +1408,26 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     };
 
     private void setFullscreen() {
-    	if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_NOW_PLAYING_FULLSCREEN, false)) {
-    			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    		} else {
-    			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    		}
+        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_NOW_PLAYING_FULLSCREEN, false)) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
     }
 
     private void setPluggedIn(int status) {
-    	
-    	if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_SCREEN_ON_WHILE_PLUGGED_IN, false)) {
-    		if (!pluggedIn && (status == BatteryManager.BATTERY_STATUS_CHARGING
-    				|| status == BatteryManager.BATTERY_STATUS_FULL
-    				|| status == BatteryManager.BATTERY_PLUGGED_AC
-    				|| status == BatteryManager.BATTERY_PLUGGED_USB)) {
-    			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    			pluggedIn = true;
-    		} else if (pluggedIn) {
-    			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    			pluggedIn = false;
-    		}
-    	}
+        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_SCREEN_ON_WHILE_PLUGGED_IN, false)) {
+            if (!pluggedIn && (status == BatteryManager.BATTERY_STATUS_CHARGING
+                || status == BatteryManager.BATTERY_STATUS_FULL
+                || status == BatteryManager.BATTERY_PLUGGED_AC
+                || status == BatteryManager.BATTERY_PLUGGED_USB)) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                pluggedIn = true;
+             } else if (pluggedIn) {
+                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                 pluggedIn = false;
+             }
+         }
     }
     
     private BroadcastReceiver mScreenTimeoutListener = new BroadcastReceiver() {
@@ -1477,7 +1462,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         }
     };
 
-	private static class AlbumSongIdWrapper {
+    private static class AlbumSongIdWrapper {
         public long albumid;
         public long songid;
         AlbumSongIdWrapper(long aid, long sid) {
