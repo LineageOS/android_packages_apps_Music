@@ -33,6 +33,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
     private static final int LONG_PRESS_DELAY = 1000;
 
     private static long mLastClickTime = 0;
+    private static long mLastDoubleClickTime = 0;
     private static boolean mDown = false;
     private static boolean mLaunched = false;
 
@@ -59,10 +60,9 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String intentAction = intent.getAction();
         if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intentAction)) {
-            Intent i = new Intent(context, MediaPlaybackService.class);
-            i.setAction(MediaPlaybackService.SERVICECMD);
+            Intent i = new Intent(MediaPlaybackService.SERVICECMD);
             i.putExtra(MediaPlaybackService.CMDNAME, MediaPlaybackService.CMDPAUSE);
-            context.startService(i);
+            context.sendBroadcast(i);
         } else if (Intent.ACTION_MEDIA_BUTTON.equals(intentAction)) {
             KeyEvent event = (KeyEvent)
                     intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
@@ -113,10 +113,23 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
                         Intent i = new Intent(context, MediaPlaybackService.class);
                         i.setAction(MediaPlaybackService.SERVICECMD);
                         if (keycode == KeyEvent.KEYCODE_HEADSETHOOK &&
+                                eventtime - mLastDoubleClickTime < 300) {
+                            i.putExtra(MediaPlaybackService.CMDNAME, MediaPlaybackService.CMDPREVIOUS);
+
+                            // Play previous song when headset button is clicked thrice.
+                            // The command needs to be sent twice since a double click
+                            // would have sent CMDNEXT so to move to the previous song,
+                            // we need to send CMDPREVIOUS twice now
+                            context.startService(i);
+                            context.startService(i);
+                            mLastClickTime = 0;
+                            mLastDoubleClickTime = 0;
+                        } else if (keycode == KeyEvent.KEYCODE_HEADSETHOOK &&
                                 eventtime - mLastClickTime < 300) {
                             i.putExtra(MediaPlaybackService.CMDNAME, MediaPlaybackService.CMDNEXT);
                             context.startService(i);
                             mLastClickTime = 0;
+                            mLastDoubleClickTime = eventtime;
                         } else {
                             i.putExtra(MediaPlaybackService.CMDNAME, command);
                             context.startService(i);

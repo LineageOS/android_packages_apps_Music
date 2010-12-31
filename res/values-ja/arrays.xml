@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="entries_duck_attenuation">
+        <item>ポーズ</item>
+        <item>何もしない</item>
+        <item>音量 -3 dB</item>
+        <item>音量 -6 dB</item>
+        <item>音量 -10 dB</item>
+        <item>音量 -15 dB</item>
+    </string-array>
+</resources>
+

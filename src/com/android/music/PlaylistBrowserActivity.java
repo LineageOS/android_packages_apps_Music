@@ -98,18 +98,27 @@ public class PlaylistBrowserActivity extends ListActivity
         mToken = MusicUtils.bindToService(this, new ServiceConnection() {
             public void onServiceConnected(ComponentName classname, IBinder obj) {
                 if (Intent.ACTION_VIEW.equals(action)) {
-                    long id = Long.parseLong(intent.getExtras().getString("playlist"));
-                    if (id == RECENTLY_ADDED_PLAYLIST) {
-                        playRecentlyAdded();
-                    } else if (id == PODCASTS_PLAYLIST) {
-                        playPodcasts();
-                    } else if (id == ALL_SONGS_PLAYLIST) {
-                        long [] list = MusicUtils.getAllSongs(PlaylistBrowserActivity.this);
-                        if (list != null) {
-                            MusicUtils.playAll(PlaylistBrowserActivity.this, list, 0);
-                        }
+                    Bundle b = intent.getExtras();
+                    if (b == null) {
+                        Log.w(TAG, "Unexpected:getExtras() returns null.");
                     } else {
-                        MusicUtils.playPlaylist(PlaylistBrowserActivity.this, id);
+                        try {
+                            long id = Long.parseLong(b.getString("playlist"));
+                            if (id == RECENTLY_ADDED_PLAYLIST) {
+                                playRecentlyAdded();
+                            } else if (id == PODCASTS_PLAYLIST) {
+                                playPodcasts();
+                            } else if (id == ALL_SONGS_PLAYLIST) {
+                                long[] list = MusicUtils.getAllSongs(PlaylistBrowserActivity.this);
+                                if (list != null) {
+                                    MusicUtils.playAll(PlaylistBrowserActivity.this, list, 0);
+                                }
+                            } else {
+                                MusicUtils.playPlaylist(PlaylistBrowserActivity.this, id);
+                            }
+                        } catch (NumberFormatException e) {
+                            Log.w(TAG, "Playlist id missing or broken");
+                        }
                     }
                     finish();
                     return;
@@ -189,7 +198,8 @@ public class PlaylistBrowserActivity extends ListActivity
         // instead of closing the cursor directly keeps the framework from accessing
         // the closed cursor later.
         if (!mAdapterSent && mAdapter != null) {
-            mAdapter.changeCursor(null);
+            // close the cursor if we didn't send it to another activity, to avoid cursor leaks
+            mAdapter.changeCursor(mAdapter.getCursor());
         }
         // Because we pass the adapter to the next activity, we need to make
         // sure it doesn't keep a reference to this activity. We can do this
@@ -260,6 +270,7 @@ public class PlaylistBrowserActivity extends ListActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mCreateShortcut) {
             menu.add(0, PARTY_SHUFFLE, 0, R.string.party_shuffle); // icon will be set in onPrepareOptionsMenu()
+            menu.add(0, SETTINGS, 0, R.string.settings).setIcon(android.R.drawable.ic_menu_preferences);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -277,6 +288,12 @@ public class PlaylistBrowserActivity extends ListActivity
             case PARTY_SHUFFLE:
                 MusicUtils.togglePartyShuffle();
                 break;
+
+            case SETTINGS:
+                     intent = new Intent();
+                     intent.setClass(this, MusicSettingsActivity.class);
+                     startActivityForResult(intent, SETTINGS);
+                     return true;
         }
         return super.onOptionsItemSelected(item);
     }

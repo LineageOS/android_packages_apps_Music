@@ -38,6 +38,7 @@ import android.graphics.Bitmap;
 import android.media.audiofx.AudioEffect;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -57,6 +58,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -65,12 +67,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.Prediction;
+import android.gesture.GestureOverlayView.OnGesturePerformedListener;
+
+import android.os.Vibrator;
+
+import java.util.ArrayList;
+
 
 public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
-    View.OnTouchListener, View.OnLongClickListener
+    View.OnTouchListener, View.OnLongClickListener, OnGesturePerformedListener
 {
     private static final int USE_AS_RINGTONE = CHILD_MENU_BASE;
 
+    private boolean mOneShot = false;
     private boolean mSeeking = false;
     private boolean mDeviceHasDpad;
     private long mStartSeekPos = 0;
@@ -87,6 +101,9 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     private Toast mToast;
     private int mTouchSlop;
     private ServiceToken mToken;
+    private boolean pluggedIn;
+    private boolean mIntentDeRegistered = false;
+    private GestureLibrary mLibrary;
 
     public MediaPlaybackActivity()
     {
@@ -104,6 +121,15 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.audio_player);
+
+	// Gestures Code
+	mLibrary = GestureLibraries.fromRawResource(this, R.raw.music);
+	if (!mLibrary.load()) {
+	    finish();
+	}
+
+	GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.gestures);
+	gestures.addOnGesturePerformedListener(this);
 
         mCurrentTime = (TextView) findViewById(R.id.currenttime);
         mTotalTime = (TextView) findViewById(R.id.totaltime);
@@ -461,8 +487,19 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     @Override
     public void onStop() {
         paused = true;
-        mHandler.removeMessages(REFRESH);
-        unregisterReceiver(mStatusListener);
+        if (mService != null && mOneShot && getChangingConfigurations() == 0) {
+            try {
+                mService.stop();
+            } catch (RemoteException ex) {
+            }
+        }
+
+        if (!mIntentDeRegistered) {
+            mHandler.removeMessages(REFRESH);
+            unregisterReceiver(mStatusListener);
+        }
+
+        unregisterReceiver(mScreenTimeoutListener);
         MusicUtils.unbindFromService(mToken);
         mService = null;
         super.onStop();
@@ -478,11 +515,20 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             // something went wrong
             mHandler.sendEmptyMessage(QUIT);
         }
-        
+
         IntentFilter f = new IntentFilter();
         f.addAction(MediaPlaybackService.PLAYSTATE_CHANGED);
         f.addAction(MediaPlaybackService.META_CHANGED);
+        f.addAction(MediaPlaybackService.PLAYBACK_COMPLETE);
+        f.addAction(Intent.ACTION_BATTERY_CHANGED);
+        f.addAction(MediaPlaybackService.REFRESH_PROGRESSBAR);
         registerReceiver(mStatusListener, new IntentFilter(f));
+
+        IntentFilter s = new IntentFilter();
+        s.addAction(Intent.ACTION_SCREEN_ON);
+        s.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mScreenTimeoutListener, new IntentFilter(s));
+
         updateTrackInfo();
         long next = refreshNow();
         queueNextRefresh(next);
@@ -497,6 +543,11 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     public void onResume() {
         super.onResume();
         updateTrackInfo();
+        setFullscreen();
+
+        if (mIntentDeRegistered) {
+            paused = false;
+        }
         setPauseButtonImage();
     }
     
@@ -526,12 +577,12 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                     .setIcon(R.drawable.ic_menu_set_as_ringtone);
             menu.add(1, DELETE_ITEM, 0, R.string.delete_item)
                     .setIcon(R.drawable.ic_menu_delete);
+            menu.add(0, SETTINGS, 0, R.string.settings).setIcon(android.R.drawable.ic_menu_preferences);
 
             Intent i = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
             if (getPackageManager().resolveActivity(i, 0) != null) {
                 menu.add(0, EFFECTS_PANEL, 0, R.string.effectspanel).setIcon(R.drawable.ic_menu_eq);
             }
-
             return true;
         }
         return false;
@@ -621,6 +672,13 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                         intent.putExtras(b);
                         startActivityForResult(intent, -1);
                     }
+                    return true;
+                }
+                
+                case SETTINGS: {
+                    intent = new Intent();
+                    intent.setClass(this, MusicSettingsActivity.class);
+                    startActivityForResult(intent, SETTINGS);
                     return true;
                 }
 
@@ -872,7 +930,102 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         }
         return super.onKeyDown(keyCode, event);
     }
-    
+
+        // gestures code
+
+        public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_ENABLE_GESTURES, false)) {
+            overlay.setGestureVisible(true);
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+            ArrayList<Prediction> predictions = mLibrary.recognize(gesture);
+
+            if (predictions.size() > 0) {
+                Prediction prediction = predictions.get(0);
+                if (prediction.score > 1.0) {
+                    String what = predictions.get(0).name;
+                    if ("play".equals(what)) {
+                        long mDuration = 2000;
+                        try {
+                            if(mService != null) {
+                                if (mService.isPlaying()) {
+                                    mService.pause();
+                                Toast.makeText(this, "Pause", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    mService.play();
+                                Toast.makeText(this, "Play", Toast.LENGTH_SHORT).show();
+                                }
+                                refreshNow();
+                                setPauseButtonImage();
+                            }
+                        } catch (RemoteException ex) {
+                        }
+                        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                        v.vibrate(300);
+                        }
+                    } else if ("next".equals(what)) {
+                        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_INVERT_GESTURES, false)) {
+                            if (mService == null) return;
+                            try {
+                                mService.prev();
+                                Toast.makeText(this, R.string.prev_toast, Toast.LENGTH_SHORT).show();
+                            } catch (RemoteException ex) {
+                            }
+                            if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                                v.vibrate(700);
+                            }
+                        } else {
+                            if (mService == null) return;
+                            try {
+                                mService.next();
+                            } catch (RemoteException ex) {
+                            }
+                            Toast.makeText(this, R.string.next_toast, Toast.LENGTH_SHORT).show();
+                            if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                                v.vibrate(500);
+                            }
+                        }
+                    } else if ("prev".equals(what)) {
+                        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_INVERT_GESTURES, false)) {
+                            if (mService == null) return;
+                            try {
+                                mService.next();
+                            } catch (RemoteException ex) {
+                            }
+                            Toast.makeText(this, R.string.next_toast, Toast.LENGTH_SHORT).show();
+                            if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                                v.vibrate(500);
+                            }
+                        } else {
+                            if (mService == null) return;
+                            try {
+                                mService.prev();
+                                Toast.makeText(this, R.string.prev_toast, Toast.LENGTH_SHORT).show();
+                            } catch (RemoteException ex) {
+                            }
+                            if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                                v.vibrate(700);
+                            }
+                        }
+                    } else if ("repeat".equals(what)) {
+                        cycleRepeat();
+                        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                            v.vibrate(1000);
+                        }
+                    } else if ("shuffle".equals(what)) {
+                        toggleShuffle();
+                        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_HAPTIC_FEEDBACK, false)) {
+                            v.vibrate(100);
+                        }
+                    }
+
+                }
+            }
+        } else {
+            overlay.setGestureVisible(false);
+        }
+    }
+
     private void scanBackward(int repcnt, long delta) {
         if(mService == null) return;
         try {
@@ -1166,14 +1319,15 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     }
 
     private long refreshNow() {
+
         if(mService == null)
             return 500;
         try {
             long pos = mPosOverride < 0 ? mService.position() : mPosOverride;
             long remaining = 1000 - (pos % 1000);
             if ((pos >= 0) && (mDuration > 0)) {
-                mCurrentTime.setText(MusicUtils.makeTimeString(this, pos / 1000));
-                
+                mCurrentTime.setText(MusicUtils.makeTimeString(this, (pos + 500) / 1000));
+
                 if (mService.isPlaying()) {
                     mCurrentTime.setVisibility(View.VISIBLE);
                 } else {
@@ -1244,6 +1398,66 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                 queueNextRefresh(1);
             } else if (action.equals(MediaPlaybackService.PLAYSTATE_CHANGED)) {
                 setPauseButtonImage();
+            } else if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
+                int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
+                setPluggedIn(status);
+            } else if (action.equals(MediaPlaybackService.REFRESH_PROGRESSBAR)) {
+                refreshNow();
+            }
+        }
+    };
+
+    private void setFullscreen() {
+        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_NOW_PLAYING_FULLSCREEN, false)) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+    }
+
+    private void setPluggedIn(int status) {
+        if (MusicUtils.getBooleanPref(this, MusicSettingsActivity.KEY_SCREEN_ON_WHILE_PLUGGED_IN, false)) {
+            if (!pluggedIn && (status == BatteryManager.BATTERY_STATUS_CHARGING
+                || status == BatteryManager.BATTERY_STATUS_FULL
+                || status == BatteryManager.BATTERY_PLUGGED_AC
+                || status == BatteryManager.BATTERY_PLUGGED_USB)) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                pluggedIn = true;
+             } else if (pluggedIn) {
+                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                 pluggedIn = false;
+             }
+         }
+    }
+    
+    private BroadcastReceiver mScreenTimeoutListener = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
+                if (mIntentDeRegistered) {
+                    IntentFilter f = new IntentFilter();
+                    f.addAction(MediaPlaybackService.PLAYSTATE_CHANGED);
+                    f.addAction(MediaPlaybackService.META_CHANGED);
+                    f.addAction(MediaPlaybackService.PLAYBACK_COMPLETE);
+                    f.addAction(MediaPlaybackService.REFRESH_PROGRESSBAR);
+                    f.addAction(Intent.ACTION_SCREEN_ON);
+                    f.addAction(Intent.ACTION_SCREEN_OFF);
+                    registerReceiver(mStatusListener, new IntentFilter(f));
+                    mIntentDeRegistered = false;
+                }
+
+                updateTrackInfo();
+                long next = refreshNow();
+                queueNextRefresh(next);
+            }
+            else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+                paused = true;
+
+                if (!mIntentDeRegistered) {
+                    mHandler.removeMessages(REFRESH);
+                    unregisterReceiver(mStatusListener);
+                    mIntentDeRegistered = true;
+                }
             }
         }
     };
