@@ -172,7 +172,8 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
         // instead of closing the cursor directly keeps the framework from accessing
         // the closed cursor later.
         if (!mAdapterSent && mAdapter != null) {
-            mAdapter.changeCursor(null);
+            // close the cursor if we didn't send it to another activity, to avoid cursor leaks
+            mAdapter.changeCursor(mAdapter.getCursor());
         }
         // Because we pass the adapter to the next activity, we need to make
         // sure it doesn't keep a reference to this activity. We can do this
@@ -285,6 +286,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
         super.onCreateOptionsMenu(menu);
         menu.add(0, PARTY_SHUFFLE, 0, R.string.party_shuffle); // icon will be set in onPrepareOptionsMenu()
         menu.add(0, SHUFFLE_ALL, 0, R.string.shuffle_all).setIcon(R.drawable.ic_menu_shuffle);
+        menu.add(0, SETTINGS, 0, R.string.settings).setIcon(android.R.drawable.ic_menu_preferences);
         return true;
     }
     
@@ -312,6 +314,12 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
                     MusicUtils.shuffleAll(this, cursor);
                     cursor.close();
                 }
+                return true;
+
+            case SETTINGS:
+                intent = new Intent();
+                intent.setClass(this, MusicSettingsActivity.class);
+                startActivityForResult(intent, SETTINGS);
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings" android:key="settings">
+
+    <CheckBoxPreference
+        android:key="screen_on_while_plugged_in"
+        android:defaultValue="false"
+        android:title="@string/screen_on_while_plugged_in_title"
+        android:summary="@string/screen_on_while_plugged_in_summary" />
+
+    <CheckBoxPreference
+        android:key="unpause_on_headset_plug"
+        android:defaultValue="false"
+        android:title="@string/unpause_on_headset_plug_title"
+        android:summary="@string/unpause_on_headset_plug_summary" />
+    
+    <CheckBoxPreference
+        android:key="doubletap_trackball_skip"
+        android:defaultValue="false"
+        android:title="@string/doubletap_trackball_next_title"
+        android:summary="@string/doubletap_trackball_next_summary" />
+
+    <CheckBoxPreference
+        android:key="now_playing_fullscreen"
+        android:defaultValue="false"
+        android:title="@string/fullscreen_title"
+        android:summary="@string/fullscreen_summary" />
+
+    <ListPreference
+        android:key="duck_attenuation"
+        android:title="@string/duck_attenuation_title"
+        android:summary="@string/duck_attenuation_summary"
+        android:dialogTitle="@string/duck_attenuation_title"
+        android:entries="@array/entries_duck_attenuation"
+        android:entryValues="@array/values_duck_attenuation"
+        android:defaultValue="10" />
+
+    <PreferenceCategory android:key="gestures_settings" android:title="@string/gestures_title"><CheckBoxPreference android:key="enable_gestures" android:defaultValue="false" android:title="@string/enable_gestures_title" android:summary="@string/enable_gestures_summary" /><CheckBoxPreference android:defaultValue="false" android:summaryOff="@string/haptic_feedback_summary_off" android:summaryOn="@string/haptic_feedback_summary_on" android:key="haptic_feedback" android:title="@string/haptic_feedback_title"></CheckBoxPreference><CheckBoxPreference android:key="invert_gestures" android:summaryOff="@string/invert_gestures_summary_off" android:summaryOn="@string/invert_gestures_summary_on" android:title="@string/invert_gestures_title" android:defaultValue="false" android:dependency="enable_gestures"></CheckBoxPreference><PreferenceScreen android:key="gestures_list" android:title="@string/gestures_list_title" android:summary="@string/gestures_list_summary" android:dependency="enable_gestures">
+	<Preference android:key="playPause" android:layout="@layout/play_pause_layout" />
+	<Preference android:key="next" android:layout="@layout/next_layout" />
+	<Preference android:key="prevRestart" android:layout="@layout/prev_restart_layout" />
+	<Preference android:key="shuffle" android:layout="@layout/shuffle_layout" />
+	<Preference android:key="repeat" android:layout="@layout/repeat_layout" />
+    
+</PreferenceScreen>
+</PreferenceCategory><PreferenceCategory android:title="@string/credits_cat"></PreferenceCategory><PreferenceScreen android:key="credits" android:title="@string/credits"> 
+        <Preference android:key="mod_name" android:title="@string/credits_mod_name" android:summary="@string/credits_mod_name_summary" android:enabled="false" />
+        <Preference android:key="mod_version" android:title="@string/credits_mod_version" android:summary="@string/credits_mod_version_summary" android:enabled="false" />
+        <Preference android:key="mod_credits" android:title="@string/credits_mod_credits" android:summary="@string/credits_mod_credits_summary" android:enabled="false" />
+    
+</PreferenceScreen>
+
+<!-- need to add a screen with a list all gestures and pics -->
+    
+
+    
+
+</PreferenceScreen>

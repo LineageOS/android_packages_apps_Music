@@ -45,7 +45,7 @@
     
     <!-- Set button -->
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="6dip"
         android:background="#ffffff" >
