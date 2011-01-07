@@ -161,11 +161,10 @@ public class MediaAppWidgetProvider3 extends AppWidgetProvider {
 	long songId = service.getAudioId();
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap noart =  BitmapFactory.decodeStream(
-                service.getResources().openRawResource(R.drawable.albumart_mp_unknown), null, opts);
-	Bitmap art = MusicUtils.getArtwork(service, songId, albumId);
-        Bitmap roundedart = getRoundedCornerBitmap(art);
+        Bitmap noart = BitmapFactory.decodeStream(
+            res.openRawResource(R.drawable.albumart_mp_unknown), null, opts);
         Bitmap roundednoart = getRoundedCornerBitmap(noart);
+        Bitmap art = MusicUtils.getArtwork(service, songId, albumId);
         CharSequence errorState = null;
         
         // Format title string with track number, or show SD card message
@@ -183,19 +182,20 @@ public class MediaAppWidgetProvider3 extends AppWidgetProvider {
             // Show error state to user
             views.setViewVisibility(R.id.title, View.GONE);
             views.setTextViewText(R.id.artist, errorState);
-	    views.setImageViewBitmap(R.id.albumart, roundednoart);
+            views.setImageViewBitmap(R.id.albumart, roundednoart);
             
         } else {
             // No error, so show normal titles
             views.setViewVisibility(R.id.title, View.VISIBLE);
             views.setTextViewText(R.id.title, titleName);
             views.setTextViewText(R.id.artist, artistName);
-	    if (art == null) {
-		views.setImageViewBitmap(R.id.albumart, roundednoart);
-	} else {
-		views.setImageViewBitmap(R.id.albumart, roundedart);
-          	}
-	}
+            if (art == null) {
+                views.setImageViewBitmap(R.id.albumart, roundednoart);
+            } else {
+                Bitmap roundedart = getRoundedCornerBitmap(art);
+                views.setImageViewBitmap(R.id.albumart, roundedart);
+            }
+        }
         
         // Set correct drawable for pause state
         final boolean playing = service.isPlaying();
