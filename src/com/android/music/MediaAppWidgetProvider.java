@@ -26,10 +26,11 @@ import android.content.res.Resources;
 import android.os.Environment;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.graphics.Bitmap;
 
 /**
  * Simple widget to show currently playing album art along
- * with play/pause and next track buttons.  
+ * with play/pause and next track buttons.
  */
 public class MediaAppWidgetProvider extends AppWidgetProvider {
     static final String TAG = "MusicAppWidgetProvider";
@@ -65,10 +66,11 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
      */
     private void defaultAppWidget(Context context, int[] appWidgetIds) {
         final Resources res = context.getResources();
-        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.album_appwidget);
-        
+        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.album_appwidget4x1);
+
         views.setViewVisibility(R.id.title, View.GONE);
-        views.setTextViewText(R.id.artist, res.getText(R.string.widget_initial_text));
+        views.setTextViewText(R.id.artist, res.getText(R.string.emptyplaylist));
+        views.setImageViewResource(R.id.albumart, R.drawable.albumart_mp_unknown);
 
         linkButtons(context, views, false /* not playing */);
         pushUpdate(context, appWidgetIds, views);
@@ -111,12 +113,15 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
      */
     void performUpdate(MediaPlaybackService service, int[] appWidgetIds) {
         final Resources res = service.getResources();
-        final RemoteViews views = new RemoteViews(service.getPackageName(), R.layout.album_appwidget);
-        
+        final RemoteViews views = new RemoteViews(service.getPackageName(), R.layout.album_appwidget4x1);
+
         CharSequence titleName = service.getTrackName();
         CharSequence artistName = service.getArtistName();
+	long albumId = service.getAlbumId();
+	long songId = service.getAudioId();
+	Bitmap bm = MusicUtils.getArtwork(service, songId, albumId);
         CharSequence errorState = null;
-        
+
         // Format title string with track number, or show SD card message
         String status = Environment.getExternalStorageState();
         if (status.equals(Environment.MEDIA_SHARED) ||
@@ -140,14 +145,21 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
             // Show error state to user
             views.setViewVisibility(R.id.title, View.GONE);
             views.setTextViewText(R.id.artist, errorState);
-            
+            views.setImageViewResource(R.id.albumart, R.drawable.albumart_mp_unknown_list);
+
         } else {
             // No error, so show normal titles
             views.setViewVisibility(R.id.title, View.VISIBLE);
             views.setTextViewText(R.id.title, titleName);
             views.setTextViewText(R.id.artist, artistName);
+
+            if (bm == null) {
+                views.setImageViewResource(R.id.albumart, R.drawable.albumart_mp_unknown_list);
+            } else {
+                views.setImageViewBitmap(R.id.albumart, bm);
+            }
         }
-        
+
         // Set correct drawable for pause state
         final boolean playing = service.isPlaying();
         if (playing) {
@@ -199,5 +211,11 @@ public class MediaAppWidgetProvider extends AppWidgetProvider {
         pendingIntent = PendingIntent.getService(context,
                 0 /* no requestCode */, intent, 0 /* no flags */);
         views.setOnClickPendingIntent(R.id.control_next, pendingIntent);
+
+        intent = new Intent(MediaPlaybackService.PREVIOUS_ACTION);
+        intent.setComponent(serviceName);
+        pendingIntent = PendingIntent.getService(context,
+                0 /* no requestCode */, intent, 0 /* no flags */);
+        views.setOnClickPendingIntent(R.id.control_prev, pendingIntent);
     }
 }

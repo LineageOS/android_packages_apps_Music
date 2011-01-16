@@ -266,11 +266,35 @@
         <service android:name="com.android.music.MediaPlaybackService"
             android:exported="false" />
 
-        <receiver android:name="com.android.music.MediaAppWidgetProvider">
+        <receiver android:name="MediaAppWidgetProvider" android:label="Music (4x1)">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget_info" />
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget1_info" />
+        </receiver>
+        <receiver android:name="MediaAppWidgetProvider2" android:label="Music (4x2)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget2_info" />
+        </receiver>
+        <receiver android:name="MediaAppWidgetProvider3" android:label="Music (2x2)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget3_info" />
+        </receiver>
+        <receiver android:name="MediaAppWidgetProvider5" android:label="Music (4x3)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget5_info" />
+        </receiver>
+        <receiver android:name="MediaAppWidgetProvider4" android:label="Music (4x4)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4_info" />
         </receiver>
     </application>
 </manifest>
