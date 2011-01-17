@@ -81,7 +81,6 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     private RepeatingImageButton mNextButton;
     private ImageButton mRepeatButton;
     private ImageButton mShuffleButton;
-    private ImageButton mQueueButton;
     private Worker mAlbumArtWorker;
     private AlbumArtHandler mAlbumArtHandler;
     private Toast mToast;
@@ -112,18 +111,15 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         mArtistName = (TextView) findViewById(R.id.artistname);
         mAlbumName = (TextView) findViewById(R.id.albumname);
         mTrackName = (TextView) findViewById(R.id.trackname);
+ 
+        mArtistName.setOnTouchListener(this);
+        mArtistName.setOnLongClickListener(this);
 
-        View v = (View)mArtistName.getParent(); 
-        v.setOnTouchListener(this);
-        v.setOnLongClickListener(this);
+        mAlbumName.setOnTouchListener(this);
+        mAlbumName.setOnLongClickListener(this);
 
-        v = (View)mAlbumName.getParent();
-        v.setOnTouchListener(this);
-        v.setOnLongClickListener(this);
-
-        v = (View)mTrackName.getParent();
-        v.setOnTouchListener(this);
-        v.setOnLongClickListener(this);
+        mTrackName.setOnTouchListener(this);
+        mTrackName.setOnLongClickListener(this);
         
         mPrevButton = (RepeatingImageButton) findViewById(R.id.prev);
         mPrevButton.setOnClickListener(mPrevListener);
@@ -139,8 +135,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         mDeviceHasDpad = (getResources().getConfiguration().navigation ==
             Configuration.NAVIGATION_DPAD);
         
-        mQueueButton = (ImageButton) findViewById(R.id.curplaylist);
-        mQueueButton.setOnClickListener(mQueueListener);
+        mAlbum.setOnClickListener(mQueueListener);
         mShuffleButton = ((ImageButton) findViewById(R.id.shuffle));
         mShuffleButton.setOnClickListener(mShuffleListener);
         mRepeatButton = ((ImageButton) findViewById(R.id.repeat));
@@ -153,6 +148,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         mProgress.setMax(1000);
 
         mTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
+        
     }
     
     int mInitialX = -1;
@@ -178,7 +174,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             return false;
         }
         if (action == MotionEvent.ACTION_DOWN) {
-            v.setBackgroundColor(0xff606060);
+            v.setBackgroundColor(0x88000000);
             mInitialX = mLastX = (int) event.getX();
             mDraggingLabel = false;
         } else if (action == MotionEvent.ACTION_UP ||
@@ -314,11 +310,11 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         boolean knownalbum =
             (album != null) && !MediaStore.UNKNOWN_STRING.equals(album);
         
-        if (knownartist && view.equals(mArtistName.getParent())) {
+        if (knownartist && view.equals(mArtistName)) {
             title = artist;
             query = artist;
             mime = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE;
-        } else if (knownalbum && view.equals(mAlbumName.getParent())) {
+        } else if (knownalbum && view.equals(mAlbumName)) {
             title = album;
             if (knownartist) {
                 query = artist + " " + album;
@@ -326,7 +322,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                 query = album;
             }
             mime = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE;
-        } else if (view.equals(mTrackName.getParent()) || !knownartist || !knownalbum) {
+        } else if (view.equals(mTrackName) || !knownartist || !knownalbum) {
             if ((song == null) || MediaStore.UNKNOWN_STRING.equals(song)) {
                 // A popup of the form "Search for null/'' using ..." is pretty
                 // unhelpful, plus, we won't find any way to buy it anyway.
@@ -1068,7 +1064,6 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                         // something is playing now, we're done
                         mRepeatButton.setVisibility(View.VISIBLE);
                         mShuffleButton.setVisibility(View.VISIBLE);
-                        mQueueButton.setVisibility(View.VISIBLE);
                         setRepeatButtonImage();
                         setShuffleButtonImage();
                         setPauseButtonImage();
@@ -1272,15 +1267,15 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             if (songid < 0 && path.toLowerCase().startsWith("http://")) {
                 // Once we can get album art and meta data from MediaPlayer, we
                 // can show that info again when streaming.
-                ((View) mArtistName.getParent()).setVisibility(View.INVISIBLE);
-                ((View) mAlbumName.getParent()).setVisibility(View.INVISIBLE);
+                ((View) mArtistName).setVisibility(View.INVISIBLE);
+                ((View) mAlbumName).setVisibility(View.INVISIBLE);
                 mAlbum.setVisibility(View.GONE);
                 mTrackName.setText(path);
                 mAlbumArtHandler.removeMessages(GET_ALBUM_ART);
                 mAlbumArtHandler.obtainMessage(GET_ALBUM_ART, new AlbumSongIdWrapper(-1, -1)).sendToTarget();
             } else {
-                ((View) mArtistName.getParent()).setVisibility(View.VISIBLE);
-                ((View) mAlbumName.getParent()).setVisibility(View.VISIBLE);
+                ((View) mArtistName).setVisibility(View.VISIBLE);
+                ((View) mAlbumName).setVisibility(View.VISIBLE);
                 String artistName = mService.getArtistName();
                 if (MediaStore.UNKNOWN_STRING.equals(artistName)) {
                     artistName = getString(R.string.unknown_artist_name);
