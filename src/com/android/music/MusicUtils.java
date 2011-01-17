@@ -872,7 +872,7 @@ public class MusicUtils {
         sBitmapOptionsCache.inPreferredConfig = Bitmap.Config.RGB_565;
         sBitmapOptionsCache.inDither = false;
 
-        sBitmapOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+        sBitmapOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
         sBitmapOptions.inDither = false;
     }
 
@@ -1021,7 +1021,7 @@ public class MusicUtils {
                 Bitmap bm = getArtworkFromFile(context, song_id, album_id);
                 if (bm != null) {
                     if (bm.getConfig() == null) {
-                        bm = bm.copy(Bitmap.Config.RGB_565, false);
+                        bm = bm.copy(Bitmap.Config.ARGB_8888, false);
                         if (bm == null && allowdefault) {
                             return getDefaultArtwork(context);
                         }
