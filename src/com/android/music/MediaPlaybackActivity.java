@@ -462,8 +462,11 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     @Override
     public void onStop() {
         paused = true;
-        mHandler.removeMessages(REFRESH);
-        unregisterReceiver(mStatusListener);
+        if (!mReceiverUnregistered) {
+            mHandler.removeMessages(REFRESH);
+            unregisterReceiver(mStatusListener);
+        }
+        unregisterReceiver(mScreenTimeoutListener);
         MusicUtils.unbindFromService(mToken);
         mService = null;
         super.onStop();
@@ -473,7 +476,6 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     public void onStart() {
         super.onStart();
         paused = false;
-
         mToken = MusicUtils.bindToService(this, osc);
         if (mToken == null) {
             // something went wrong
@@ -485,7 +487,13 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         f.addAction(MediaPlaybackService.META_CHANGED);
         f.addAction(MediaPlaybackService.SHUFFLE_CHANGED);
         f.addAction(MediaPlaybackService.REPEAT_CHANGED);
-        registerReceiver(mStatusListener, new IntentFilter(f));
+        registerReceiver(mStatusListener, f);
+
+        IntentFilter s = new IntentFilter();
+        s.addAction(Intent.ACTION_SCREEN_ON);
+        s.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mScreenTimeoutListener, s);
+
         updateTrackInfo();
         long next = refreshNow();
         queueNextRefresh(next);
