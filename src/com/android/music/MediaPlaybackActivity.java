@@ -24,14 +24,12 @@ import android.app.KeyguardManager;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -56,7 +54,6 @@ import android.view.MotionEvent;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -67,8 +64,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 
 public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
-    View.OnTouchListener, View.OnLongClickListener
-{
+        View.OnTouchListener, View.OnLongClickListener {
+
     private static final int USE_AS_RINGTONE = CHILD_MENU_BASE;
 
     private boolean mSeeking = false;
@@ -87,21 +84,18 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     private int mTouchSlop;
     private ServiceToken mToken;
 
-    public MediaPlaybackActivity()
-    {
+    public MediaPlaybackActivity() {
     }
 
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle icicle)
-    {
+    public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         mAlbumArtWorker = new Worker("album art worker");
         mAlbumArtHandler = new AlbumArtHandler(mAlbumArtWorker.getLooper());
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.audio_player);
 
         mCurrentTime = (TextView) findViewById(R.id.currenttime);
@@ -120,7 +114,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
 
         mTrackName.setOnTouchListener(this);
         mTrackName.setOnLongClickListener(this);
-        
+
         mPrevButton = (RepeatingImageButton) findViewById(R.id.prev);
         mPrevButton.setOnClickListener(mPrevListener);
         mPrevButton.setRepeatListener(mRewListener, 260);
@@ -155,7 +149,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     int mTextWidth = 0;
     int mViewWidth = 0;
     boolean mDraggingLabel = false;
-    
+
     TextView textViewForContainer(View v) {
         View vv = v.findViewById(R.id.artistname);
         if (vv != null) return (TextView) vv;
@@ -165,7 +159,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         if (vv != null) return (TextView) vv;
         return null;
     }
-    
+
     public boolean onTouch(View v, MotionEvent event) {
         int action = event.getAction();
         TextView tv = textViewForContainer(v);
@@ -173,7 +167,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             return false;
         }
         if (action == MotionEvent.ACTION_DOWN) {
-            v.setBackgroundColor(0x88000000);
+            v.setBackgroundColor(0xff606060);
             mInitialX = mLastX = (int) event.getX();
             mDraggingLabel = false;
         } else if (action == MotionEvent.ACTION_UP ||
@@ -209,7 +203,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             if (Math.abs(delta) > mTouchSlop) {
                 // start moving
                 mLabelScroller.removeMessages(0, tv);
-                
+
                 // Only turn ellipsizing off when it's not already off, because it
                 // causes the scroll position to be reset to 0.
                 if (tv.getEllipsize() != null) {
@@ -248,6 +242,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             tv.scrollTo(x, 0);
             if (x == 0) {
                 tv.setEllipsize(TruncateAt.END);
+                tv.setHorizontalFadingEdgeEnabled(false);
             } else {
                 Message newmsg = obtainMessage(0, tv);
                 mLabelScroller.sendMessageDelayed(newmsg, 15);
@@ -805,7 +800,6 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
-        int direction = -1;
         int repcnt = event.getRepeatCount();
 
         if((seekmethod==0)?seekMethod1(keyCode):seekMethod2(keyCode))
@@ -1125,9 +1119,9 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     private void setPauseButtonImage() {
         try {
             if (mService != null && mService.isPlaying()) {
-                mPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+                mPauseButton.setImageResource(R.drawable.btn_playback_ic_pause);
             } else {
-                mPauseButton.setImageResource(android.R.drawable.ic_media_play);
+                mPauseButton.setImageResource(R.drawable.btn_playback_ic_play);
             }
         } catch (RemoteException ex) {
         }
@@ -1167,7 +1161,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             long remaining = 1000 - (pos % 1000);
             if ((pos >= 0) && (mDuration > 0)) {
                 mCurrentTime.setText(MusicUtils.makeTimeString(this, pos / 1000));
-                
+
                 if (mService.isPlaying()) {
                     mCurrentTime.setVisibility(View.VISIBLE);
                 } else {
