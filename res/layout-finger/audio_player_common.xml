@@ -16,67 +16,31 @@
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout
+    <SeekBar android:id="@android:id/progress"
+        android:indeterminateOnly="false"
+        android:progressDrawable="@drawable/progress_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="100dip"
+        android:layout_height="30dip"
         android:layout_alignParentBottom="true"
-        android:background="#88000000">
+        android:layout_marginBottom="6dip" />
 
-        <SeekBar android:id="@android:id/progress"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="36dip"
-            android:layout_alignParentBottom="true"
-            android:paddingLeft="8dip"
-            android:paddingRight="8dip"
-            android:paddingBottom="4dip" />
+    <TextView android:id="@+id/currenttime"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="12sp"
+        android:padding="4dip"
+        android:layout_width="48dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@android:id/progress" />
 
-        <TextView android:id="@+id/currenttime"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:shadowColor="#ff000000"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="3"
-            android:padding="4dip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_above="@android:id/progress" />
-
-        <TextView android:id="@+id/totaltime"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:shadowColor="#ff000000"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="3"
-            android:padding="4dip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_above="@android:id/progress" />
-
-        <ImageButton android:id="@+id/pause"
-            style="@android:style/MediaButton.Play"
-            android:layout_above="@android:id/progress"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="4dip" />
-
-        <com.android.music.RepeatingImageButton android:id="@+id/prev"
-            style="@android:style/MediaButton.Previous"
-            android:layout_above="@android:id/progress"
-            android:layout_toLeftOf="@id/pause"
-            android:layout_marginBottom="4dip" />
-
-        <com.android.music.RepeatingImageButton android:id="@+id/next"
-            style="@android:style/MediaButton.Next"
-            android:layout_above="@android:id/progress"
-            android:layout_toRightOf="@id/pause"
-            android:layout_marginBottom="4dip" />
-
-    </RelativeLayout>
+    <TextView android:id="@+id/totaltime"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="12sp"
+        android:padding="4dip"
+        android:layout_width="48dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_above="@android:id/progress"
+        android:gravity="right" />
 
 </merge>
