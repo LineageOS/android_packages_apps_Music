@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2008 The Android Open Source Project
+<!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,11 +14,8 @@
      limitations under the License.
 -->
 
-    <shape xmlns:android="http://schemas.android.com/apk/res/android">
-        <gradient android:type="radial"
-            android:startColor="#00000000"
-            android:endColor="#af000000"
-            android:gradientRadius="300"
-            android:centerX="0.5"
-            android:centerY="0.5"/>
-    </shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:drawable="@drawable/btn_playback_right_pressed" />
+    <item android:state_focused="true" android:state_enabled="true" android:drawable="@drawable/btn_playback_right_selected" />
+    <item android:drawable="@drawable/btn_playback_right_normal" />
+</selector>
