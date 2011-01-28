@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACH///08\u003d",
+        "filename": "res/layout-finger/audio_player_common_controls.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 18
+      },
+      "writtenOn": "2011-01-28T00:46:46Z",
+      "side": 1,
+      "message": "Whitespace (and one below)",
+      "revId": "45da388246fe58127320f82b0b32d955b084888c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACH///04\u003d",
+        "filename": "res/layout-finger/audio_player_common_progress.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 18
+      },
+      "writtenOn": "2011-01-28T00:46:46Z",
+      "side": 1,
+      "message": "Whitespace (and one below)",
+      "revId": "45da388246fe58127320f82b0b32d955b084888c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACH///00\u003d",
+        "filename": "res/layout-land-finger/audio_player_common_controls.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 18
+      },
+      "writtenOn": "2011-01-28T00:46:46Z",
+      "side": 1,
+      "message": "Whitespace (and one below)",
+      "revId": "45da388246fe58127320f82b0b32d955b084888c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
