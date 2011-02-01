@@ -80,6 +80,8 @@ public class MediaPlaybackService extends Service {
     public static final String PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
     public static final String META_CHANGED = "com.android.music.metachanged";
     public static final String QUEUE_CHANGED = "com.android.music.queuechanged";
+    public static final String REPEATMODE_CHANGED = "com.android.music.repeatmodechanged";
+    public static final String SHUFFLEMODE_CHANGED = "com.android.music.shufflemodechanged";
 
     public static final String SERVICECMD = "com.android.music.musicservicecommand";
     public static final String CMDNAME = "command";
@@ -88,11 +90,15 @@ public class MediaPlaybackService extends Service {
     public static final String CMDPAUSE = "pause";
     public static final String CMDPREVIOUS = "previous";
     public static final String CMDNEXT = "next";
+    public static final String CMDCYCLEREPEAT = "cyclerepeat";
+    public static final String CMDTOGGLESHUFFLE = "toggleshuffle";
 
     public static final String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
     public static final String PAUSE_ACTION = "com.android.music.musicservicecommand.pause";
     public static final String PREVIOUS_ACTION = "com.android.music.musicservicecommand.previous";
     public static final String NEXT_ACTION = "com.android.music.musicservicecommand.next";
+    public static final String CYCLEREPEAT_ACTION = "com.android.music.musicservicecommand.cyclerepeat";
+    public static final String TOGGLESHUFFLE_ACTION = "com.android.music.musicservicecommand.toggleshuffle";
 
     private static final int TRACK_ENDED = 1;
     private static final int RELEASE_WAKELOCK = 2;
@@ -145,7 +151,8 @@ public class MediaPlaybackService extends Service {
     // This will have to change if we want to support multiple simultaneous cards.
     private int mCardId;
     
-    private MediaAppWidgetProvider mAppWidgetProvider = MediaAppWidgetProvider.getInstance();
+    private MediaAppWidgetProvider4x1 mAppWidgetProvider4x1 = MediaAppWidgetProvider4x1.getInstance();
+    private MediaAppWidgetProvider4x2 mAppWidgetProvider4x2 = MediaAppWidgetProvider4x2.getInstance();
     
     // interval after which we stop the service when idle
     private static final int IDLE_DELAY = 60000;
@@ -232,11 +239,20 @@ public class MediaPlaybackService extends Service {
                 pause();
                 mPausedByTransientLossOfFocus = false;
                 seek(0);
-            } else if (MediaAppWidgetProvider.CMDAPPWIDGETUPDATE.equals(cmd)) {
+            } else if (CMDCYCLEREPEAT.equals(cmd) || CYCLEREPEAT_ACTION.equals(action)) {
+                cycleRepeat();
+            } else if (CMDTOGGLESHUFFLE.equals(cmd) || TOGGLESHUFFLE_ACTION.equals(action)) {
+                toggleShuffle();
+            } else if (MediaAppWidgetProvider4x1.CMDAPPWIDGETUPDATE.equals(cmd)) {
                 // Someone asked us to refresh a set of specific widgets, probably
                 // because they were just added.
                 int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-                mAppWidgetProvider.performUpdate(MediaPlaybackService.this, appWidgetIds);
+                mAppWidgetProvider4x1.performUpdate(MediaPlaybackService.this, appWidgetIds);
+            } else if (MediaAppWidgetProvider4x2.CMDAPPWIDGETUPDATE.equals(cmd)) {
+                // Someone asked us to refresh a set of specific widgets, probably
+                // because they were just added.
+                int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+                mAppWidgetProvider4x2.performUpdate(MediaPlaybackService.this, appWidgetIds);
             }
         }
     };
@@ -301,6 +317,8 @@ public class MediaPlaybackService extends Service {
         commandFilter.addAction(PAUSE_ACTION);
         commandFilter.addAction(NEXT_ACTION);
         commandFilter.addAction(PREVIOUS_ACTION);
+        commandFilter.addAction(CYCLEREPEAT_ACTION);
+        commandFilter.addAction(TOGGLESHUFFLE_ACTION);
         registerReceiver(mIntentReceiver, commandFilter);
         
         PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
@@ -422,7 +440,7 @@ public class MediaPlaybackService extends Service {
 
     private void reloadQueue() {
         String q = null;
-        
+
         boolean newstyle = false;
         int id = mCardId;
         if (mPreferences.contains("cardid")) {
@@ -470,7 +488,7 @@ public class MediaPlaybackService extends Service {
                 return;
             }
             mPlayPos = pos;
-            
+
             // When reloadQueue is called in response to a card-insertion,
             // we might not be able to query the media provider right away.
             // To deal with this, try querying for the current file, and if
@@ -509,13 +527,13 @@ public class MediaPlaybackService extends Service {
                 mPlayListLen = 0;
                 return;
             }
-            
+
             long seekpos = mPreferences.getLong("seekpos", 0);
             seek(seekpos >= 0 && seekpos < duration() ? seekpos : 0);
             Log.d(LOGTAG, "restored queue, currently at position "
                     + position() + "/" + duration()
                     + " (requested " + seekpos + ")");
-            
+
             int repmode = mPreferences.getInt("repeatmode", REPEAT_NONE);
             if (repmode != REPEAT_ALL && repmode != REPEAT_CURRENT) {
                 repmode = REPEAT_NONE;
@@ -569,7 +587,7 @@ public class MediaPlaybackService extends Service {
             mShuffleMode = shufmode;
         }
     }
-    
+
     @Override
     public IBinder onBind(Intent intent) {
         mDelayedStopHandler.removeCallbacksAndMessages(null);
@@ -616,9 +634,13 @@ public class MediaPlaybackService extends Service {
                 pause();
                 mPausedByTransientLossOfFocus = false;
                 seek(0);
+            } else if (CMDCYCLEREPEAT.equals(cmd) || CYCLEREPEAT_ACTION.equals(action)) {
+                cycleRepeat();
+            } else if (CMDTOGGLESHUFFLE.equals(cmd) || TOGGLESHUFFLE_ACTION.equals(action)) {
+                toggleShuffle();
             }
         }
-        
+
         // make sure the service will shut down on its own if it was
         // just started but not bound to and nothing is playing
         mDelayedStopHandler.removeCallbacksAndMessages(null);
@@ -626,7 +648,7 @@ public class MediaPlaybackService extends Service {
         mDelayedStopHandler.sendMessageDelayed(msg, IDLE_DELAY);
         return START_STICKY;
     }
-    
+
     @Override
     public boolean onUnbind(Intent intent) {
         mServiceInUse = false;
@@ -639,7 +661,7 @@ public class MediaPlaybackService extends Service {
             // an in-progress action requesting audio focus ends, so don't stop the service now.
             return true;
         }
-        
+
         // If there is a playlist but playback is paused, then wait a while
         // before stopping the service, so that pause/resume isn't slow.
         // Also delay stopping the service if we're transitioning between tracks.
@@ -648,12 +670,12 @@ public class MediaPlaybackService extends Service {
             mDelayedStopHandler.sendMessageDelayed(msg, IDLE_DELAY);
             return true;
         }
-        
+
         // No active playlist, OK to stop the service right now
         stopSelf(mServiceStartId);
         return true;
     }
-    
+
     private Handler mDelayedStopHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -749,9 +771,10 @@ public class MediaPlaybackService extends Service {
         } else {
             saveQueue(false);
         }
-        
+
         // Share this notification directly with our widgets
-        mAppWidgetProvider.notifyChange(this, what);
+        mAppWidgetProvider4x1.notifyChange(this, what);
+        mAppWidgetProvider4x2.notifyChange(this, what);
     }
 
     private void ensurePlayListCapacity(int size) {
@@ -769,7 +792,7 @@ public class MediaPlaybackService extends Service {
         // FIXME: shrink the array when the needed size is much smaller
         // than the allocated size
     }
-    
+
     // insert the list of songs at the specified position in the playlist
     private void addToPlayList(long [] list, int position) {
         int addlen = list.length;
@@ -799,7 +822,7 @@ public class MediaPlaybackService extends Service {
             notifyChange(META_CHANGED);
         }
     }
-    
+
     /**
      * Appends a list of tracks to the current playlist.
      * If nothing is playing currently, playback will be started at
@@ -879,7 +902,7 @@ public class MediaPlaybackService extends Service {
             }
         }
     }
-    
+
     /**
      * Moves the item at index1 to index2.
      * @param index1
@@ -948,7 +971,7 @@ public class MediaPlaybackService extends Service {
             stop(false);
 
             String id = String.valueOf(mPlayList[mPlayPos]);
-            
+
             mCursor = getContentResolver().query(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     mCursorCols, "_id=" + id , null, null);
@@ -976,7 +999,7 @@ public class MediaPlaybackService extends Service {
             if (path == null) {
                 return;
             }
-            
+
             // if mCursor is null, try to associate path with a database cursor
             if (mCursor == null) {
 
@@ -993,7 +1016,7 @@ public class MediaPlaybackService extends Service {
                    where = MediaStore.Audio.Media.DATA + "=?";
                    selectionArgs = new String[] { path };
                 }
-                
+
                 try {
                     mCursor = resolver.query(uri, mCursorCols, where, selectionArgs, null);
                     if  (mCursor != null) {
@@ -1068,12 +1091,12 @@ public class MediaPlaybackService extends Service {
                 if (album == null || album.equals(MediaStore.UNKNOWN_STRING)) {
                     album = getString(R.string.unknown_album_name);
                 }
-                
+
                 views.setTextViewText(R.id.artistalbum,
                         getString(R.string.notification_artist_album, artist, album)
                         );
             }
-            
+
             Notification status = new Notification();
             status.contentView = views;
             status.flags |= Notification.FLAG_ONGOING_EVENT;
@@ -1094,7 +1117,7 @@ public class MediaPlaybackService extends Service {
             setShuffleMode(SHUFFLE_AUTO);
         }
     }
-    
+
     private void stop(boolean remove_status_icon) {
         if (mPlayer.isInitialized()) {
             mPlayer.stop();
@@ -1289,14 +1312,40 @@ public class MediaPlaybackService extends Service {
             notifyChange(META_CHANGED);
         }
     }
-    
+
+    public void cycleRepeat() {
+        if (mRepeatMode == REPEAT_NONE) {
+            setRepeatMode(REPEAT_ALL);
+        } else if (mRepeatMode == REPEAT_ALL) {
+            setRepeatMode(REPEAT_CURRENT);
+            if (mShuffleMode != SHUFFLE_NONE) {
+                setShuffleMode(SHUFFLE_NONE);
+            }
+        } else {
+            setRepeatMode(REPEAT_NONE);
+        }
+    }
+
+    public void toggleShuffle() {
+        if (mShuffleMode == SHUFFLE_NONE) {
+            setShuffleMode(SHUFFLE_NORMAL);
+            if (mRepeatMode == REPEAT_CURRENT) {
+                setRepeatMode(REPEAT_ALL);
+            }
+        } else if (mShuffleMode == SHUFFLE_NORMAL || mShuffleMode == SHUFFLE_AUTO) {
+            setShuffleMode(SHUFFLE_NONE);
+        } else {
+            Log.e("MediaPlaybackService", "Invalid shuffle mode: " + mShuffleMode);
+        }
+    }
+
     private void gotoIdleState() {
         mDelayedStopHandler.removeCallbacksAndMessages(null);
         Message msg = mDelayedStopHandler.obtainMessage();
         mDelayedStopHandler.sendMessageDelayed(msg, IDLE_DELAY);
         stopForeground(true);
     }
-    
+
     private void saveBookmarkIfNeeded() {
         try {
             if (isPodcast()) {
@@ -1313,7 +1362,7 @@ public class MediaPlaybackService extends Service {
                     // if we're near the start or end, clear the bookmark
                     pos = 0;
                 }
-                
+
                 // write 'pos' to the bookmark field
                 ContentValues values = new ContentValues();
                 values.put(MediaStore.Audio.Media.BOOKMARK, pos);
@@ -1428,7 +1477,7 @@ public class MediaPlaybackService extends Service {
         }
         return false;
     }
-    
+
     /**
      * Removes the range of tracks specified from the play list. If a file within the range is
      * the file currently being played, playback will move to the next file after the
@@ -1444,7 +1493,7 @@ public class MediaPlaybackService extends Service {
         }
         return numremoved;
     }
-    
+
     private int removeTracksInternal(int first, int last) {
         synchronized (this) {
             if (last < first) return 0;
@@ -1488,7 +1537,7 @@ public class MediaPlaybackService extends Service {
             return last - first + 1;
         }
     }
-    
+
     /**
      * Removes all instances of the track with the given id
      * from the playlist.
@@ -1510,13 +1559,14 @@ public class MediaPlaybackService extends Service {
         }
         return numremoved;
     }
-    
+
     public void setShuffleMode(int shufflemode) {
         synchronized(this) {
             if (mShuffleMode == shufflemode && mPlayListLen > 0) {
                 return;
             }
             mShuffleMode = shufflemode;
+            notifyChange(SHUFFLEMODE_CHANGED);
             if (mShuffleMode == SHUFFLE_AUTO) {
                 if (makeAutoShuffleList()) {
                     mPlayListLen = 0;
@@ -1534,16 +1584,19 @@ public class MediaPlaybackService extends Service {
             saveQueue(false);
         }
     }
+
     public int getShuffleMode() {
         return mShuffleMode;
     }
-    
+
     public void setRepeatMode(int repeatmode) {
         synchronized(this) {
             mRepeatMode = repeatmode;
+            notifyChange(REPEATMODE_CHANGED);
             saveQueue(false);
         }
     }
+
     public int getRepeatMode() {
         return mRepeatMode;
     }
@@ -1559,7 +1612,7 @@ public class MediaPlaybackService extends Service {
     public String getPath() {
         return mFileToPlay;
     }
-    
+
     /**
      * Returns the rowid of the currently playing file, or -1 if
      * no file is currently playing.
@@ -1572,7 +1625,7 @@ public class MediaPlaybackService extends Service {
         }
         return -1;
     }
-    
+
     /**
      * Returns the position in the queue 
      * @return the position in the queue
@@ -1582,7 +1635,7 @@ public class MediaPlaybackService extends Service {
             return mPlayPos;
         }
     }
-    
+
     /**
      * Starts playing the track at the given position in the queue.
      * @param pos The position in the queue of the track that will be played.
@@ -1608,7 +1661,7 @@ public class MediaPlaybackService extends Service {
             return mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
         }
     }
-    
+
     public long getArtistId() {
         synchronized (this) {
             if (mCursor == null) {
@@ -1653,7 +1706,7 @@ public class MediaPlaybackService extends Service {
             return (mCursor.getInt(PODCASTCOLIDX) > 0);
         }
     }
-    
+
     private long getBookmark() {
         synchronized (this) {
             if (mCursor == null) {
@@ -1662,7 +1715,7 @@ public class MediaPlaybackService extends Service {
             return mCursor.getLong(BOOKMARKCOLIDX);
         }
     }
-    
+
     /**
      * Returns the duration of the file in milliseconds.
      * Currently this method returns -1 for the duration of MIDI files.
@@ -1759,7 +1812,7 @@ public class MediaPlaybackService extends Service {
             sendBroadcast(i);
             mIsInitialized = true;
         }
-        
+
         public boolean isInitialized() {
             return mIsInitialized;
         }
@@ -1781,11 +1834,11 @@ public class MediaPlaybackService extends Service {
             stop();
             mMediaPlayer.release();
         }
-        
+
         public void pause() {
             mMediaPlayer.pause();
         }
-        
+
         public void setHandler(Handler handler) {
             mHandler = handler;
         }
@@ -1857,7 +1910,7 @@ public class MediaPlaybackService extends Service {
      */
     static class ServiceStub extends IMediaPlaybackService.Stub {
         WeakReference<MediaPlaybackService> mService;
-        
+
         ServiceStub(MediaPlaybackService service) {
             mService = new WeakReference<MediaPlaybackService>(service);
         }
@@ -1892,6 +1945,12 @@ public class MediaPlaybackService extends Service {
         }
         public void next() {
             mService.get().next(true);
+        }
+        public void cycleRepeat() {
+            mService.get().cycleRepeat();
+        }
+        public void toggleShuffle() {
+            mService.get().toggleShuffle();
         }
         public String getTrackName() {
             return mService.get().getTrackName();

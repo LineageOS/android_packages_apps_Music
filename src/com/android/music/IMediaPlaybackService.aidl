@@ -30,6 +30,8 @@ interface IMediaPlaybackService
     void play();
     void prev();
     void next();
+    void cycleRepeat();
+    void toggleShuffle();
     long duration();
     long position();
     long seek(long pos);
