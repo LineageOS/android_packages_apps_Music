@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACH///Nc\u003d",
+        "filename": "AndroidManifest.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 32
+      },
+      "writtenOn": "2011-02-01T13:10:47Z",
+      "side": 1,
+      "message": "You need to update the receiver name here, otherwise it crashes when using the 4x1 widget.",
+      "revId": "bbb94b2e188ae539606a4abf2e254212720a96f9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
