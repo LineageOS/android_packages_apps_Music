@@ -764,6 +764,8 @@ public class MediaPlaybackService extends Service {
         i.putExtra("album",getAlbumName());
         i.putExtra("track", getTrackName());
         i.putExtra("playing", isPlaying());
+        i.putExtra("songid", getAudioId());
+        i.putExtra("albumid", getAlbumId());
         sendStickyBroadcast(i);
         
         if (what.equals(QUEUE_CHANGED)) {
