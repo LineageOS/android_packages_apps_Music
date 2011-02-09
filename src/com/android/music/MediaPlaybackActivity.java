@@ -16,6 +16,7 @@
 
 package com.android.music;
 
+import java.util.ArrayList;
 import com.android.music.MusicUtils.ServiceToken;
 
 import android.app.Activity;
@@ -30,8 +31,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.GestureOverlayView.OnGesturePerformedListener;
+import android.gesture.Prediction;
 import android.graphics.Bitmap;
 import android.media.audiofx.AudioEffect;
 import android.media.AudioManager;
@@ -42,7 +50,8 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
-import android.os.SystemClock;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
@@ -64,7 +73,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 
 public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
-        View.OnTouchListener, View.OnLongClickListener {
+        View.OnTouchListener, View.OnLongClickListener, OnGesturePerformedListener {
 
     private static final int USE_AS_RINGTONE = CHILD_MENU_BASE;
 
@@ -84,6 +93,10 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     private int mTouchSlop;
     private ServiceToken mToken;
     private boolean mIntentDeRegistered = false;
+    private GestureOverlayView mGestureOverlayView;
+    private GestureLibrary mGestureLibrary;
+    private SharedPreferences mPreferences;
+    private Vibrator mVibrator;
 
     public MediaPlaybackActivity() {
     }
@@ -93,11 +106,29 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        configureActivity();
+        seekmethod = 1;
+        mTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
+        mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    }
 
+    private void configureActivity() {
         mAlbumArtWorker = new Worker("album art worker");
         mAlbumArtHandler = new AlbumArtHandler(mAlbumArtWorker.getLooper());
 
-        setContentView(R.layout.audio_player);
+        if (mPreferences.getBoolean(MusicSettingsActivity.KEY_ENABLE_GESTURES, false)) {
+            loadGestureLibrary();
+            mGestureOverlayView = new GestureOverlayView(this);
+            View inflate = getLayoutInflater().inflate(R.layout.audio_player, null);
+            mGestureOverlayView.addView(inflate);
+            mGestureOverlayView.setOrientation(GestureOverlayView.ORIENTATION_HORIZONTAL);
+            mGestureOverlayView.setGestureStrokeType(GestureOverlayView.GESTURE_STROKE_TYPE_MULTIPLE);
+            mGestureOverlayView.addOnGesturePerformedListener(this);
+            setContentView(mGestureOverlayView);
+        } else {
+            setContentView(R.layout.audio_player);
+        }
 
         mCurrentTime = (TextView) findViewById(R.id.currenttime);
         mTotalTime = (TextView) findViewById(R.id.totaltime);
@@ -125,7 +156,6 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         mNextButton = (RepeatingImageButton) findViewById(R.id.next);
         mNextButton.setOnClickListener(mNextListener);
         mNextButton.setRepeatListener(mFfwdListener, 260);
-        seekmethod = 1;
 
         mDeviceHasDpad = (getResources().getConfiguration().navigation ==
             Configuration.NAVIGATION_DPAD);
@@ -141,29 +171,29 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             seeker.setOnSeekBarChangeListener(mSeekListener);
         }
         mProgress.setMax(1000);
-
-        mTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
     }
-    
+
+    private void loadGestureLibrary() {
+        if (mPreferences.getBoolean(MusicSettingsActivity.KEY_HAS_CUSTOM_GESTURES, false)) {
+            String fileName = EditGesturesActivity.LIBRARY_FILENAME;
+            mGestureLibrary = GestureLibraries.fromPrivateFile(this, fileName);
+        } else {
+            mGestureLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
+        }
+        if (!mGestureLibrary.load()) {
+            finish();
+        }
+    }
+
     int mInitialX = -1;
     int mLastX = -1;
     int mTextWidth = 0;
     int mViewWidth = 0;
     boolean mDraggingLabel = false;
 
-    TextView textViewForContainer(View v) {
-        View vv = v.findViewById(R.id.artistname);
-        if (vv != null) return (TextView) vv;
-        vv = v.findViewById(R.id.albumname);
-        if (vv != null) return (TextView) vv;
-        vv = v.findViewById(R.id.trackname);
-        if (vv != null) return (TextView) vv;
-        return null;
-    }
-
     public boolean onTouch(View v, MotionEvent event) {
         int action = event.getAction();
-        TextView tv = textViewForContainer(v);
+        TextView tv = (TextView) v;
         if (tv == null) {
             return false;
         }
@@ -364,7 +394,6 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     // The second scenario involves the user operating the scroll ball, in this
     // case there WON'T BE onStartTrackingTouch/onStopTrackingTouch notifications,
     // we will simply apply the updated position without suspending regular updates.
-
     private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
         public void onStartTrackingTouch(SeekBar bar) {
             mLastSeekEventTime = 0;
@@ -430,26 +459,13 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
 
     private View.OnClickListener mPrevListener = new View.OnClickListener() {
         public void onClick(View v) {
-            if (mService == null) return;
-            try {
-                if (mService.position() < 2000) {
-                    mService.prev();
-                } else {
-                    mService.seek(0);
-                    mService.play();
-                }
-            } catch (RemoteException ex) {
-            }
+            doPrev();
         }
     };
 
     private View.OnClickListener mNextListener = new View.OnClickListener() {
         public void onClick(View v) {
-            if (mService == null) return;
-            try {
-                mService.next();
-            } catch (RemoteException ex) {
-            }
+            doNext();
         }
     };
 
@@ -466,7 +482,52 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             scanForward(repcnt, howlong);
         }
     };
-   
+
+    enum GestureAction {
+        PAUSE,NEXT,PREV,SHUFFLE,REPEAT,INVALID;
+
+        static GestureAction toGestureAction(String str) {
+            try {
+                return valueOf(str);
+            } catch (Exception ex) {
+                return INVALID;
+            }
+        }
+    }
+
+    public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+        ArrayList<Prediction> predictions = mGestureLibrary.recognize(gesture);
+        //for (Prediction prediction : predictions) {
+        //    Log.d("Music","Gesture prediction: " + prediction.name + " score: " + prediction.score);
+        //}
+        Prediction bestPrediction = predictions.get(0);
+        if (bestPrediction.score > 2.0) {
+            switch (GestureAction.toGestureAction(bestPrediction.name)) {
+            case PAUSE:
+                doPauseResume();
+                break;
+            case NEXT:
+                doNext();
+                break;
+            case PREV:
+                doPrev();
+                break;
+            case SHUFFLE:
+                toggleShuffle();
+                break;
+            case REPEAT:
+                cycleRepeat();
+                break;
+            case INVALID:
+                Log.e("MediaPlaybackActivity","Invalid gesture name: " + bestPrediction.name);
+                break;
+            }
+            if (mPreferences.getBoolean(MusicSettingsActivity.KEY_ENABLE_HAPTIC_FEEDBACK, false)) {
+                mVibrator.vibrate(100);
+            }
+        }
+    }
+
     @Override
     public void onStop() {
         paused = true;
@@ -475,9 +536,21 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             unregisterReceiver(mStatusListener);
         }
         unregisterReceiver(mScreenTimeoutListener);
+
+        IntentFilter g = new IntentFilter();
+        g.addAction(MusicSettingsActivity.ACTION_ENABLE_GESTURES_CHANGED);
+        g.addAction(MusicSettingsActivity.ACTION_GESTURES_CHANGED);
+        registerReceiver(mGestureStatusListener, new IntentFilter(g));
+
         MusicUtils.unbindFromService(mToken);
         mService = null;
         super.onStop();
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        unregisterReceiver(mGestureStatusListener);
     }
 
     @Override
@@ -509,7 +582,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     public void onNewIntent(Intent intent) {
         setIntent(intent);
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
@@ -519,11 +592,12 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         }
         setPauseButtonImage();
     }
-    
+
     @Override
     public void onDestroy()
     {
         mAlbumArtWorker.quit();
+        unregisterReceiver(mGestureStatusListener);
         super.onDestroy();
         //System.out.println("***************** playback activity onDestroy\n");
     }
@@ -538,6 +612,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         if (MusicUtils.getCurrentAudioId() >= 0) {
             menu.add(0, GOTO_START, 0, R.string.goto_start).setIcon(R.drawable.ic_menu_music_library);
             menu.add(0, PARTY_SHUFFLE, 0, R.string.party_shuffle); // icon will be set in onPrepareOptionsMenu()
+            @SuppressWarnings("unused")
             SubMenu sub = menu.addSubMenu(0, ADD_TO_PLAYLIST, 0,
                     R.string.add_to_playlist).setIcon(android.R.drawable.ic_menu_add);
             // these next two are in a separate group, so they can be shown/hidden as needed
@@ -551,6 +626,8 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
             if (getPackageManager().resolveActivity(i, 0) != null) {
                 menu.add(0, EFFECTS_PANEL, 0, R.string.effectspanel).setIcon(R.drawable.ic_menu_eq);
             }
+
+            menu.add(0, SETTINGS, 0, R.string.settings).setIcon(android.R.drawable.ic_menu_preferences);
 
             return true;
         }
@@ -650,6 +727,14 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                     startActivityForResult(i, EFFECTS_PANEL);
                     return true;
                 }
+
+                case SETTINGS: {
+                    intent = new Intent();
+                    intent.setClass(this, MusicSettingsActivity.class);
+                    startActivityForResult(intent, SETTINGS);
+                    return true;
+                }
+
             }
         } catch (RemoteException ex) {
         }
@@ -673,6 +758,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                 break;
         }
     }
+
     private final int keyboard[][] = {
         {
             KeyEvent.KEYCODE_Q,
@@ -984,7 +1070,28 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         } catch (RemoteException ex) {
         }
     }
-    
+
+    private void doPrev() {
+        if (mService == null) return;
+        try {
+            if (mService.position() < 2000) {
+                mService.prev();
+            } else {
+                mService.seek(0);
+                mService.play();
+            }
+        } catch (RemoteException ex) {
+        }
+    }
+
+    private void doNext() {
+        if (mService == null) return;
+        try {
+            mService.next();
+        } catch (RemoteException ex) {
+        }
+    }
+
     private void toggleShuffle() {
         if (mService == null) {
             return;
@@ -1301,6 +1408,20 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         }
     };
 
+    private BroadcastReceiver mGestureStatusListener = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (MusicSettingsActivity.ACTION_ENABLE_GESTURES_CHANGED.
+                    equals(intent.getAction())) {
+                mAlbumArtWorker.quit();
+                configureActivity();
+            } else if (MusicSettingsActivity.ACTION_GESTURES_CHANGED.
+                    equals(intent.getAction())) {
+                loadGestureLibrary();
+            }
+        }
+    };
+
     private static class AlbumSongIdWrapper {
         public long albumid;
         public long songid;
@@ -1428,6 +1549,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         public void quit() {
             mLooper.quit();
         }
+
     }
 }
 
