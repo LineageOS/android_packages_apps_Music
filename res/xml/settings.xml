@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings"
+    android:key="settings">
+
+    <PreferenceCategory android:title="@string/gestures_category_title">
+
+        <CheckBoxPreference android:key="enable_gestures"
+            android:title="@string/enable_gestures_title"
+            android:summary="@string/enable_gestures_summary"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference android:key="enable_haptic_feedback"
+            android:title="@string/enable_haptic_feedback_title"
+            android:summary="@string/enable_haptic_feedback_summary"
+            android:defaultValue="false"
+            android:dependency="enable_gestures" />
+
+        <PreferenceScreen android:key="edit_gestures"
+            android:title="@string/edit_gestures_title">
+            <intent
+                android:targetPackage="com.android.music"
+                android:targetClass="com.android.music.EditGesturesActivity" />
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
