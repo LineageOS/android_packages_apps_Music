@@ -88,7 +88,8 @@ public class MusicUtils {
         public final static int SCAN_DONE = 11;
         public final static int QUEUE = 12;
         public final static int EFFECTS_PANEL = 13;
-        public final static int CHILD_MENU_BASE = 14; // this should be the last item
+        public final static int SETTINGS = 14;
+        public final static int CHILD_MENU_BASE = 15; // this should be the last item
     }
 
     public static String makeAlbumsLabel(Context context, int numalbums, int numsongs, boolean isUnknown) {

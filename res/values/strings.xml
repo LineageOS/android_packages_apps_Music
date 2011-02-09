@@ -319,5 +319,71 @@
 
     <!-- Menu text for the item controlling the audio effects panel [CHAR LIMIT=15] -->
     <string name="effectspanel">Sound effects</string>
+
+    <!-- Menu text for the music settings item [CHAR LIMIT=15] -->
+    <string name="settings">Music settings</string>
+
+    <!-- Category title for gestures in music settings -->
+    <string name="gestures_category_title">Gestures</string>
+
+    <!-- Title and summary for 'enable gestures' preference checkbox -->
+    <string name="enable_gestures_title">Enable gestures</string>
+    <string name="enable_gestures_summary">Control music playback via gestures on the &quot;Now playing&quot; screen</string>
+
+    <!-- Title and summary for 'enable haptic feedback' preference checkbox -->
+    <string name="enable_haptic_feedback_title">Enable haptic feedback</string>
+    <string name="enable_haptic_feedback_summary">Enable phone vibration in response to completed gestures</string>
+
+    <!-- Title for 'edit gestures' preference screen and subsequent activity -->
+    <string name="edit_gestures_title">Edit gestures</string>
+
+    <!-- Titles and summaries for gestures when listed in 'edit gestures' activity -->
+    <string-array name="gesture_titles">
+        <item>Pause/Resume</item>
+        <item>Next</item>
+        <item>Previous</item>
+        <item>Shuffle</item>
+        <item>Repeat</item>
+    </string-array>
+    <string-array name="gesture_summaries">
+        <item>Pause current song or resume playback</item>
+        <item>Skip to next song on playlist</item>
+        <item>Restart current song or skip to previous song on playlist</item>
+        <item>Toggle shuffle on and off</item>
+        <item>Cycle through repeat modes</item>
+    </string-array>
+
+    <!-- Loading text for 'edit gestures' activity -->
+    <string name="gestures_loading">Loading gestures</string>
+
+    <!-- Context menu entries for 'edit gestures' activity -->
+    <string name="gestures_customize">Customize gesture</string>
+    <string name="gestures_reset">Reset to default</string>
+
+    <!-- Button text for 'edit gestures' activity -->
+    <string name="button_reload_gestures">Reload gestures</string>
+    <string name="button_reset_all_gestures">Reset all to default</string>
+
+    <!-- Alert dialog text to confirm desire to reset all gestures to default -->
+    <string name="gestures_reset_all_alert">Are you sure you want to reset all gestures to default?</string>
+
+    <!-- Alert dialog 'yes' and 'no' button text -->
+    <string name="button_yes">Yes</string>
+    <string name="button_no">No</string>
+
+    <!-- Error messages for 'edit gestures' activity -->
+    <string name="gestures_error_loading">Could not load gesture library.</string>
+    <string name="gestures_error_library">Your custom gesture library is corrupted. Try resetting all gestures to default.</string>
+
+    <!-- Title for 'customize gesture' activity -->
+    <string name="customize_gesture_title">Customize gesture</string>
+
+    <!-- Prompt and instructions for 'customize gesture' activity -->
+    <string name="custimize_gesture_prompt">Draw your desired gesture below. For compatiblity with playback controls, gestures cannot consist solely of a horizontal swipe.</string>
+
+    <!-- Button text for 'customize gesture' activity -->
+    <string name="button_done">Done</string>
+    <string name="button_cancel">Cancel</string>
+
 </resources>
 

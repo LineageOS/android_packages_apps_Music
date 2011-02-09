@@ -17,7 +17,6 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SeekBar android:id="@android:id/progress"
-        android:indeterminateOnly="false"
         android:progressDrawable="@android:drawable/progress_horizontal"
         android:layout_width="match_parent"
         android:layout_height="30dip"

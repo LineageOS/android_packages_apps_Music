@@ -920,6 +920,7 @@ public class TrackBrowserActivity extends ListActivity
                 menu.add(0, CLEAR_PLAYLIST, 0, R.string.clear_playlist).setIcon(R.drawable.ic_menu_clear_playlist);
             }
         }
+        menu.add(0, SETTINGS, 0, R.string.settings).setIcon(android.R.drawable.ic_menu_preferences);
         return true;
     }
 
@@ -964,6 +965,12 @@ public class TrackBrowserActivity extends ListActivity
             case CLEAR_PLAYLIST:
                 // We only clear the current playlist
                 MusicUtils.clearQueue();
+                return true;
+
+            case SETTINGS:
+                intent = new Intent();
+                intent.setClass(this, MusicSettingsActivity.class);
+                startActivityForResult(intent, SETTINGS);
                 return true;
         }
         return super.onOptionsItemSelected(item);
