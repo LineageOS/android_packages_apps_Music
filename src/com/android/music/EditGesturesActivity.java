@@ -33,7 +33,6 @@ import android.gesture.GestureLibrary;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -78,7 +77,8 @@ public class EditGesturesActivity extends ListActivity {
         setListAdapter(mGesturesArrayAdapter);
         mEmpty = (TextView) findViewById(android.R.id.empty);
 
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mPreferences = getSharedPreferences(MusicSettingsActivity.PREFERENCES_FILE,
+                MODE_PRIVATE);
         loadGestures();
 
         registerForContextMenu(getListView());

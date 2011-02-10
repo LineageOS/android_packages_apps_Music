@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.MotionEvent;
 import android.widget.TextView;
@@ -87,7 +86,8 @@ public class CustomizeGestureActivity extends Activity {
     }
 
     public void replaceGesture(View v) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences preferences = getSharedPreferences(MusicSettingsActivity.PREFERENCES_FILE,
+                MODE_PRIVATE);
         GestureLibrary gestureLibrary;
         if (preferences.getBoolean(MusicSettingsActivity.KEY_HAS_CUSTOM_GESTURES, false)) {
             gestureLibrary = EditGesturesActivity.getGestureLibrary();
