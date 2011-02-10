@@ -44,6 +44,8 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
 import android.provider.MediaStore;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -145,6 +147,8 @@ public class MediaPlaybackService extends Service {
     private boolean mQueueIsSaveable = true;
     // used to track what type of audio focus loss caused the playback to pause
     private boolean mPausedByTransientLossOfFocus = false;
+    // used to track current volume
+    private float mCurrentVolume = 1.0f;
 
     private SharedPreferences mPreferences;
     // We use this to distinguish between different cards when saving/restoring playlists.
@@ -165,7 +169,6 @@ public class MediaPlaybackService extends Service {
     }
 
     private Handler mMediaplayerHandler = new Handler() {
-        float mCurrentVolume = 1.0f;
         @Override
         public void handleMessage(Message msg) {
             MusicUtils.debugLog("mMediaplayerHandler.handleMessage " + msg.what);
@@ -173,8 +176,7 @@ public class MediaPlaybackService extends Service {
                 case FADEIN:
                     if (!isPlaying() && mStartPlayback) {
                         mStartPlayback = false;
-                        mCurrentVolume = 0f;
-                        mPlayer.setVolume(mCurrentVolume);
+                        mPlayer.setVolume(0f);
                         play();
                         mMediaplayerHandler.sendEmptyMessageDelayed(FADEIN, 10);
                     } else {
@@ -263,7 +265,7 @@ public class MediaPlaybackService extends Service {
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_LOSS:
                     Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
-                    if(isPlaying()) {
+                    if (isPlaying()) {
                         mPausedByTransientLossOfFocus = false;
                         pause();
                     }
@@ -271,20 +273,57 @@ public class MediaPlaybackService extends Service {
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
-                    if(isPlaying()) {
-                        mPausedByTransientLossOfFocus = true;
-                        pause();
+                    if (isPlaying()) {
+                        SharedPreferences preferences = getSharedPreferences(MusicSettingsActivity.
+                                PREFERENCES_FILE, MODE_PRIVATE);
+                        if (preferences.getBoolean(MusicSettingsActivity.KEY_ENABLE_FOCUS_LOSS_DUCKING,
+                                false)) {
+                            int duckAttenuationdB = Integer.valueOf(preferences.getString(
+                                    MusicSettingsActivity.KEY_DUCK_ATTENUATION_DB,
+                                    MusicSettingsActivity.DEFAULT_DUCK_ATTENUATION_DB));
+                            //Convert from decibels to volume level
+                            float duckVolume = (float) Math.pow(10.0, -duckAttenuationdB / 20.0);
+                            Log.v(LOGTAG, "New attentuated volume: " + duckVolume);
+                            mPlayer.setVolume(duckVolume);
+                        } else {
+                            mPausedByTransientLossOfFocus = true;
+                            pause();
+                        }
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
                     Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN");
-                    if(!isPlaying() && mPausedByTransientLossOfFocus) {
+                    if (isPlaying()) {
+                        mMediaplayerHandler.sendEmptyMessageDelayed(FADEIN,10);
+                    } else if (mPausedByTransientLossOfFocus) {
                         mPausedByTransientLossOfFocus = false;
                         startAndFadeIn();
                     }
                     break;
                 default:
                     Log.e(LOGTAG, "Unknown audio focus change code");
+            }
+        }
+    };
+
+    private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
+        public void onCallStateChanged(int state, String incomingNumber) {
+            switch (state) {
+                case TelephonyManager.CALL_STATE_RINGING:
+                    Log.v(LOGTAG, "PhoneState: received CALL_STATE_RINGING");
+                    if (isPlaying()) {
+                        mPausedByTransientLossOfFocus = true;
+                        pause();
+                    }
+                    break;
+
+                case TelephonyManager.CALL_STATE_OFFHOOK:
+                    Log.v(LOGTAG, "PhoneState: received CALL_STATE_OFFHOOK");
+                    mPausedByTransientLossOfFocus = false;
+                    if (isPlaying()) {
+                        pause();
+                    }
+                    break;
             }
         }
     };
@@ -302,7 +341,7 @@ public class MediaPlaybackService extends Service {
         
         mPreferences = getSharedPreferences("Music", MODE_WORLD_READABLE | MODE_WORLD_WRITEABLE);
         mCardId = MusicUtils.getCardId(this);
-        
+
         registerExternalStorageListener();
 
         // Needs to be done in this thread, since otherwise ApplicationContext.getPowerManager() crashes.
@@ -310,7 +349,7 @@ public class MediaPlaybackService extends Service {
         mPlayer.setHandler(mMediaplayerHandler);
 
         reloadQueue();
-        
+
         IntentFilter commandFilter = new IntentFilter();
         commandFilter.addAction(SERVICECMD);
         commandFilter.addAction(TOGGLEPAUSE_ACTION);
@@ -320,7 +359,7 @@ public class MediaPlaybackService extends Service {
         commandFilter.addAction(CYCLEREPEAT_ACTION);
         commandFilter.addAction(TOGGLESHUFFLE_ACTION);
         registerReceiver(mIntentReceiver, commandFilter);
-        
+
         PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
         mWakeLock.setReferenceCounted(false);
@@ -346,7 +385,11 @@ public class MediaPlaybackService extends Service {
         mPlayer = null;
 
         mAudioManager.abandonAudioFocus(mAudioFocusListener);
-        
+
+        TelephonyManager telephonyManager =
+            (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+
         // make sure there aren't any other messages coming
         mDelayedStopHandler.removeCallbacksAndMessages(null);
         mMediaplayerHandler.removeCallbacksAndMessages(null);
@@ -441,10 +484,8 @@ public class MediaPlaybackService extends Service {
     private void reloadQueue() {
         String q = null;
 
-        boolean newstyle = false;
         int id = mCardId;
         if (mPreferences.contains("cardid")) {
-            newstyle = true;
             id = mPreferences.getInt("cardid", ~mCardId);
         }
         if (id == mCardId) {
@@ -889,7 +930,6 @@ public class MediaPlaybackService extends Service {
                 addToPlayList(list, -1);
                 notifyChange(QUEUE_CHANGED);
             }
-            int oldpos = mPlayPos;
             if (position >= 0) {
                 mPlayPos = position;
             } else {
@@ -1062,10 +1102,18 @@ public class MediaPlaybackService extends Service {
      * Starts playback of a previously opened file.
      */
     public void play() {
+        TelephonyManager telephonyManager =
+            (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK) {
+            return;
+        }
+
         mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
                 AudioManager.AUDIOFOCUS_GAIN);
         mAudioManager.registerMediaButtonEventReceiver(new ComponentName(this.getPackageName(),
                 MediaButtonIntentReceiver.class.getName()));
+
+        telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
         if (mPlayer.isInitialized()) {
             // if we are at the end of the song, go to the next song first
@@ -1894,6 +1942,7 @@ public class MediaPlaybackService extends Service {
 
         public void setVolume(float vol) {
             mMediaPlayer.setVolume(vol, vol);
+            mCurrentVolume = vol;
         }
 
         public void setAudioSessionId(int sessionId) {
