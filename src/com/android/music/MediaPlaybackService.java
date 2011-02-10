@@ -145,6 +145,8 @@ public class MediaPlaybackService extends Service {
     private boolean mQueueIsSaveable = true;
     // used to track what type of audio focus loss caused the playback to pause
     private boolean mPausedByTransientLossOfFocus = false;
+    // used to track current volume
+    private float mCurrentVolume = 1.0f;
 
     private SharedPreferences mPreferences;
     // We use this to distinguish between different cards when saving/restoring playlists.
@@ -165,7 +167,6 @@ public class MediaPlaybackService extends Service {
     }
 
     private Handler mMediaplayerHandler = new Handler() {
-        float mCurrentVolume = 1.0f;
         @Override
         public void handleMessage(Message msg) {
             MusicUtils.debugLog("mMediaplayerHandler.handleMessage " + msg.what);
@@ -173,8 +174,7 @@ public class MediaPlaybackService extends Service {
                 case FADEIN:
                     if (!isPlaying() && mStartPlayback) {
                         mStartPlayback = false;
-                        mCurrentVolume = 0f;
-                        mPlayer.setVolume(mCurrentVolume);
+                        mPlayer.setVolume(0f);
                         play();
                         mMediaplayerHandler.sendEmptyMessageDelayed(FADEIN, 10);
                     } else {
@@ -263,7 +263,7 @@ public class MediaPlaybackService extends Service {
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_LOSS:
                     Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
-                    if(isPlaying()) {
+                    if (isPlaying()) {
                         mPausedByTransientLossOfFocus = false;
                         pause();
                     }
@@ -271,14 +271,29 @@ public class MediaPlaybackService extends Service {
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
-                    if(isPlaying()) {
-                        mPausedByTransientLossOfFocus = true;
-                        pause();
+                    if (isPlaying()) {
+                        SharedPreferences preferences = getSharedPreferences(MusicSettingsActivity.
+                                PREFERENCES_FILE, MODE_PRIVATE);
+                        if (preferences.getBoolean(MusicSettingsActivity.KEY_ENABLE_FOCUS_LOSS_DUCKING,
+                                false)) {
+                            int duckAttenuationdB = Integer.valueOf(preferences.getString(
+                                    MusicSettingsActivity.KEY_DUCK_ATTENUATION_DB,
+                                    MusicSettingsActivity.DEFAULT_DUCK_ATTENUATION_DB));
+                            //Convert from decibels to volume level
+                            float duckVolume = (float) Math.pow(10.0, -duckAttenuationdB / 20.0);
+                            Log.v(LOGTAG, "New attentuated volume: " + duckVolume);
+                            mPlayer.setVolume(duckVolume);
+                        } else {
+                            mPausedByTransientLossOfFocus = true;
+                            pause();
+                        }
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
                     Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN");
-                    if(!isPlaying() && mPausedByTransientLossOfFocus) {
+                    if (isPlaying()) { //
+                        mMediaplayerHandler.sendEmptyMessageDelayed(FADEIN,10);
+                    } else if (mPausedByTransientLossOfFocus) {
                         mPausedByTransientLossOfFocus = false;
                         startAndFadeIn();
                     }
@@ -1894,6 +1909,7 @@ public class MediaPlaybackService extends Service {
 
         public void setVolume(float vol) {
             mMediaPlayer.setVolume(vol, vol);
+            mCurrentVolume = vol;
         }
 
         public void setAudioSessionId(int sessionId) {

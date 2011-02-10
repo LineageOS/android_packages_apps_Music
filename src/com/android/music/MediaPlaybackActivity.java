@@ -51,7 +51,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
@@ -106,7 +105,8 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mPreferences = getSharedPreferences(MusicSettingsActivity.PREFERENCES_FILE,
+                MODE_PRIVATE);
         configureActivity();
         seekmethod = 1;
         mTouchSlop = ViewConfiguration.get(this).getScaledTouchSlop();
