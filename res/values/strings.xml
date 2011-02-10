@@ -323,15 +323,39 @@
     <!-- Menu text for the music settings item [CHAR LIMIT=15] -->
     <string name="settings">Music settings</string>
 
+    <!-- Category title for audio focus in music settings -->
+    <string name="audio_focus_category_title">Audio Focus</string>
+
+    <!-- Title and summary for 'enable focus loss ducking' preference checkbox -->
+    <string name="enable_focus_loss_ducking_title">Focus loss ducking</string>
+    <string name="enable_focus_loss_ducking_summary">Instead of pausing playback, lower playback volume during audible notifications</string>
+
+    <!-- Title, summary, and entries for 'enable gestures' preference list -->
+    <string name="duck_attenuation_db_title">Duck attentuation</string>
+    <string name="duck_attenuation_db_summary">Select the amount by which to attenuate the volume during focus loss</string>
+    <string-array name="duck_attenuation_db_entries">
+        <item>None</item>
+        <item>4 dB</item>
+        <item>8 dB (default)</item>
+        <item>12 dB</item>
+    </string-array>
+    <!-- Do not translate. Entry values for 'enable gestures' preference list -->
+    <string-array name="duck_attenuation_db_entryvalues">
+        <item>0</item>
+        <item>4</item>
+        <item>8</item>
+        <item>12</item>
+    </string-array>
+
     <!-- Category title for gestures in music settings -->
     <string name="gestures_category_title">Gestures</string>
 
     <!-- Title and summary for 'enable gestures' preference checkbox -->
     <string name="enable_gestures_title">Enable gestures</string>
-    <string name="enable_gestures_summary">Control music playback via gestures on the &quot;Now playing&quot; screen</string>
+    <string name="enable_gestures_summary">Control music playback via gestures on the \"Now playing\" screen</string>
 
     <!-- Title and summary for 'enable haptic feedback' preference checkbox -->
-    <string name="enable_haptic_feedback_title">Enable haptic feedback</string>
+    <string name="enable_haptic_feedback_title">Haptic feedback</string>
     <string name="enable_haptic_feedback_summary">Enable phone vibration in response to completed gestures</string>
 
     <!-- Title for 'edit gestures' preference screen and subsequent activity -->

@@ -21,23 +21,31 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 
 public class MusicSettingsActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
+    static final String KEY_ENABLE_FOCUS_LOSS_DUCKING = "enable_focus_loss_ducking";
+    static final String KEY_DUCK_ATTENUATION_DB = "duck_attenuation_db";
     static final String KEY_ENABLE_GESTURES = "enable_gestures";
     static final String KEY_ENABLE_HAPTIC_FEEDBACK = "enable_haptic_feedback";
     static final String KEY_HAS_CUSTOM_GESTURES = "has_custom_gestures";
     //This key has the gesture entry name (E.g. PAUSE) appended to it before use
     static final String KEY_HAS_CUSTOM_GESTURE_XXX = "has_custom_gesture_";
 
+    static final String DEFAULT_DUCK_ATTENUATION_DB = "8";
+
     static final String ACTION_ENABLE_GESTURES_CHANGED = "com.android.music.enablegestureschanged";
     static final String ACTION_GESTURES_CHANGED = "com.android.music.gestureschanged";
 
+    static final String PREFERENCES_FILE = "settings";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PreferenceManager preferenceManager = getPreferenceManager();
+        preferenceManager.setSharedPreferencesName(PREFERENCES_FILE);
         addPreferencesFromResource(R.xml.settings);
     }
 
