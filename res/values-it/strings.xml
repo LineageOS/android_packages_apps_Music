@@ -156,4 +156,87 @@
     <string name="fast_scroll_alphabet" msgid="5548732936480723311">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="widget_initial_text" msgid="6334545155963910952">"Tocca per selezionare musica."</string>
     <string name="effectspanel" msgid="8804547581593509614">"Effetti sonori"</string>
+
+    <!-- Menu text for the music settings item [CHAR LIMIT=15] -->
+    <string name="settings">Impostazioni</string>
+
+    <!-- Category title for audio focus in music settings -->
+    <string name="audio_focus_category_title">Audio Focus</string>
+
+    <!-- Title and summary for 'enable focus loss ducking' preference checkbox -->
+    <string name="enable_focus_loss_ducking_title">Perdita audio focus</string>
+    <string name="enable_focus_loss_ducking_summary">In caso di notifiche audio diminuisce il volume della riproduzione invece di mettere in pausa</string>
+
+    <!-- Title, summary, and entries for 'enable gestures' preference list -->
+    <string name="duck_attenuation_db_title">Attenuazione volume</string>
+    <string name="duck_attenuation_db_summary">Selezionare di quanto attenuare il volume durante la perdita di audio focus</string>
+    <string-array name="duck_attenuation_db_entries">
+        <item>Niente</item>
+        <item>4 dB</item>
+        <item>8 dB (default)</item>
+        <item>12 dB</item>
+    </string-array>
+
+    <!-- Category title for gestures in music settings -->
+    <string name="gestures_category_title">Gesture</string>
+
+    <!-- Title and summary for 'enable gestures' preference checkbox -->
+    <string name="enable_gestures_title">Attiva gesture</string>
+    <string name="enable_gestures_summary">Controlla la riproduzione musicale tramite gesture nella schermata \"In esecuzione\"</string>
+
+    <!-- Title and summary for 'enable haptic feedback' preference checkbox -->
+    <string name="enable_haptic_feedback_title">Feedback aptico</string>
+    <string name="enable_haptic_feedback_summary">Attiva la vibrazione del dispositivo in seguito al completamento di una gesture</string>
+
+    <!-- Title for 'edit gestures' preference screen and subsequent activity -->
+    <string name="edit_gestures_title">Modifica gesture</string>
+
+    <!-- Titles and summaries for gestures when listed in 'edit gestures' activity -->
+    <string-array name="gesture_titles">
+        <item>Pausa/Riprendi</item>
+        <item>Successivo</item>
+        <item>Precedente</item>
+        <item>Shuffle</item>
+        <item>Ripeti</item>
+    </string-array>
+    <string-array name="gesture_summaries">
+        <item>Pausa il brano o riprendi la riproduzione</item>
+        <item>Passa al brano successivo nella playlist</item>
+        <item>Riavvia il brano o torna a quello precedente nella playlist</item>
+        <item>Attiva/disattiva riproduzione casuale</item>
+        <item>Scorri tra le diverse modalità di riproduzione</item>
+    </string-array>
+
+    <!-- Loading text for 'edit gestures' activity -->
+    <string name="gestures_loading">Caricamento gesture</string>
+
+    <!-- Context menu entries for 'edit gestures' activity -->
+    <string name="gestures_customize">Personalizza gesture</string>
+    <string name="gestures_reset">Ripristina a default</string>
+
+    <!-- Button text for 'edit gestures' activity -->
+    <string name="button_reload_gestures">Ricarica gesture</string>
+    <string name="button_reset_all_gestures">Ripristina a default</string>
+
+    <!-- Alert dialog text to confirm desire to reset all gestures to default -->
+    <string name="gestures_reset_all_alert">Sei sicuro di voler ripristinare tutte le gesture a quelle di default?</string>
+
+    <!-- Alert dialog 'yes' and 'no' button text -->
+    <string name="button_yes">Sì</string>
+    <string name="button_no">No</string>
+
+    <!-- Error messages for 'edit gestures' activity -->
+    <string name="gestures_error_loading">Non è stato possibile caricare la libreria gesture.</string>
+    <string name="gestures_error_library">La libreria delle tue gesture personalizzate è danneggiata. Prova a ripristinare tutte le gesture a quelle di default.</string>
+
+    <!-- Title for 'customize gesture' activity -->
+    <string name="customize_gesture_title">Personalizza gesture</string>
+
+    <!-- Prompt and instructions for 'customize gesture' activity -->
+    <string name="custimize_gesture_prompt">Disegna di seguito la gesture desiderata. Per non andare in conflitto con i controlli della riproduzione le gesture non possono essere composte solamente da swipe orizzontali.</string>
+
+    <!-- Button text for 'customize gesture' activity -->
+    <string name="button_done">Fatto</string>
+    <string name="button_cancel">Annulla</string>
+
 </resources>
