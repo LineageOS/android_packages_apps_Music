@@ -156,4 +156,86 @@
     <string name="fast_scroll_alphabet" msgid="5548732936480723311">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="widget_initial_text" msgid="6334545155963910952">"Toque para selecionar a música."</string>
     <string name="effectspanel" msgid="8804547581593509614">"Efeitos sonoros"</string>
+
+    <!-- Menu text for the music settings item [CHAR LIMIT=15] -->
+    <string name="settings">Conf. de Música</string>
+
+    <!-- Category title for audio focus in music settings -->
+    <string name="audio_focus_category_title">Foco de áudio</string>
+
+    <!-- Title and summary for 'enable focus loss ducking' preference checkbox -->
+    <string name="enable_focus_loss_ducking_title">Perda de foco</string>
+    <string name="enable_focus_loss_ducking_summary">Ao invés de pausar reprodução, diminui volume de reprodução durante notificações audíveis.</string>
+
+    <!-- Title, summary, and entries for 'enable gestures' preference list -->
+    <string name="duck_attenuation_db_title">Atenuação de volume</string>
+    <string name="duck_attenuation_db_summary">Selecione a quantidade de atenuação do volume durante a perda de foco</string>
+    <string-array name="duck_attenuation_db_entries">
+        <item>Nenhum</item>
+        <item>4 dB</item>
+        <item>8 dB (padrão)</item>
+        <item>12 dB</item>
+    </string-array>
+
+    <!-- Category title for gestures in music settings -->
+    <string name="gestures_category_title">Gestos</string>
+
+    <!-- Title and summary for 'enable gestures' preference checkbox -->
+    <string name="enable_gestures_title">Habilitar gestos</string>
+    <string name="enable_gestures_summary">Controle a reprodução de música via gestos na tela de \"Em Reprodução\"</string>
+
+    <!-- Title and summary for 'enable haptic feedback' preference checkbox -->
+    <string name="enable_haptic_feedback_title">Feedback de toque</string>
+    <string name="enable_haptic_feedback_summary">Habilitar vibração do telefone em resposta a gestos completados</string>
+
+    <!-- Title for 'edit gestures' preference screen and subsequent activity -->
+    <string name="edit_gestures_title">Editar gestos</string>
+
+    <!-- Titles and summaries for gestures when listed in 'edit gestures' activity -->
+    <string-array name="gesture_titles">
+        <item>Pausar/Resumir</item>
+        <item>Próximo</item>
+        <item>Anterior</item>
+        <item>Embaralhar</item>
+        <item>Repetir</item>
+    </string-array>
+    <string-array name="gesture_summaries">
+        <item>Pausa música atual ou resumi a reprodução</item>
+        <item>Pule para a próxima música na lista de reprodução</item>
+        <item>Reiniciar música atual ou pular para a música anterior da lista de reprodução</item>
+        <item>Alterna emberalhar entre habiltado e desabilitado</item>
+        <item>Percorrer os modos de repetição</item>
+    </string-array>
+
+    <!-- Loading text for 'edit gestures' activity -->
+    <string name="gestures_loading">Carregando gestos</string>
+
+    <!-- Context menu entries for 'edit gestures' activity -->
+    <string name="gestures_customize">Personalizar gestos</string>
+    <string name="gestures_reset">Restaurar para o padrão</string>
+
+    <!-- Button text for 'edit gestures' activity -->
+    <string name="button_reload_gestures">Recarregar gestos</string>
+    <string name="button_reset_all_gestures">Restaurar todos para o padrão</string>
+
+    <!-- Alert dialog text to confirm desire to reset all gestures to default -->
+    <string name="gestures_reset_all_alert">Você tem certeza que deseja restaurar todos os gestos para o padrão?</string>
+
+    <!-- Alert dialog 'yes' and 'no' button text -->
+    <string name="button_yes">Sim</string>
+    <string name="button_no">Não</string>
+
+    <!-- Error messages for 'edit gestures' activity -->
+    <string name="gestures_error_loading">Não pode carregar a biblioteca de gesto.</string>
+    <string name="gestures_error_library">Sua biblioteca de gesto está corrompida. Tente restaurar todos os gesto para o padrão.</string>
+
+    <!-- Title for 'customize gesture' activity -->
+    <string name="customize_gesture_title">Gesto personalizado</string>
+
+    <!-- Prompt and instructions for 'customize gesture' activity -->
+    <string name="custimize_gesture_prompt">Desenhe seu gesto desejado abaixo. Para compatibilidade com controles de plaback, gestos não pode consistir apenas de uma linha horizonal.</string>
+
+    <!-- Button text for 'customize gesture' activity -->
+    <string name="button_done">Concluído</string>
+    <string name="button_cancel">Cancelar</string>
 </resources>
