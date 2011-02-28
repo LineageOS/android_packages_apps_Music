@@ -37,14 +37,14 @@
         android:layout_alignParentRight="true">
 
         <ImageButton android:id="@+id/repeat"
-            android:layout_width="48dip"
+            android:layout_width="44dip"
             android:layout_height="36dip"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="4dip"
             android:background="@drawable/btn_playback_top" />
 
         <ImageButton android:id="@+id/shuffle"
-            android:layout_width="48dip"
+            android:layout_width="44dip"
             android:layout_height="36dip"
             android:layout_alignParentRight="true"
             android:layout_marginRight="4dip"

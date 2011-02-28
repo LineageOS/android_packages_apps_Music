@@ -76,7 +76,7 @@
         android:scaleType="fitXY" />
 
     <ImageButton android:id="@+id/control_repeat"
-        android:layout_width="38dip"
+        android:layout_width="40dip"
         android:layout_height="32dip"
         android:layout_toRightOf="@id/albumart_info_divider"
         android:layout_marginLeft="6dip"
@@ -84,7 +84,7 @@
         android:background="@drawable/appwidget_button_center" />
 
     <ImageButton android:id="@+id/control_shuffle"
-        android:layout_width="38dip"
+        android:layout_width="40dip"
         android:layout_height="32dip"
         android:layout_alignParentRight="true"
         android:layout_marginRight="6dip"
