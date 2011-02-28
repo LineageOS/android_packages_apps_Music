@@ -489,7 +489,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         static GestureAction toGestureAction(String str) {
             try {
                 return valueOf(str);
-            } catch (Exception ex) {
+            } catch (IllegalArgumentException ex) {
                 return INVALID;
             }
         }
