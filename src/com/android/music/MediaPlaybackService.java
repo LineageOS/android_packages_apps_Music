@@ -248,12 +248,12 @@ public class MediaPlaybackService extends Service {
                             break;
                         case AudioManager.AUDIOFOCUS_GAIN:
                             Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN");
-                           // if(!isPlaying() && mPausedByTransientLossOfFocus) {
+                            if(isPlaying() || mPausedByTransientLossOfFocus) {
                                 mPausedByTransientLossOfFocus = false;
                                 mCurrentVolume = 0f;
                                 mPlayer.setVolume(mCurrentVolume);
                                 play(); // also queues a fade-in
-                           // }
+                            }
                             break;
                         default:
                             Log.e(LOGTAG, "Unknown audio focus change code");
