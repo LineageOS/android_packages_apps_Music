@@ -106,6 +106,7 @@ public class MediaPlaybackService extends Service {
     private static final int RELEASE_WAKELOCK = 2;
     private static final int SERVER_DIED = 3;
     private static final int FADEIN = 4;
+    private static final int FOCUSCHANGE = 5;
     private static final int MAX_HISTORY_SIZE = 100;
     
     private MultiPlayer mPlayer;
@@ -211,6 +212,54 @@ public class MediaPlaybackService extends Service {
                 case RELEASE_WAKELOCK:
                     mWakeLock.release();
                     break;
+
+                case FOCUSCHANGE:
+                    // This code is here so we can better synchronize it with the code that
+                    // handles fade-in
+                    // AudioFocus is a new feature: focus updates are made verbose on purpose
+                    switch (msg.arg1) {
+                        case AudioManager.AUDIOFOCUS_LOSS:
+                            Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
+                            if(isPlaying()) {
+                                mPausedByTransientLossOfFocus = false;
+                            }
+                            pause();
+                            break;
+                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                            Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
+                            if (isPlaying()) {
+                                SharedPreferences preferences = getSharedPreferences(MusicSettingsActivity.
+                                        PREFERENCES_FILE, MODE_PRIVATE);
+                                if (preferences.getBoolean(MusicSettingsActivity.KEY_ENABLE_FOCUS_LOSS_DUCKING,
+                                        false)) {
+                                    int duckAttenuationdB = Integer.valueOf(preferences.getString(
+                                            MusicSettingsActivity.KEY_DUCK_ATTENUATION_DB,
+                                            MusicSettingsActivity.DEFAULT_DUCK_ATTENUATION_DB));
+                                    //Convert from decibels to volume level
+                                    float duckVolume = (float) Math.pow(10.0, -duckAttenuationdB / 20.0);
+                                    Log.v(LOGTAG, "New attentuated volume: " + duckVolume);
+                                    mPlayer.setVolume(duckVolume);
+                                } else {
+                                    mPausedByTransientLossOfFocus = true;
+                                    pause(); // don't move pause out because we have ducking
+                                }
+                            }
+                            break;
+                        case AudioManager.AUDIOFOCUS_GAIN:
+                            Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN");
+                           // if(!isPlaying() && mPausedByTransientLossOfFocus) {
+                                mPausedByTransientLossOfFocus = false;
+                                mCurrentVolume = 0f;
+                                mPlayer.setVolume(mCurrentVolume);
+                                play(); // also queues a fade-in
+                           // }
+                            break;
+                        default:
+                            Log.e(LOGTAG, "Unknown audio focus change code");
+                    }
+                    break;
+
                 default:
                     break;
             }
@@ -261,48 +310,7 @@ public class MediaPlaybackService extends Service {
 
     private OnAudioFocusChangeListener mAudioFocusListener = new OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
-            // AudioFocus is a new feature: focus updates are made verbose on purpose
-            switch (focusChange) {
-                case AudioManager.AUDIOFOCUS_LOSS:
-                    Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
-                    if (isPlaying()) {
-                        mPausedByTransientLossOfFocus = false;
-                        pause();
-                    }
-                    break;
-                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                    Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
-                    if (isPlaying()) {
-                        SharedPreferences preferences = getSharedPreferences(MusicSettingsActivity.
-                                PREFERENCES_FILE, MODE_PRIVATE);
-                        if (preferences.getBoolean(MusicSettingsActivity.KEY_ENABLE_FOCUS_LOSS_DUCKING,
-                                false)) {
-                            int duckAttenuationdB = Integer.valueOf(preferences.getString(
-                                    MusicSettingsActivity.KEY_DUCK_ATTENUATION_DB,
-                                    MusicSettingsActivity.DEFAULT_DUCK_ATTENUATION_DB));
-                            //Convert from decibels to volume level
-                            float duckVolume = (float) Math.pow(10.0, -duckAttenuationdB / 20.0);
-                            Log.v(LOGTAG, "New attentuated volume: " + duckVolume);
-                            mPlayer.setVolume(duckVolume);
-                        } else {
-                            mPausedByTransientLossOfFocus = true;
-                            pause();
-                        }
-                    }
-                    break;
-                case AudioManager.AUDIOFOCUS_GAIN:
-                    Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN");
-                    if (isPlaying()) {
-                        mMediaplayerHandler.sendEmptyMessageDelayed(FADEIN,10);
-                    } else if (mPausedByTransientLossOfFocus) {
-                        mPausedByTransientLossOfFocus = false;
-                        startAndFadeIn();
-                    }
-                    break;
-                default:
-                    Log.e(LOGTAG, "Unknown audio focus change code");
-            }
+            mMediaplayerHandler.obtainMessage(FOCUSCHANGE, focusChange, 0).sendToTarget();
         }
     };
 
@@ -1124,6 +1132,9 @@ public class MediaPlaybackService extends Service {
             }
 
             mPlayer.start();
+            // make sure we fade in, in case a previous fadein was stopped because
+            // of another focus loss
+            mMediaplayerHandler.sendEmptyMessage(FADEIN);
 
             RemoteViews views = new RemoteViews(getPackageName(), R.layout.statusbar);
             views.setImageViewResource(R.id.icon, R.drawable.stat_notify_musicplayer);
@@ -1199,6 +1210,7 @@ public class MediaPlaybackService extends Service {
      */
     public void pause() {
         synchronized(this) {
+            mMediaplayerHandler.removeMessages(FADEIN);
             if (isPlaying()) {
                 mPlayer.pause();
                 gotoIdleState();

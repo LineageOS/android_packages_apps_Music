@@ -19,5 +19,7 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="notification_artist_album" msgid="2128095771677061443">"<xliff:g id="ALBUM">%2$s</xliff:g>"\n"<xliff:g id="ARTIST">%1$s</xliff:g>"</string>
+    <string name="create_playlist_create_text_prompt" msgid="2379436619128383935">"Atidarykite klaviatūrą, kad suteiktumėte grojaraščiui naują pavadinimą arba pasirinkite „Išsaugoti į“, kad pavadintumėte jį „<xliff:g id="PLAYLIST">%s</xliff:g>“."</string>
+    <string name="rename_playlist_same_prompt" msgid="7777541452078260899">"Atidarykite klaviatūrą, kad grojaraščiui „<xliff:g id="PLAYLIST">%s</xliff:g>“ suteiktumėte naują pavadinimą."</string>
+    <string name="rename_playlist_diff_prompt" msgid="900422624897120958">"Atidarykite klaviatūrą, kad suteiktumėte grojaraščiui „<xliff:g id="PLAYLIST">%1$s</xliff:g>“ naują pavadinimą arba pasirinkite „Išsaugoti į“, kad pavadintumėte jį „<xliff:g id="NAME">%2$s</xliff:g>“."</string>
 </resources>
