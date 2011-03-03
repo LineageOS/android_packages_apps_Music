@@ -348,7 +348,7 @@
 
     <!-- Title and summary for 'enable gestures' preference checkbox -->
     <string name="enable_gestures_title">使用手勢</string>
-    <string name="enable_gestures_summary">在“目前播放”頁面透過手勢來控製音樂播放</string>
+    <string name="enable_gestures_summary">在“目前播放”頁面透過手勢來控制音樂播放</string>
 
     <!-- Title and summary for 'enable haptic feedback' preference checkbox -->
     <string name="enable_haptic_feedback_title">觸動回饋</string>
@@ -399,7 +399,7 @@
     <string name="customize_gesture_title">自定手勢</string>
 
     <!-- Prompt and instructions for 'customize gesture' activity -->
-    <string name="custimize_gesture_prompt">請在下方畫出欲使用的手勢。為了與既有音樂控製相容，手勢不可以只是橫向的一劃。</string>
+    <string name="custimize_gesture_prompt">請在下方畫出欲使用的手勢。為了與既有音樂控制相容，手勢不可以只是橫向的一劃。</string>
 
     <!-- Button text for 'customize gesture' activity -->
     <string name="button_done">完成</string>
