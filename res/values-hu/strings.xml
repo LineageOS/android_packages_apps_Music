@@ -156,4 +156,51 @@
     <string name="fast_scroll_alphabet" msgid="5548732936480723311">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="widget_initial_text" msgid="6334545155963910952">"Érintse meg zene kiválasztásához."</string>
     <!-- outdated translation 1443100475802906298 -->     <string name="effectspanel" msgid="8804547581593509614">"Hangeffektek"</string>
+
+    <string name="settings">Beállítások</string>
+    <string name="audio_focus_category_title">Audió fókusz</string>
+    <string name="enable_focus_loss_ducking_title">Fókusz csillapítása</string>
+    <string name="enable_focus_loss_ducking_summary">Értesítéseknél a lejátszás halkulása és szüneteltetése</string>
+    <string name="duck_attenuation_db_title">Csatornamagasság csillapítása</string>
+    <string name="duck_attenuation_db_summary">Állítsa be azt a hangmagasságot, amelynél a csatornamagasság csillapítva legyen</string>
+    <string-array name="duck_attenuation_db_entries">
+        <item>Nincs</item>
+        <item>4 dB</item>
+        <item>8 dB (alapértelmezett)</item>
+        <item>12 dB</item>
+    </string-array>
+    <string name="gestures_category_title">Gesztusok</string>
+    <string name="enable_gestures_title">Engedélyezze a gesztus vezérlést</string>
+    <string name="enable_gestures_summary">Engedélyezze a zene vezérlését gesztusok által</string>
+    <string name="enable_haptic_feedback_title">Haptic visszajelzés</string>
+    <string name="enable_haptic_feedback_summary">Telefon vibrációs visszajelzése a gesztusok használatakor</string>
+    <string name="edit_gestures_title">Gesztusok szerkesztése</string>
+    <string-array name="gesture_titles">
+        <item>Szünet/Folytatás</item>
+        <item>Következő</item>
+        <item>Előző</item>
+        <item>Véletlenszerű</item>
+        <item>Ismétlődő</item>
+    </string-array>
+    <string-array name="gesture_summaries">
+        <item>Jelenlegi szám leállítása vagy lejátszás folytatása</item>
+        <item>Ugrás a lejátszási lista következő számára</item>
+        <item>Jelenlegi szám újrajátszása vagy ugrás az előző számra</item>
+        <item>Véletlenszerű lejátszás be- és kikapcsolása</item>
+        <item>Ismétődő lejátszási módok</item>
+    </string-array>
+    <string name="gestures_loading">Gesztusok betöltése</string>
+    <string name="gestures_customize">Gesztusok személyreszabása</string>
+    <string name="gestures_reset">Visszaállítás</string>
+    <string name="button_reload_gestures">Gesztusok újratöltése</string>
+    <string name="button_reset_all_gestures">Összes visszaállítása</string>
+    <string name="gestures_reset_all_alert">Biztos, hogy az összes gesztust az alapértemezettre szeretné visszaállítani?</string>
+    <string name="button_yes">Igen</string>
+    <string name="button_no">Nem</string>
+    <string name="gestures_error_loading">Nem lehet a gesztus könyvtárat betölteni.</string>
+    <string name="gestures_error_library">Az egyéni gesztus-könyvtár sérült. Próbálja meg az összes gesztust alapértelmezettre visszaállítani.</string>
+    <string name="customize_gesture_title">Gesztus személyreszabása</string>
+    <string name="custimize_gesture_prompt">Rajzolja le a kívánt gesztust. Kompatibilitási okok miatt a lejátszás irányítása nem állhat egy síma vízszintes vonalból.</string>
+    <string name="button_done">Rendben</string>
+    <string name="button_cancel">Mégse</string>
 </resources>
