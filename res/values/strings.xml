@@ -340,7 +340,7 @@
         <item>12 dB</item>
     </string-array>
     <!-- Do not translate. Entry values for 'enable gestures' preference list -->
-    <string-array name="duck_attenuation_db_entryvalues">
+    <string-array name="duck_attenuation_db_entryvalues" translatable="false">
         <item>0</item>
         <item>4</item>
         <item>8</item>
@@ -403,7 +403,7 @@
     <string name="customize_gesture_title">Customize gesture</string>
 
     <!-- Prompt and instructions for 'customize gesture' activity -->
-    <string name="custimize_gesture_prompt">Draw your desired gesture below. For compatiblity with playback controls, gestures cannot consist solely of a horizontal swipe.</string>
+    <string name="custimize_gesture_prompt">Draw your desired gesture below. For compatibility with playback controls, gestures cannot consist solely of a horizontal swipe.</string>
 
     <!-- Button text for 'customize gesture' activity -->
     <string name="button_done">Done</string>
