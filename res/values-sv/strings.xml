@@ -156,4 +156,50 @@
     <string name="fast_scroll_alphabet" msgid="5548732936480723311">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="widget_initial_text" msgid="6334545155963910952">"Tryck om du vill välja musik."</string>
     <string name="effectspanel" msgid="8804547581593509614">"Ljudeffekter"</string>
+    <string name="settings">Musikinställningar</string>
+    <string name="audio_focus_category_title">Ljudfokus</string>
+    <string name="enable_focus_loss_ducking_title">Ducka för fokusförlust</string>
+    <string name="enable_focus_loss_ducking_summary">Sänk uppspelningsvolymen istället för att pausa under ljudaviseringar</string>
+    <string name="duck_attenuation_db_title">Ljuddämpning</string>
+    <string name="duck_attenuation_db_summary">Välj hur mycket ljudvolymen ska dämpas när musiken tappar fokus</string>
+    <string-array name="duck_attenuation_db_entries">
+        <item>Ingen</item>
+        <item>4 dB</item>
+        <item>8 dB (standard)</item>
+        <item>12 dB</item>
+    </string-array>
+    <string name="gestures_category_title">Gester</string>
+    <string name="enable_gestures_title">Aktivera gester</string>
+    <string name="enable_gestures_summary">Kontrollera musikuppspelning via gester på \"Nu spelas\"-skärmen</string>
+    <string name="enable_haptic_feedback_title">Haptisk återkoppling</string>
+    <string name="enable_haptic_feedback_summary">Aktivera vibrationer i respons till avslutade gester</string>
+    <string name="edit_gestures_title">Ändra gester</string>
+    <string-array name="gesture_titles">
+        <item>Paus/Fortsätt</item>
+        <item>Nästa</item>
+        <item>Föregående</item>
+        <item>Slumpa</item>
+        <item>Upprepa</item>
+    </string-array>
+    <string-array name="gesture_summaries">
+        <item>Pausa nuvarande låt eller fortsätt uppspelning</item>
+        <item>Hoppa till nästa låt i spellistan</item>
+        <item>Starta om nuvarande låt eller hoppa till föregående låg i spellistan</item>
+        <item>Stäng av eller på slumpning av låtar</item>
+        <item>Växla mellan upprepningslägen</item>
+    </string-array>
+    <string name="gestures_loading">Laddar gester</string>
+    <string name="gestures_customize">Anpassa gest</string>
+    <string name="gestures_reset">Återställ till standard</string>
+    <string name="button_reload_gestures">Ladda om gester</string>
+    <string name="button_reset_all_gestures">Återställ alla till standard</string>
+    <string name="gestures_reset_all_alert">Är du säker på att du vill återställa alla gester till standard?</string>
+    <string name="button_yes">Ja</string>
+    <string name="button_no">Nej</string>
+    <string name="gestures_error_loading">Kunde inte ladda bibliotek med gester.</string>
+    <string name="gestures_error_library">Ditt anpassade bibliotek av gester är korrupt. Prova att återställa alla gester till standard.</string>
+    <string name="customize_gesture_title">Anpassa gest</string>
+    <string name="custimize_gesture_prompt">Rita din önskade gest nedan. För kompatibilitet med uppspelningskontroller, kan inte gester bestå av enbart ett horisontellt svep.</string>
+    <string name="button_done">Klar</string>
+    <string name="button_cancel">Avbryt</string>
 </resources>
