@@ -273,8 +273,8 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
         if (album == null || album.equals(MediaStore.UNKNOWN_STRING)) {
             // unknown album, so we should include the artist ID to limit the songs to songs only by that artist 
             mArtistCursor.moveToPosition(groupPosition);
-            mCurrentArtistId = mArtistCursor.getString(mArtistCursor.getColumnIndex(MediaStore.Audio.Artists._ID));
-            intent.putExtra("artist", mCurrentArtistId);
+            mCurrentArtistId = mArtistCursor.getString(mArtistCursor.getColumnIndex(MediaStore.Audio.Albumartists._ID));
+            intent.putExtra("album_artist", mCurrentArtistId);
         }
         startActivity(intent);
         return true;
@@ -344,14 +344,14 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
             }
             gpos = gpos - getExpandableListView().getHeaderViewsCount();
             mArtistCursor.moveToPosition(gpos);
-            mCurrentArtistId = mArtistCursor.getString(mArtistCursor.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID));
-            mCurrentArtistName = mArtistCursor.getString(mArtistCursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST));
+            mCurrentArtistId = mArtistCursor.getString(mArtistCursor.getColumnIndexOrThrow(MediaStore.Audio.Albumartists._ID));
+            mCurrentArtistName = mArtistCursor.getString(mArtistCursor.getColumnIndexOrThrow(MediaStore.Audio.Albumartists.ALBUM_ARTIST));
             mCurrentAlbumId = null;
             mIsUnknownArtist = mCurrentArtistName == null ||
                     mCurrentArtistName.equals(MediaStore.UNKNOWN_STRING);
             mIsUnknownAlbum = true;
             if (mIsUnknownArtist) {
-                menu.setHeaderTitle(getString(R.string.unknown_artist_name));
+                menu.setHeaderTitle(getString(R.string.unknown_album_artist_name));
             } else {
                 menu.setHeaderTitle(mCurrentArtistName);
                 menu.add(0, SEARCH, 0, R.string.search_title);
@@ -371,7 +371,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
             gpos = gpos - getExpandableListView().getHeaderViewsCount();
             mArtistCursor.moveToPosition(gpos);
             mCurrentArtistNameForAlbum = mArtistCursor.getString(
-                    mArtistCursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST));
+                    mArtistCursor.getColumnIndexOrThrow(MediaStore.Audio.Albumartists.ALBUM_ARTIST));
             mIsUnknownArtist = mCurrentArtistNameForAlbum == null ||
                     mCurrentArtistNameForAlbum.equals(MediaStore.UNKNOWN_STRING);
             mIsUnknownAlbum = mCurrentAlbumName == null ||
@@ -394,7 +394,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
                 // play everything by the selected artist
                 long [] list =
                     mCurrentArtistId != null ?
-                    MusicUtils.getSongListForArtist(this, Long.parseLong(mCurrentArtistId))
+                    MusicUtils.getSongListForAlbumartist(this, Long.parseLong(mCurrentArtistId))
                     : MusicUtils.getSongListForAlbum(this, Long.parseLong(mCurrentAlbumId));
                         
                 MusicUtils.playAll(this, list, 0);
@@ -404,7 +404,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
             case QUEUE: {
                 long [] list =
                     mCurrentArtistId != null ?
-                    MusicUtils.getSongListForArtist(this, Long.parseLong(mCurrentArtistId))
+                    MusicUtils.getSongListForAlbumartist(this, Long.parseLong(mCurrentArtistId))
                     : MusicUtils.getSongListForAlbum(this, Long.parseLong(mCurrentAlbumId));
                 MusicUtils.addToCurrentPlaylist(this, list);
                 return true;
@@ -420,7 +420,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
             case PLAYLIST_SELECTED: {
                 long [] list =
                     mCurrentArtistId != null ?
-                    MusicUtils.getSongListForArtist(this, Long.parseLong(mCurrentArtistId))
+                    MusicUtils.getSongListForAlbumartist(this, Long.parseLong(mCurrentArtistId))
                     : MusicUtils.getSongListForAlbum(this, Long.parseLong(mCurrentAlbumId));
                 long playlist = item.getIntent().getLongExtra("playlist", 0);
                 MusicUtils.addToPlaylist(this, list, playlist);
@@ -431,7 +431,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
                 long [] list;
                 String desc;
                 if (mCurrentArtistId != null) {
-                    list = MusicUtils.getSongListForArtist(this, Long.parseLong(mCurrentArtistId));
+                    list = MusicUtils.getSongListForAlbumartist(this, Long.parseLong(mCurrentArtistId));
                     String f;
                     if (android.os.Environment.isExternalStorageRemovable()) {
                         f = getString(R.string.delete_artist_desc);
@@ -478,8 +478,8 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
         if (mCurrentArtistId != null) {
             title = mCurrentArtistName;
             query = mCurrentArtistName;
-            i.putExtra(MediaStore.EXTRA_MEDIA_ARTIST, mCurrentArtistName);
-            i.putExtra(MediaStore.EXTRA_MEDIA_FOCUS, MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE);
+            i.putExtra(MediaStore.EXTRA_MEDIA_ALBUM_ARTIST, mCurrentArtistName);
+            i.putExtra(MediaStore.EXTRA_MEDIA_FOCUS, MediaStore.Audio.Albumartists.ENTRY_CONTENT_TYPE);
         } else {
             if (mIsUnknownAlbum) {
                 title = query = mCurrentArtistNameForAlbum;
@@ -489,7 +489,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
                     query = query + " " + mCurrentArtistNameForAlbum;
                 }
             }
-            i.putExtra(MediaStore.EXTRA_MEDIA_ARTIST, mCurrentArtistNameForAlbum);
+            i.putExtra(MediaStore.EXTRA_MEDIA_ALBUM_ARTIST, mCurrentArtistNameForAlbum);
             i.putExtra(MediaStore.EXTRA_MEDIA_ALBUM, mCurrentAlbumName);
             i.putExtra(MediaStore.EXTRA_MEDIA_FOCUS, MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE);
         }
@@ -516,7 +516,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
                     if (uri != null) {
                         long [] list = null;
                         if (mCurrentArtistId != null) {
-                            list = MusicUtils.getSongListForArtist(this, Long.parseLong(mCurrentArtistId));
+                            list = MusicUtils.getSongListForAlbumartist(this, Long.parseLong(mCurrentArtistId));
                         } else if (mCurrentAlbumId != null) {
                             list = MusicUtils.getSongListForAlbum(this, Long.parseLong(mCurrentAlbumId));
                         }
@@ -530,13 +530,13 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
     private Cursor getArtistCursor(AsyncQueryHandler async, String filter) {
 
         String[] cols = new String[] {
-                MediaStore.Audio.Artists._ID,
-                MediaStore.Audio.Artists.ARTIST,
-                MediaStore.Audio.Artists.NUMBER_OF_ALBUMS,
-                MediaStore.Audio.Artists.NUMBER_OF_TRACKS
+                MediaStore.Audio.Albumartists._ID,
+                MediaStore.Audio.Albumartists.ALBUM_ARTIST,
+                MediaStore.Audio.Albumartists.NUMBER_OF_ALBUMS,
+                MediaStore.Audio.Albumartists.NUMBER_OF_TRACKS
         };
 
-        Uri uri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
+        Uri uri = MediaStore.Audio.Albumartists.EXTERNAL_CONTENT_URI;
         if (!TextUtils.isEmpty(filter)) {
             uri = uri.buildUpon().appendQueryParameter("filter", Uri.encode(filter)).build();
         }
@@ -544,10 +544,10 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
         Cursor ret = null;
         if (async != null) {
             async.startQuery(0, null, uri,
-                    cols, null , null, MediaStore.Audio.Artists.ARTIST_KEY);
+                    cols, null , null, MediaStore.Audio.Albumartists.ALBUM_ARTIST_KEY);
         } else {
             ret = MusicUtils.query(this, uri,
-                    cols, null , null, MediaStore.Audio.Artists.ARTIST_KEY);
+                    cols, null , null, MediaStore.Audio.Albumartists.ALBUM_ARTIST_KEY);
         }
         return ret;
     }
@@ -612,15 +612,15 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
             mResources = context.getResources();
             mAlbumSongSeparator = context.getString(R.string.albumsongseparator);
             mUnknownAlbum = context.getString(R.string.unknown_album_name);
-            mUnknownArtist = context.getString(R.string.unknown_artist_name);
+            mUnknownArtist = context.getString(R.string.unknown_album_artist_name);
         }
         
         private void getColumnIndices(Cursor cursor) {
             if (cursor != null) {
-                mGroupArtistIdIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID);
-                mGroupArtistIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST);
-                mGroupAlbumIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_ALBUMS);
-                mGroupSongIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_TRACKS);
+                mGroupArtistIdIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albumartists._ID);
+                mGroupArtistIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albumartists.ALBUM_ARTIST);
+                mGroupAlbumIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albumartists.NUMBER_OF_ALBUMS);
+                mGroupSongIdx = cursor.getColumnIndexOrThrow(MediaStore.Audio.Albumartists.NUMBER_OF_TRACKS);
                 if (mIndexer != null) {
                     mIndexer.setCursor(cursor);
                 } else {
@@ -691,7 +691,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
             
             vh.line2.setText(songs_albums);
             
-            long currentartistid = MusicUtils.getCurrentArtistId();
+            long currentartistid = MusicUtils.getCurrentAlbumartistId();
             long artistid = cursor.getLong(mGroupArtistIdIdx);
             if (currentartistid == artistid && !isexpanded) {
                 vh.play_indicator.setImageDrawable(mNowPlayingOverlay);
@@ -714,7 +714,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
             vh.line1.setText(displayname);
 
             int numsongs = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.NUMBER_OF_SONGS));
-            int numartistsongs = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.NUMBER_OF_SONGS_FOR_ARTIST));
+            int numartistsongs = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.NUMBER_OF_SONGS_FOR_ALBUM_ARTIST));
 
             final StringBuilder builder = mBuffer;
             builder.delete(0, builder.length());
@@ -733,7 +733,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
                     final Object[] args = mFormatArgs3;
                     args[0] = numsongs;
                     args[1] = numartistsongs;
-                    args[2] = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST));
+                    args[2] = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Albumartists.ALBUM_ARTIST));
                     builder.append(mResources.getQuantityString(R.plurals.Nsongscomp, numsongs, args));
                 }
             }
@@ -767,17 +767,17 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
         @Override
         protected Cursor getChildrenCursor(Cursor groupCursor) {
             
-            long id = groupCursor.getLong(groupCursor.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID));
+            long id = groupCursor.getLong(groupCursor.getColumnIndexOrThrow(MediaStore.Audio.Albumartists._ID));
             
             String[] cols = new String[] {
                     MediaStore.Audio.Albums._ID,
                     MediaStore.Audio.Albums.ALBUM,
                     MediaStore.Audio.Albums.NUMBER_OF_SONGS,
-                    MediaStore.Audio.Albums.NUMBER_OF_SONGS_FOR_ARTIST,
+                    MediaStore.Audio.Albums.NUMBER_OF_SONGS_FOR_ALBUM_ARTIST,
                     MediaStore.Audio.Albums.ALBUM_ART
             };
             Cursor c = MusicUtils.query(mActivity,
-                    MediaStore.Audio.Artists.Albums.getContentUri("external", id),
+                    MediaStore.Audio.Albumartists.Albums.getContentUri("external", id),
                     cols, null, null, MediaStore.Audio.Albums.DEFAULT_SORT_ORDER);
             
             class MyCursorWrapper extends CursorWrapper {
@@ -802,7 +802,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
                 
                 @Override
                 public int getColumnIndexOrThrow(String name) {
-                    if (MediaStore.Audio.Albums.ARTIST.equals(name)) {
+                    if (MediaStore.Audio.Albums.ALBUM_ARTIST.equals(name)) {
                         return mMagicColumnIdx;
                     }
                     return super.getColumnIndexOrThrow(name); 
@@ -813,7 +813,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
                     if (idx != mMagicColumnIdx) {
                         return super.getColumnName(idx);
                     }
-                    return MediaStore.Audio.Albums.ARTIST;
+                    return MediaStore.Audio.Albums.ALBUM_ARTIST;
                 }
                 
                 @Override
