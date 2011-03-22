@@ -156,4 +156,87 @@
     <string name="fast_scroll_alphabet" msgid="5548732936480723311">" АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"</string>
     <string name="widget_initial_text" msgid="6334545155963910952">"Нажмите ,чтобы выбрать музыку."</string>
     <string name="effectspanel" msgid="8804547581593509614">"Звуковые эффекты"</string>
+	
+    <!-- Menu text for the music settings item [CHAR LIMIT=15] -->
+    <string name="settings">Настройки</string>
+
+    <!-- Category title for audio focus in music settings -->
+    <string name="audio_focus_category_title">Аудио-фокус</string>
+
+    <!-- Title and summary for 'enable focus loss ducking' preference checkbox -->
+    <string name="enable_focus_loss_ducking_title">Приглушать музыку</string>
+    <string name="enable_focus_loss_ducking_summary">При уведомлении музыка приглушается, а не останавливается.</string>
+
+    <!-- Title, summary, and entries for 'enable gestures' preference list -->
+    <string name="duck_attenuation_db_title">Величина приглушения</string>
+    <string name="duck_attenuation_db_summary">Выберите знаечение, на которое будет приглушаться громкость</string>
+    <string-array name="duck_attenuation_db_entries">
+        <item>Нет</item>
+        <item>4 dB</item>
+        <item>8 dB (по умолчанию)</item>
+        <item>12 dB</item>
+    </string-array>	
+
+    <!-- Category title for gestures in music settings -->
+    <string name="gestures_category_title">Жесты</string>
+
+    <!-- Title and summary for 'enable gestures' preference checkbox -->
+    <string name="enable_gestures_title">Включить жесты</string>
+    <string name="enable_gestures_summary">Управление музыкой жестами на экране \"Сейчас воспроизводится\"</string>
+
+    <!-- Title and summary for 'enable haptic feedback' preference checkbox -->
+    <string name="enable_haptic_feedback_title">Отклик на действие</string>
+    <string name="enable_haptic_feedback_summary">Включить вибрацию телефона на завершение жеста</string>
+
+    <!-- Title for 'edit gestures' preference screen and subsequent activity -->
+    <string name="edit_gestures_title">Изменить жесты</string>
+
+    <!-- Titles and summaries for gestures when listed in 'edit gestures' activity -->
+    <string-array name="gesture_titles">
+        <item>Пауза/Продолжить</item>
+        <item>Следующий</item>
+        <item>Предыдущий</item>
+        <item>Перемешать все</item>
+        <item>Повтор</item>
+    </string-array>
+    <string-array name="gesture_summaries">
+        <item>Пауза или возобновление воспроизведения</item>
+        <item>Следующая песня</item>
+        <item>Вернуться к началу песни или перейти к предыдущей песне</item>
+        <item>Перемешать все (вкл или выкл)</item>
+        <item>Переключение между режимами повтора</item>
+    </string-array>
+
+    <!-- Loading text for 'edit gestures' activity -->
+    <string name="gestures_loading">Загрузка жестов</string>
+
+    <!-- Context menu entries for 'edit gestures' activity -->
+    <string name="gestures_customize">Настройка жестов</string>
+    <string name="gestures_reset">Восстановить по умолчанию</string>
+
+    <!-- Button text for 'edit gestures' activity -->
+    <string name="button_reload_gestures">Перезагрузить жесты</string>
+    <string name="button_reset_all_gestures">Сбросить все по умолчанию</string>
+
+    <!-- Alert dialog text to confirm desire to reset all gestures to default -->
+    <string name="gestures_reset_all_alert">Вы действительно хотите сбросить все жесты по умолчанию?</string>
+
+    <!-- Alert dialog 'yes' and 'no' button text -->
+    <string name="button_yes">Да</string>
+    <string name="button_no">Нет</string>
+
+    <!-- Error messages for 'edit gestures' activity -->
+    <string name="gestures_error_loading">Не удалось загрузить библиотеку жестов.</string>
+    <string name="gestures_error_library">Библиотека жестов повреждена. Попробуйте сбросить все жесты по умолчанию.</string>
+
+    <!-- Title for 'customize gesture' activity -->
+    <string name="customize_gesture_title">Настройка жеста</string>
+
+    <!-- Prompt and instructions for 'customize gesture' activity -->
+    <string name="custimize_gesture_prompt">Нарисуйте ваш жест ниже. Для управления музыкой, жест не может состоять только из горизонтальной линии.</string>
+
+    <!-- Button text for 'customize gesture' activity -->
+    <string name="button_done">Готово</string>
+    <string name="button_cancel">Отмена</string>	
+	
 </resources>
