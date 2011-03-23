@@ -16,6 +16,40 @@
       "revId": "217a179e60b077026814dcfc7377148f95ea15f7",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADX///Wc\u003d",
+        "filename": "res/values-ru/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 742
+      },
+      "writtenOn": "2011-03-23T06:57:12Z",
+      "side": 1,
+      "message": "????? --\u003e ????",
+      "revId": "217a179e60b077026814dcfc7377148f95ea15f7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADX///Wg\u003d",
+        "filename": "res/values-ru/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 742
+      },
+      "writtenOn": "2011-03-23T06:57:12Z",
+      "side": 1,
+      "message": "For compatibility with playback controls, gestures cannot consist solely of a horizontal swipe.\n\n??? ????????????? ? ??????????? ??????? ????? ?? ????? ???? ??????? ?????????????? ??????",
+      "revId": "217a179e60b077026814dcfc7377148f95ea15f7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
