@@ -165,7 +165,7 @@
 
     <!-- Title and summary for 'enable focus loss ducking' preference checkbox -->
     <string name="enable_focus_loss_ducking_title">Perda de foco</string>
-    <string name="enable_focus_loss_ducking_summary">Ao invés de pausar reprodução, diminui volume de reprodução durante notificações audíveis.</string>
+    <string name="enable_focus_loss_ducking_summary">Ao invés de pausar a reprodução, diminui o volume de reprodução durante notificações audíveis</string>
 
     <!-- Title, summary, and entries for 'enable gestures' preference list -->
     <string name="duck_attenuation_db_title">Atenuação de volume</string>
