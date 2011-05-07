@@ -242,6 +242,16 @@ public class MusicUtils {
         return -1;
     }
 
+    public static long getCurrentAlbumartistId() {
+        if (MusicUtils.sService != null) {
+            try {
+                return sService.getAlbumartistId();
+            } catch (RemoteException ex) {
+            }
+        }
+        return -1;
+    }
+
     public static long getCurrentAudioId() {
         if (MusicUtils.sService != null) {
             try {
@@ -335,6 +345,22 @@ public class MusicUtils {
                 ccols, where, null,
                 MediaStore.Audio.Media.ALBUM_KEY + ","  + MediaStore.Audio.Media.TRACK);
         
+        if (cursor != null) {
+            long [] list = getSongListForCursor(cursor);
+            cursor.close();
+            return list;
+        }
+        return sEmptyList;
+    }
+
+    public static long [] getSongListForAlbumartist(Context context, long id) {
+        final String[] ccols = new String[] { MediaStore.Audio.Media._ID };
+        String where = MediaStore.Audio.Media.ALBUM_ARTIST_ID + "=" + id + " AND " +
+        MediaStore.Audio.Media.IS_MUSIC + "=1";
+        Cursor cursor = query(context, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                ccols, where, null,
+                MediaStore.Audio.Media.ALBUM_KEY + ","  + MediaStore.Audio.Media.TRACK);
+
         if (cursor != null) {
             long [] list = getSongListForCursor(cursor);
             cursor.close();
