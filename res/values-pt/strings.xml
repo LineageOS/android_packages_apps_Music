@@ -238,4 +238,5 @@
     <!-- Button text for 'customize gesture' activity -->
     <string name="button_done">Concluído</string>
     <string name="button_cancel">Cancelar</string>
+    <string name="unknown_album_artist_name">Artista Desconhecido</string>
 </resources>
