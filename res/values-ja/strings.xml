@@ -204,5 +204,5 @@
     <string name="custimize_gesture_prompt">下に思いのままにジェスチャーを描いてください。再生コントロールの互換性のため、ジェスチャーは単純な水平スワイプを使用することはできません。</string>
     <string name="button_done">完了</string>
     <string name="button_cancel">キャンセル</string>
-
+    <string name="unknown_album_artist_name">不明なアーティスト</string>
 </resources>
