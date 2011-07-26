@@ -105,8 +105,9 @@ public class MediaPlaybackService extends Service {
     private static final int TRACK_ENDED = 1;
     private static final int RELEASE_WAKELOCK = 2;
     private static final int SERVER_DIED = 3;
-    private static final int FADEIN = 4;
-    private static final int FOCUSCHANGE = 5;
+    private static final int FOCUSCHANGE = 4;
+    private static final int FADEDOWN = 5;
+    private static final int FADEUP = 6;
     private static final int MAX_HISTORY_SIZE = 100;
     
     private MultiPlayer mPlayer;
@@ -166,31 +167,28 @@ public class MediaPlaybackService extends Service {
 
     private boolean mStartPlayback = false;
 
-    private void startAndFadeIn() {
-        mStartPlayback = true;
-        mMediaplayerHandler.sendEmptyMessageDelayed(FADEIN, 10);
-    }
-
     private Handler mMediaplayerHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             MusicUtils.debugLog("mMediaplayerHandler.handleMessage " + msg.what);
             switch (msg.what) {
-                case FADEIN:
-                    if (!isPlaying() && mStartPlayback) {
-                        mStartPlayback = false;
-                        mPlayer.setVolume(0f);
-                        play();
-                        mMediaplayerHandler.sendEmptyMessageDelayed(FADEIN, 10);
+                case FADEDOWN:
+                    mCurrentVolume -= .05f;
+                    if (mCurrentVolume > .2f) {
+                        mMediaplayerHandler.sendEmptyMessageDelayed(FADEDOWN, 10);
                     } else {
-                        mCurrentVolume += 0.01f;
-                        if (mCurrentVolume < 1.0f) {
-                            mMediaplayerHandler.sendEmptyMessageDelayed(FADEIN, 10);
-                        } else {
-                            mCurrentVolume = 1.0f;
-                        }
-                        mPlayer.setVolume(mCurrentVolume);
+                        mCurrentVolume = .2f;
                     }
+                    mPlayer.setVolume(mCurrentVolume);
+                    break;
+                case FADEUP:
+                    mCurrentVolume += .01f;
+                    if (mCurrentVolume < 1.0f) {
+                        mMediaplayerHandler.sendEmptyMessageDelayed(FADEUP, 10);
+                    } else {
+                            mCurrentVolume = 1.0f;
+                    }
+                    mPlayer.setVolume(mCurrentVolume);
                     break;
                 case SERVER_DIED:
                     if (mIsSupposedToBePlaying) {
@@ -218,7 +216,6 @@ public class MediaPlaybackService extends Service {
                 case FOCUSCHANGE:
                     // This code is here so we can better synchronize it with the code that
                     // handles fade-in
-                    // AudioFocus is a new feature: focus updates are made verbose on purpose
                     switch (msg.arg1) {
                         case AudioManager.AUDIOFOCUS_LOSS:
                             Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
@@ -227,8 +224,11 @@ public class MediaPlaybackService extends Service {
                             }
                             pause();
                             break;
-                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                            mMediaplayerHandler.removeMessages(FADEUP);
+                            mMediaplayerHandler.sendEmptyMessage(FADEDOWN);
+                            break;
+                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                             Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
                             if (isPlaying()) {
                                 SharedPreferences preferences = getSharedPreferences(MusicSettingsActivity.
@@ -255,6 +255,9 @@ public class MediaPlaybackService extends Service {
                                 mCurrentVolume = 0f;
                                 mPlayer.setVolume(mCurrentVolume);
                                 play(); // also queues a fade-in
+                            } else {
+                                mMediaplayerHandler.removeMessages(FADEDOWN);
+                                mMediaplayerHandler.sendEmptyMessage(FADEUP);
                             }
                             break;
                         default:
@@ -1138,7 +1141,8 @@ public class MediaPlaybackService extends Service {
             mPlayer.start();
             // make sure we fade in, in case a previous fadein was stopped because
             // of another focus loss
-            mMediaplayerHandler.sendEmptyMessage(FADEIN);
+            mMediaplayerHandler.removeMessages(FADEDOWN);
+            mMediaplayerHandler.sendEmptyMessage(FADEUP);
 
             RemoteViews views = new RemoteViews(getPackageName(), R.layout.statusbar);
             views.setImageViewResource(R.id.icon, R.drawable.stat_notify_musicplayer);
@@ -1214,7 +1218,7 @@ public class MediaPlaybackService extends Service {
      */
     public void pause() {
         synchronized(this) {
-            mMediaplayerHandler.removeMessages(FADEIN);
+            mMediaplayerHandler.removeMessages(FADEUP);
             if (isPlaying()) {
                 mPlayer.pause();
                 gotoIdleState();
