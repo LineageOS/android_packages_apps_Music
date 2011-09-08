@@ -19,17 +19,22 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
     <string name="onesong">"1 skladba"</string>
+
   <plurals name="Nsongs">
     <item quantity="other">"Počet skladieb: <xliff:g id="COUNT">%d</xliff:g>"</item>
   </plurals>
+
   <plurals name="Nsongscomp">
     <item quantity="other">"<xliff:g id="COUNT_FOR_ARTIST">%2$d</xliff:g> z celkového počtu <xliff:g id="TOTAL_COUNT">%1$d</xliff:g> skladieb"</item>
   </plurals>
+
   <plurals name="Nalbums">
     <item quantity="one">"1 album"</item>
     <item quantity="other">"Počet albumov: <xliff:g id="COUNT">%d</xliff:g>"</item>
   </plurals>
+
     <string name="goto_start">"Knižnica"</string>
     <string name="goto_playback">"Prehrávanie"</string>
     <string name="party_shuffle">"Náhodný výber všetkých skladieb"</string>
@@ -44,10 +49,12 @@
     <string name="delete_song_desc">"Skladba <xliff:g id="SONG">%s</xliff:g> bude natrvalo odstránená z karty SD."</string>
     <string name="delete_song_desc_nosdcard">"Skladba „<xliff:g id="SONG">%s</xliff:g>“ bude z ukladacieho priestoru USB natrvalo odstránená."</string>
     <string name="delete_confirm_button_text">"OK"</string>
+
   <plurals name="NNNtracksdeleted">
     <item quantity="one">"Bola odstránená 1 skladba."</item>
     <item quantity="other">"Odstránené sklady: <xliff:g id="SONGS_TO_DELETE">%d</xliff:g>"</item>
   </plurals>
+
     <string name="scanning">"Prebieha vyhľadávanie na karte SD..."</string>
     <string name="scanning_nosdcard">"Prebieha vyhľadávanie v ukladacom priestore USB…"</string>
     <string name="nowplaying_title">"Práve sa prehráva"</string>
@@ -103,16 +110,19 @@
     <string name="queue">"Aktuálny zoznam skladieb"</string>
     <string name="new_playlist">"Nové"</string>
     <string name="new_playlist_name_template">"Nový zoznam skladieb <xliff:g id="NUMBER">%d</xliff:g>"</string>
+
   <plurals name="NNNtrackstoplaylist">
     <item quantity="one">"1 skladba bola pridaná do zoznamu skladieb."</item>
     <item quantity="other">"Počet skladieb pridaných do zoznamu skladieb: <xliff:g id="NUMBER">%d</xliff:g>"</item>
   </plurals>
+
     <string name="emptyplaylist">"Vybratý zoznam skladieb je prázdny."</string>
     <string name="create_playlist_create_text">"Uložiť"</string>
     <string name="create_playlist_overwrite_text">"Prepísať"</string>
     <string name="service_start_error_title">"Problém s prehrávaním"</string>
     <string name="service_start_error_msg">"Žiaľ, skladbu nie je možné prehrať."</string>
     <string name="service_start_error_button">"OK"</string>
+
   <string-array name="weeklist">
     <item>"1 týždeň"</item>
     <item>"2 týždne"</item>
@@ -127,6 +137,7 @@
     <item>"11 týždňov"</item>
     <item>"12 týždňov"</item>
   </string-array>
+
     <string name="weekpicker_set">"Hotovo"</string>
     <string name="weekpicker_title">"Nastaviť čas"</string>
     <color name="dragndrop_background">#e0103010</color>
@@ -217,7 +228,7 @@
 
     
     <string name="button_reload_gestures">Obnoviť gestá</string>
-    <string name="button_reset_all_gestures">Obnoviť všetky na predvolené/string>
+    <string name="button_reset_all_gestures">Obnoviť všetky na predvolené</string>
 
     
     <string name="gestures_reset_all_alert">Prajete si obnoviť všetky gestá na predvolené?</string>
