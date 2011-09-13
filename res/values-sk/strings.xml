@@ -16,25 +16,19 @@
 ** limitations under the License.
 */
  -->
-
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
     <string name="onesong">"1 skladba"</string>
-
   <plurals name="Nsongs">
     <item quantity="other">"Počet skladieb: <xliff:g id="COUNT">%d</xliff:g>"</item>
   </plurals>
-
   <plurals name="Nsongscomp">
     <item quantity="other">"<xliff:g id="COUNT_FOR_ARTIST">%2$d</xliff:g> z celkového počtu <xliff:g id="TOTAL_COUNT">%1$d</xliff:g> skladieb"</item>
   </plurals>
-
   <plurals name="Nalbums">
     <item quantity="one">"1 album"</item>
     <item quantity="other">"Počet albumov: <xliff:g id="COUNT">%d</xliff:g>"</item>
   </plurals>
-
     <string name="goto_start">"Knižnica"</string>
     <string name="goto_playback">"Prehrávanie"</string>
     <string name="party_shuffle">"Náhodný výber všetkých skladieb"</string>
@@ -49,12 +43,10 @@
     <string name="delete_song_desc">"Skladba <xliff:g id="SONG">%s</xliff:g> bude natrvalo odstránená z karty SD."</string>
     <string name="delete_song_desc_nosdcard">"Skladba „<xliff:g id="SONG">%s</xliff:g>“ bude z ukladacieho priestoru USB natrvalo odstránená."</string>
     <string name="delete_confirm_button_text">"OK"</string>
-
   <plurals name="NNNtracksdeleted">
     <item quantity="one">"Bola odstránená 1 skladba."</item>
     <item quantity="other">"Odstránené sklady: <xliff:g id="SONGS_TO_DELETE">%d</xliff:g>"</item>
   </plurals>
-
     <string name="scanning">"Prebieha vyhľadávanie na karte SD..."</string>
     <string name="scanning_nosdcard">"Prebieha vyhľadávanie v ukladacom priestore USB…"</string>
     <string name="nowplaying_title">"Práve sa prehráva"</string>
@@ -110,19 +102,16 @@
     <string name="queue">"Aktuálny zoznam skladieb"</string>
     <string name="new_playlist">"Nové"</string>
     <string name="new_playlist_name_template">"Nový zoznam skladieb <xliff:g id="NUMBER">%d</xliff:g>"</string>
-
   <plurals name="NNNtrackstoplaylist">
     <item quantity="one">"1 skladba bola pridaná do zoznamu skladieb."</item>
     <item quantity="other">"Počet skladieb pridaných do zoznamu skladieb: <xliff:g id="NUMBER">%d</xliff:g>"</item>
   </plurals>
-
     <string name="emptyplaylist">"Vybratý zoznam skladieb je prázdny."</string>
     <string name="create_playlist_create_text">"Uložiť"</string>
     <string name="create_playlist_overwrite_text">"Prepísať"</string>
     <string name="service_start_error_title">"Problém s prehrávaním"</string>
     <string name="service_start_error_msg">"Žiaľ, skladbu nie je možné prehrať."</string>
     <string name="service_start_error_button">"OK"</string>
-
   <string-array name="weeklist">
     <item>"1 týždeň"</item>
     <item>"2 týždne"</item>
@@ -137,7 +126,6 @@
     <item>"11 týždňov"</item>
     <item>"12 týždňov"</item>
   </string-array>
-
     <string name="weekpicker_set">"Hotovo"</string>
     <string name="weekpicker_title">"Nastaviť čas"</string>
     <color name="dragndrop_background">#e0103010</color>
@@ -172,15 +160,9 @@
     <string name="effectspanel">"Zvukové efekty"</string>
     <!-- Menu text for the music settings item [CHAR LIMIT=15] -->
     <string name="settings">Nastavenie Hudby</string>
-
-    
     <string name="audio_focus_category_title">Zvýraznenie Zvuku</string>
-
-    
     <string name="enable_focus_loss_ducking_title">Stíšenie Zvuku</string>
     <string name="enable_focus_loss_ducking_summary">Namiesto pozastavenia prehrávania, počas zvukových upozornení, bude prehrávanie stíšené</string>
-
-    
     <string name="duck_attenuation_db_title">Hodnota stíšenia</string>
     <string name="duck_attenuation_db_summary">Zvoľte hodnotu na ktorú sa stíši hlasitosť počas stratenia fókusu</string>
     <string-array name="duck_attenuation_db_entries">
@@ -189,21 +171,12 @@
         <item>8 dB (default)</item>
         <item>12 dB</item>
     </string-array>
-    
     <string name="gestures_category_title">Gestá</string>
-
-    
     <string name="enable_gestures_title">Povoliť gestá</string>
     <string name="enable_gestures_summary">Ovládať prehrávanie hudby pomocou giest na obrazovke \"Teraz hrá\"</string>
-
-    
     <string name="enable_haptic_feedback_title">Hmatová odozva</string>
     <string name="enable_haptic_feedback_summary">Povoliť vibrovanie telefónu pri dokončení giest</string>
-
-    
     <string name="edit_gestures_title">Upraviť gestá</string>
-
-    
     <string-array name="gesture_titles">
         <item>Pauza/Pokračovať</item>
         <item>Ďalší</item>
@@ -218,36 +191,18 @@
         <item>Prepnúť náhodné prehrávanie</item>
         <item>Cyklovať v módoch opakovania</item>
     </string-array>
-
-    
     <string name="gestures_loading">Načítavanie giest</string>
-
-    
     <string name="gestures_customize">Upraviť gestá</string>
     <string name="gestures_reset">Obnoviť predvolené</string>
-
-    
     <string name="button_reload_gestures">Obnoviť gestá</string>
     <string name="button_reset_all_gestures">Obnoviť všetky na predvolené</string>
-
-    
     <string name="gestures_reset_all_alert">Prajete si obnoviť všetky gestá na predvolené?</string>
-
-    
     <string name="button_yes">Áno</string>
     <string name="button_no">Nie</string>
-
-    
     <string name="gestures_error_loading">Nemožno načítať knižnicu giest.</string>
     <string name="gestures_error_library">Knižnica Vašich giest je poškodená. Pokúste sa obnoviť všetky gestá na predvolené.</string>
-
-    
     <string name="customize_gesture_title">Prispôsobiť gesto</string>
-
-    
     <string name="custimize_gesture_prompt">Nakreslite požadované gesto nižšie. Pre kompatibilitu s ovládaním prehrávania, gestá nemôžu pozostávať len z horizontálneho posunu.</string>
-
-    
     <string name="button_done">Hotovo</string>
     <string name="button_cancel">Zrušiť</string>
 </resources>
