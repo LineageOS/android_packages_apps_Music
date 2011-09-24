@@ -169,7 +169,7 @@
     <item>12 dB</item>
   </string-array>
 
-  <string name="gestures_category_title">Gestwn</string>
+  <string name="gestures_category_title">Gesten</string>
 
   <string name="enable_gestures_title">Gesten einschalten</string>
   <string name="enable_gestures_summary">Musiksteuerung auf \"Aktuelle Wiedergabe\" über Gesten kontrollieren</string>
@@ -212,7 +212,7 @@
   <string name="customize_gesture_title">Gesten anpassen</string>
 
   <!-- Prompt and instructions for 'customize gesture' activity -->
-  <string name="custimize_gesture_prompt">Die gewünschte Gesten unten zeichnen. Für Kompatibilität mit den Steuerelementen können Gesten nich einzig aus einem horizontalem Wischen bestehen.</string>
+  <string name="custimize_gesture_prompt">Die gewünschte Gesten unten zeichnen. Für Kompatibilität mit den Steuerelementen können Gesten nicht einzig aus einem horizontalem Wischen bestehen.</string>
 
   <!-- Button text for 'customize gesture' activity -->
   <string name="button_done">Fertig</string>
