@@ -263,6 +263,8 @@
             android:theme="@android:style/Theme.Dialog" android:exported="false" />
         <activity android:name="com.android.music.WeekSelector"
             android:theme="@android:style/Theme.Dialog" android:exported="false" />
+            <activity android:name="com.android.music.FolderSelector"
+            android:theme="@android:style/Theme.Dialog" android:exported="false" />
         <activity android:name="com.android.music.DeleteItems"
             android:theme="@android:style/Theme.Dialog" android:exported="false" />
         <activity android:name="com.android.music.ScanningProgress"

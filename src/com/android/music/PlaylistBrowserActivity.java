@@ -16,8 +16,10 @@
 
 package com.android.music;
 
+import com.android.music.MusicUtils.Defs;
 import com.android.music.MusicUtils.ServiceToken;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.AsyncQueryHandler;
 import android.content.BroadcastReceiver;
@@ -35,6 +37,7 @@ import android.database.sqlite.SQLiteException;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -65,9 +68,12 @@ public class PlaylistBrowserActivity extends ListActivity
     private static final int EDIT_PLAYLIST = CHILD_MENU_BASE + 2;
     private static final int RENAME_PLAYLIST = CHILD_MENU_BASE + 3;
     private static final int CHANGE_WEEKS = CHILD_MENU_BASE + 4;
+    private static final int CHANGE_FOLDER = CHILD_MENU_BASE + 5;
+    private static final int REFRESH_FOLDER_PLAYLIST = CHILD_MENU_BASE + 6;
     private static final long RECENTLY_ADDED_PLAYLIST = -1;
     private static final long ALL_SONGS_PLAYLIST = -2;
     private static final long PODCASTS_PLAYLIST = -3;
+    private static final int FOLDER_PLAYLIST = -4;
     private PlaylistListAdapter mAdapter;
     boolean mAdapterSent;
     private static int mLastListPosCourse = -1;
@@ -101,6 +107,8 @@ public class PlaylistBrowserActivity extends ListActivity
                     long id = Long.parseLong(intent.getExtras().getString("playlist"));
                     if (id == RECENTLY_ADDED_PLAYLIST) {
                         playRecentlyAdded();
+                    } else if (id == FOLDER_PLAYLIST) {
+                    	playFavoritePlaylist();
                     } else if (id == PODCASTS_PLAYLIST) {
                         playPodcasts();
                     } else if (id == ALL_SONGS_PLAYLIST) {
@@ -304,6 +312,11 @@ public class PlaylistBrowserActivity extends ListActivity
         if (mi.id == RECENTLY_ADDED_PLAYLIST) {
             menu.add(0, EDIT_PLAYLIST, 0, R.string.edit_playlist_menu);
         }
+        
+        if (mi.id == FOLDER_PLAYLIST) {
+        	menu.add(0, CHANGE_FOLDER, 0, R.string.edit_favorite_folder_menu);
+        	menu.add(0, REFRESH_FOLDER_PLAYLIST, 0, R.string.refresh_favorite_folder_menu);
+        }
 
         if (mi.id >= 0) {
             menu.add(0, RENAME_PLAYLIST, 0, R.string.rename_playlist_menu);
@@ -321,6 +334,8 @@ public class PlaylistBrowserActivity extends ListActivity
             case PLAY_SELECTION:
                 if (mi.id == RECENTLY_ADDED_PLAYLIST) {
                     playRecentlyAdded();
+                } else if (mi.id == FOLDER_PLAYLIST) {
+                	playFavoritePlaylist();
                 } else if (mi.id == PODCASTS_PLAYLIST) {
                     playPodcasts();
                 } else {
@@ -342,9 +357,27 @@ public class PlaylistBrowserActivity extends ListActivity
                     intent.setClass(this, WeekSelector.class);
                     startActivityForResult(intent, CHANGE_WEEKS);
                     return true;
-                } else {
-                    Log.e(TAG, "should not be here");
                 }
+                Log.e(TAG, "should not be here");
+                break;
+            case CHANGE_FOLDER:
+                if (mi.id == FOLDER_PLAYLIST) {
+                	Intent intent = new Intent();
+                    intent.setClass(this, FolderSelector.class);
+                    startActivityForResult(intent, CHANGE_FOLDER);
+                    return true;
+                }
+                break;
+            case REFRESH_FOLDER_PLAYLIST:
+            	if (mi.id == FOLDER_PLAYLIST) {
+            		sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+            				Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+            		Activity a = this;
+                    a.setTitle("");
+                    Intent intent = new Intent();
+                    intent.setClass(a, ScanningProgress.class);
+                    a.startActivityForResult(intent, Defs.SCAN_DONE);
+            	}
                 break;
             case RENAME_PLAYLIST:
                 Intent intent = new Intent();
@@ -393,6 +426,12 @@ public class PlaylistBrowserActivity extends ListActivity
             intent.setDataAndType(Uri.EMPTY, "vnd.android.cursor.dir/track");
             intent.putExtra("playlist", "recentlyadded");
             startActivity(intent);
+        } else if (id == FOLDER_PLAYLIST) {
+        	Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setDataAndType(Uri.EMPTY, "vnd.android.cursor.dir/track");
+            intent.putExtra("playlist", "favoritefolder");
+            playFavoritePlaylist();
+            startActivity(intent);
         } else if (id == PODCASTS_PLAYLIST) {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setDataAndType(Uri.EMPTY, "vnd.android.cursor.dir/track");
@@ -404,6 +443,32 @@ public class PlaylistBrowserActivity extends ListActivity
             intent.putExtra("playlist", Long.valueOf(id).toString());
             startActivity(intent);
         }
+    }
+
+    private void playFavoritePlaylist() {
+    	String folder = MusicUtils.getStringPref(this, "favoritefolder", "/mnt/sdcard");
+    	final String[] ccols = new String[] { MediaStore.Audio.Media._ID };
+    	String where = MediaStore.MediaColumns.DATA + " LIKE '" + folder + "%'";
+    	Cursor cursor = MusicUtils.query(this, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                ccols, where, null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+    	
+    	if (cursor == null) {
+    		// Todo: show a message
+    		return;
+    	}
+
+    	try {
+    		int len = cursor.getCount();
+    		long [] list = new long[len];
+    		for (int i = 0; i < len; i++) {
+    			cursor.moveToNext();
+    			list[i] = cursor.getLong(0);
+    		}
+    		MusicUtils.playAll(this, list, 0);
+    	} catch (SQLiteException ex) {
+    	} finally {
+    		cursor.close();
+    	}  	
     }
 
     private void playRecentlyAdded() {
@@ -424,7 +489,7 @@ public class PlaylistBrowserActivity extends ListActivity
             for (int i = 0; i < len; i++) {
                 cursor.moveToNext();
                 list[i] = cursor.getLong(0);
-            }
+            } 
             MusicUtils.playAll(this, list, 0);
         } catch (SQLiteException ex) {
         } finally {
@@ -519,6 +584,11 @@ public class PlaylistBrowserActivity extends ListActivity
         recent.add(RECENTLY_ADDED_PLAYLIST);
         recent.add(getString(R.string.recentlyadded));
         autoplaylistscursor.addRow(recent);
+        
+        ArrayList<Object> fromFolder = new ArrayList<Object>(2);
+        fromFolder.add(FOLDER_PLAYLIST);
+        fromFolder.add(getString(R.string.favoritefolder));
+        autoplaylistscursor.addRow(fromFolder);      
         
         // check if there are any podcasts
         Cursor counter = MusicUtils.query(this, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,

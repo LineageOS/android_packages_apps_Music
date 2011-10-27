@@ -1186,7 +1186,21 @@ public class MusicUtils {
         ed.putInt(name, value);
         SharedPreferencesCompat.apply(ed);
     }
-
+    
+    static String getStringPref(Context context, String name, String def) {
+        SharedPreferences prefs =
+            context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+        return prefs.getString(name, def);
+    }
+    
+    static void setStringPref(Context context, String name, String value) {
+        SharedPreferences prefs =
+            context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+        Editor ed = prefs.edit();
+        ed.putString(name, value);
+        SharedPreferencesCompat.apply(ed);
+    }
+    
     static void setRingtone(Context context, long id) {
         ContentResolver resolver = context.getContentResolver();
         // Set the flag in the database to mark this as a ringtone

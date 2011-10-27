@@ -411,5 +411,13 @@
     <string name="button_done">Done</string>
     <string name="button_cancel">Cancel</string>
 
+    <!-- Folder playlist. -->
+    <string name="favoritefolder">Favorite folder</string>
+    <string name="edit_favorite_folder_menu">Set folder</string>
+    <string name="refresh_favorite_folder_menu">Refresh media</string>
+    <string name="favoritefolder_title">Favorite folder</string>
+    <string name="folderpicker_title">Set favorite folder</string>
+    <string name="folderpicker_set">Done</string>
+
 </resources>
 

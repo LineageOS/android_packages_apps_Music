@@ -208,7 +208,8 @@ public class TrackBrowserActivity extends ListActivity
                     new int[] {},
                     "nowplaying".equals(mPlaylist),
                     mPlaylist != null &&
-                    !(mPlaylist.equals("podcasts") || mPlaylist.equals("recentlyadded")));
+                    !(mPlaylist.equals("podcasts") || mPlaylist.equals("recentlyadded")
+                    		|| mPlaylist.equals("favoritefolder")));
             setListAdapter(mAdapter);
             setTitle(R.string.working_songs);
             getTrackCursor(mAdapter.getQueryHandler(), null, true);
@@ -480,6 +481,8 @@ public class TrackBrowserActivity extends ListActivity
                 fancyName = getText(R.string.podcasts_title);
             } else if (mPlaylist.equals("recentlyadded")){
                 fancyName = getText(R.string.recentlyadded_title);
+            } else if (mPlaylist.equals("favoritefolder")){
+            	fancyName = getText(R.string.favoritefolder_title);
             } else {
                 String [] cols = new String [] {
                 MediaStore.Audio.Playlists.NAME
@@ -1094,6 +1097,18 @@ public class TrackBrowserActivity extends ListActivity
                 int X = MusicUtils.getIntPref(this, "numweeks", 2) * (3600 * 24 * 7);
                 where.append(" AND " + MediaStore.MediaColumns.DATE_ADDED + ">");
                 where.append(System.currentTimeMillis() / 1000 - X);
+                ret = queryhandler.doQuery(uri,
+                        mCursorCols, where.toString(), null,
+                        MediaStore.Audio.Media.DEFAULT_SORT_ORDER, async);
+            } else if (mPlaylist.equals("favoritefolder")) {
+                // do a query for all songs in the favorite folder (playlist)
+                Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                if (!TextUtils.isEmpty(filter)) {
+                    uri = uri.buildUpon().appendQueryParameter("filter", Uri.encode(filter)).build();
+                }
+                String folder = MusicUtils.getStringPref(this, "favoritefolder", "/mnt/sdcard");
+                where.append(" AND " + MediaStore.MediaColumns.DATA + " LIKE ");
+                where.append("'" + folder + "%'");
                 ret = queryhandler.doQuery(uri,
                         mCursorCols, where.toString(), null,
                         MediaStore.Audio.Media.DEFAULT_SORT_ORDER, async);
