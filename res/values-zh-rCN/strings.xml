@@ -156,4 +156,86 @@
     <string name="fast_scroll_alphabet" msgid="5548732936480723311">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="widget_initial_text" msgid="6334545155963910952">"轻触以选择音乐。"</string>
     <string name="effectspanel" msgid="8804547581593509614">"音效"</string>
+
+    <!-- Menu text for the music settings item [CHAR LIMIT=15] -->
+    <string name="settings">音乐设置</string>
+
+    <!-- Category title for audio focus in music settings -->
+    <string name="audio_focus_category_title">音效聚焦</string>
+
+    <!-- Title and summary for 'enable focus loss ducking' preference checkbox -->
+    <string name="enable_focus_loss_ducking_title">失焦回避</string>
+    <string name="enable_focus_loss_ducking_summary">当播放通知声音时, 减小音乐播放的音量而不是暂停播放</string>
+
+    <!-- Title, summary, and entries for 'enable gestures' preference list -->
+    <string name="duck_attenuation_db_title">回避衰减度</string>
+    <string name="duck_attenuation_db_summary">选择在失焦时音量的衰减程度</string>
+    <string-array name="duck_attenuation_db_entries">
+        <item>0分贝</item>
+        <item>4分贝</item>
+        <item>8分贝(默认)</item>
+        <item>12分贝</item>
+    </string-array>
+
+    <!-- Category title for gestures in music settings -->
+    <string name="gestures_category_title">手势</string>
+
+    <!-- Title and summary for 'enable gestures' preference checkbox -->
+    <string name="enable_gestures_title">启用手势</string>
+    <string name="enable_gestures_summary">在"当前播放"页面通过手势来控制音乐播放</string>
+
+    <!-- Title and summary for 'enable haptic feedback' preference checkbox -->
+    <string name="enable_haptic_feedback_title">触动反馈</string>
+    <string name="enable_haptic_feedback_summary">启用手机震动来响应手势输入完成</string>
+
+    <!-- Title for 'edit gestures' preference screen and subsequent activity -->
+    <string name="edit_gestures_title">编辑手势</string>
+
+    <!-- Titles and summaries for gestures when listed in 'edit gestures' activity -->
+    <string-array name="gesture_titles">
+        <item>暂停/继续</item>
+        <item>下一首</item>
+        <item>前一首</item>
+        <item>随机播放</item>
+        <item>重复播放</item>
+    </string-array>
+    <string-array name="gesture_summaries">
+        <item>暂停当前音乐或继续播放</item>
+        <item>跳到播放列表的下一首音乐</item>
+        <item>重新播放当前音乐或跳到播放列表的前一首音乐</item>
+        <item>启用或关闭随机播放</item>
+        <item>切换到各个重复播放模式</item>
+    </string-array>
+
+    <!-- Loading text for 'edit gestures' activity -->
+    <string name="gestures_loading">载入手势</string>
+
+    <!-- Context menu entries for 'edit gestures' activity -->
+    <string name="gestures_customize">自定义手势</string>
+    <string name="gestures_reset">重置为默认</string>
+
+    <!-- Button text for 'edit gestures' activity -->
+    <string name="button_reload_gestures">重新载入手势</string>
+    <string name="button_reset_all_gestures">重置所有为默认</string>
+
+    <!-- Alert dialog text to confirm desire to reset all gestures to default -->
+    <string name="gestures_reset_all_alert">你确定要将所有的手势重置为默认?</string>
+
+    <!-- Alert dialog 'yes' and 'no' button text -->
+    <string name="button_yes">是</string>
+    <string name="button_no">否</string>
+
+    <!-- Error messages for 'edit gestures' activity -->
+    <string name="gestures_error_loading">无法载入手势库.</string>
+    <string name="gestures_error_library">你的自定义手势库已经损坏.请尝试将所有手势重置为默认.</string>
+
+    <!-- Title for 'customize gesture' activity -->
+    <string name="customize_gesture_title">自定义手势</string>
+
+    <!-- Prompt and instructions for 'customize gesture' activity -->
+    <string name="custimize_gesture_prompt">请在下面画出你想要的手势. 为了与既有音乐控制兼容, 手势不可以只是水平的一划.</string>
+
+    <!-- Button text for 'customize gesture' activity -->
+    <string name="button_done">完成</string>
+    <string name="button_cancel">取消</string>
 </resources>
