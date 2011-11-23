@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMX///0s\u003d",
+        "filename": "res/values-de/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1951
+      },
+      "writtenOn": "2011-11-23T15:40:45Z",
+      "side": 1,
+      "message": "\"Unbekannter Interpret\" (vgl. Originaltext) wäre aussagekräftiger",
+      "revId": "8f1a99193770133c06850e4c4782122667cb1722",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
