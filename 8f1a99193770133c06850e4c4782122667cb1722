@@ -34,6 +34,24 @@
       "revId": "8f1a99193770133c06850e4c4782122667cb1722",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX///0I\u003d",
+        "filename": "res/values-de/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1053
+      },
+      "writtenOn": "2011-11-23T16:54:47Z",
+      "side": 1,
+      "message": "Warum?\r\nEs bezieht sich doch auf zwei unterschiedliche ID3 Tags.\r\nWoher soll man wissen, welches gemeint ist, wenn beides mal das selbe gemeldet wird?",
+      "parentUuid": "AAAAMX///0Y\u003d",
+      "revId": "8f1a99193770133c06850e4c4782122667cb1722",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
