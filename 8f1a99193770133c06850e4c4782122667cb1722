@@ -52,6 +52,24 @@
       "revId": "8f1a99193770133c06850e4c4782122667cb1722",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX///yM\u003d",
+        "filename": "res/values-de/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1951
+      },
+      "writtenOn": "2011-11-24T02:26:41Z",
+      "side": 1,
+      "message": "Wenn man in das englische Original schaut steht auch beides mal : \"Unknown artist\" drin (vgl. /packages/apps/Music/res/values/strings.xml Zeile 178 bzw. 180). Du hast zwar recht mit den unterschiedlichen ID3-Tags, aber vielen Nutzer der App wird es egal sein, warum hier kein Interpret/Künstler hinterlegt ist.",
+      "parentUuid": "AAAAMX///0I\u003d",
+      "revId": "8f1a99193770133c06850e4c4782122667cb1722",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
