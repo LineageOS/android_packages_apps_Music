@@ -70,6 +70,24 @@
       "revId": "8f1a99193770133c06850e4c4782122667cb1722",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn////g\u003d",
+        "filename": "res/values-de/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1402
+      },
+      "writtenOn": "2011-11-24T14:33:59Z",
+      "side": 1,
+      "message": "Also für was entscheiden wir uns jetzt?",
+      "parentUuid": "AAAAMX///yM\u003d",
+      "revId": "8f1a99193770133c06850e4c4782122667cb1722",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
