@@ -74,11 +74,10 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
             int keycode = event.getKeyCode();
             int action = event.getAction();
             long eventtime = event.getEventTime();
-
+            boolean notifToggle = intent.getBooleanExtra("notifToggle", false);
             // single quick press: pause/resume. 
             // double press: next track
             // long press: start auto-shuffle mode.
-            
             String command = null;
             switch (keycode) {
                 case KeyEvent.KEYCODE_MEDIA_STOP:
@@ -104,7 +103,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
 
             if (command != null) {
                 if (action == KeyEvent.ACTION_DOWN) {
-                    if (mDown) {
+                    if (mDown && !notifToggle) {
                         if ((MediaPlaybackService.CMDTOGGLEPAUSE.equals(command) ||
                                 MediaPlaybackService.CMDPLAY.equals(command))
                                 && mLastClickTime != 0 
