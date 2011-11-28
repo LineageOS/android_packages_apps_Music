@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAM3///2I\u003d",
+        "filename": "res/values-es/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 431
+      },
+      "writtenOn": "2011-11-28T14:58:57Z",
+      "side": 1,
+      "message": "¿(Estás) seguro que deseas restablecer..?",
+      "revId": "6811fdf4257854a55c320dd4e53636c9482ffe68",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
