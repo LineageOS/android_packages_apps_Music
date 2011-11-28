@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="utf-8"?>
+<!--
 /*
 ** Copyright 2007, The Android Open Source Project
 **
@@ -15,10 +15,10 @@
 ** See the License for the specific language governing permissions and 
 ** limitations under the License.
 */
- -->
+-->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
     <string name="onesong" msgid="8336826100414159413">"1 canción"</string>
   <plurals name="Nsongs">
     <item quantity="other" msgid="5798230388116542981">"<xliff:g id="COUNT">%d</xliff:g> canciones"</item>
@@ -48,8 +48,8 @@
     <item quantity="one" msgid="8560276109508404217">"Se ha eliminado una canción."</item>
     <item quantity="other" msgid="5156740163031225200">"Se han eliminado <xliff:g id="SONGS_TO_DELETE">%d</xliff:g> canciones."</item>
   </plurals>
-    <string name="scanning" msgid="3529383847223198502">"Examinando tarjeta SD…"</string>
-    <string name="scanning_nosdcard" msgid="8105284774487360148">"Analizando almacenamiento USB…"</string>
+    <string name="scanning" msgid="3529383847223198502">"Examinando tarjeta SD"\u2026</string>
+    <string name="scanning_nosdcard" msgid="8105284774487360148">"Analizando almacenamiento USB"\u2026</string>
     <string name="nowplaying_title" msgid="8342523844307751761">"Reproduciendo"</string>
     <string name="partyshuffle_title" msgid="6582413231529992125">"Sesión aleatoria"</string>
     <string name="artists_title" msgid="8490372367259160067">"Artistas"</string>
@@ -92,8 +92,8 @@
     <string name="shuffle_on_notif" msgid="5453708337808483943">"La reproducción aleatoria está activada."</string>
     <string name="shuffle_off_notif" msgid="4251189610017886263">"La reproducción aleatoria está desactivada."</string>
     <string name="repeat_off_notif" msgid="1149406899083479716">"La repetición está desactivada."</string>
-    <string name="repeat_current_notif" msgid="1227153936360904196">"Repitiendo canción actual..."</string>
-    <string name="repeat_all_notif" msgid="6443293055987316642">"Repitiendo todas las canciones..."</string>
+    <string name="repeat_current_notif" msgid="1227153936360904196">"Repitiendo canción actual"\u2026</string>
+    <string name="repeat_all_notif" msgid="6443293055987316642">"Repitiendo todas las canciones"\u2026</string>
     <string name="ringtone_menu" msgid="2737472190159134599">"Utilizar como tono del teléfono"</string>
     <string name="ringtone_menu_short" msgid="3367622038867238133">"Utilizar como tono"</string>
     <string name="ringtone_set" msgid="5325818347613843130">"Se ha establecido \"<xliff:g id="NAME">%s</xliff:g>\" como tono del teléfono."</string>
@@ -138,12 +138,12 @@
     <string name="playback_failed" msgid="4477832192645009774">"El reproductor no admite este tipo de archivo de audio."</string>
     <string name="cancel" msgid="886559484711947520">"Cancelar"</string>
     <string name="remove_from_playlist" msgid="2548577514849026354">"Eliminar de lista de reproducción"</string>
-    <string name="streamloadingtext" msgid="3367150884806639224">"Conectando con <xliff:g id="HOST">%s</xliff:g>..."</string>
+    <string name="streamloadingtext" msgid="3367150884806639224">"Conectando con <xliff:g id="HOST">%s</xliff:g>"\u2026</string>
     <string name="mediasearch" msgid="959222971261132292">"Buscar <xliff:g id="TERM">%s</xliff:g> con:"</string>
-    <string name="working_artists" msgid="8678357432732156580">"Artistas…"</string>
-    <string name="working_albums" msgid="8713273699401457426">"Álbumes…"</string>
-    <string name="working_songs" msgid="2201491972050410684">"Canciones…"</string>
-    <string name="working_playlists" msgid="4424950806134653351">"Listas de reproducción…"</string>
+    <string name="working_artists" msgid="8678357432732156580">"Artistas"\u2026</string>
+    <string name="working_albums" msgid="8713273699401457426">"Álbumes"\u2026</string>
+    <string name="working_songs" msgid="2201491972050410684">"Canciones"\u2026</string>
+    <string name="working_playlists" msgid="4424950806134653351">"Listas de reproducción"\u2026</string>
     <string name="loading" msgid="3267924133697717662">"Cargando"</string>
     <string name="sort_by_track" msgid="7662999005554152565">"Pistas"</string>
     <string name="sort_by_album" msgid="2912837715658975248">"Álbumes"</string>
@@ -153,7 +153,90 @@
     <string name="fail_to_start_stream" msgid="3605390187703912835">"No se ha podido reproducir el flujo solicitado."</string>
     <string name="search_settings_description" msgid="6520975349259883368">"Artistas, álbumes y pistas"</string>
     <string name="search_hint" msgid="3766854898072633001">"Buscar música"</string>
-    <string name="fast_scroll_alphabet" msgid="5548732936480723311">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
+    <string name="fast_scroll_alphabet" msgid="5548732936480723311">\u0020"ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="widget_initial_text" msgid="6334545155963910952">"Toca para selec música."</string>
     <string name="effectspanel" msgid="8804547581593509614">"Efectos sonido"</string>
+
+    <!-- Menu text for the music settings item [CHAR LIMIT=15] -->
+    <string name="settings">Preferencias</string>
+
+    <!-- Category title for audio focus in music settings -->
+    <string name="audio_focus_category_title">Prioridad del reproductor</string>
+
+    <!-- Title and summary for 'enable focus loss ducking' preference checkbox -->
+    <string name="enable_focus_loss_ducking_title">Enfoque de sonido</string>
+    <string name="enable_focus_loss_ducking_summary">En vez de pausar la reproducción, se bajará el volumen durante una notificación</string>
+
+    <!-- Title, summary, and entries for 'enable gestures' preference list -->
+    <string name="duck_attenuation_db_title">Atenuación</string>
+    <string name="duck_attenuation_db_summary">Seleccionar cuanto se atenuará el sonido durante la pérdida de enfoque</string>
+    <string-array name="duck_attenuation_db_entries">
+        <item>Ninguna</item>
+        <item>4 dB</item>
+        <item>8 dB (predeterminado)</item>
+        <item>12 dB</item>
+    </string-array>
+
+    <!-- Category title for gestures in music settings -->
+    <string name="gestures_category_title">Gestos</string>
+
+    <!-- Title and summary for 'enable gestures' preference checkbox -->
+    <string name="enable_gestures_title">Habilitar gestos</string>
+    <string name="enable_gestures_summary">Controles de reproducción vía gestos en la pantalla \"Reproduciendo\"</string>
+
+    <!-- Title and summary for 'enable haptic feedback' preference checkbox -->
+    <string name="enable_haptic_feedback_title">Comunicación háptica</string>
+    <string name="enable_haptic_feedback_summary">Habilitar vibración como confirmación de un gesto completado</string>
+
+    <!-- Title for 'edit gestures' preference screen and subsequent activity -->
+    <string name="edit_gestures_title">Editar gestos</string>
+
+    <!-- Titles and summaries for gestures when listed in 'edit gestures' activity -->
+    <string-array name="gesture_titles">
+        <item>Pausar/Reanudar</item>
+        <item>Siguiente</item>
+        <item>Anterior</item>
+        <item>Mezclar</item>
+        <item>Repetir</item>
+    </string-array>
+    <string-array name="gesture_summaries">
+        <item>Pausar o reanudar la reproducción</item>
+        <item>Saltar a la siguiente canción de la lista</item>
+        <item>Reiniciar la canción actual o saltar a la anterior</item>
+        <item>Activar o desactivar reproducción aleatoria</item>
+        <item>Cambiar entre los modos de repetición</item>
+    </string-array>
+
+    <!-- Loading text for 'edit gestures' activity -->
+    <string name="gestures_loading">Cargando gestos</string>
+
+    <!-- Context menu entries for 'edit gestures' activity -->
+    <string name="gestures_customize">Gestos personalizados</string>
+    <string name="gestures_reset">Restablecer</string>
+
+    <!-- Button text for 'edit gestures' activity -->
+    <string name="button_reload_gestures">Recargar gestos</string>
+    <string name="button_reset_all_gestures">Restablecer todo</string>
+
+    <!-- Alert dialog text to confirm desire to reset all gestures to default -->
+    <string name="gestures_reset_all_alert">¿Estás seguro de restablecer todos los gestos grabados?</string>
+
+    <!-- Alert dialog 'yes' and 'no' button text -->
+    <string name="button_yes">Sí</string>
+    <string name="button_no">No</string>
+
+    <!-- Error messages for 'edit gestures' activity -->
+    <string name="gestures_error_loading">No se pueden leer los gestos almacenados.</string>
+    <string name="gestures_error_library">Los gestos almacenados están corruptos. Intenta restablecer todos los gestos.</string>
+
+    <!-- Title for 'customize gesture' activity -->
+    <string name="customize_gesture_title">Gestos personalizados</string>
+
+    <!-- Prompt and instructions for 'customize gesture' activity -->
+    <string name="custimize_gesture_prompt">Traza el gesto debajo. Por compatibilidad con los controles de reproducción, no podrá ser una línea horizontal solamente.</string>
+
+    <!-- Button text for 'customize gesture' activity -->
+    <string name="button_done">Hecho</string>
+    <string name="button_cancel">Cancelar</string>
+
 </resources>
