@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAANH///8I\u003d",
+        "filename": "res/values-de/strings.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1053
+      },
+      "writtenOn": "2011-12-02T20:38:49Z",
+      "side": 1,
+      "message": "Warum Plural?",
+      "revId": "159de7096a97ffa21654860647933d6f968e33f6",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
