@@ -16,6 +16,8 @@
 
 package com.android.music;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -33,6 +35,7 @@ public class MusicSettingsActivity extends PreferenceActivity implements
     static final String KEY_HAS_CUSTOM_GESTURES = "has_custom_gestures";
     //This key has the gesture entry name (E.g. PAUSE) appended to it before use
     static final String KEY_HAS_CUSTOM_GESTURE_XXX = "has_custom_gesture_";
+    static final String KEY_WIDGET_TRANSPARENCY = "widget_transparency";
 
     static final String DEFAULT_DUCK_ATTENUATION_DB = "8";
 
@@ -53,6 +56,20 @@ public class MusicSettingsActivity extends PreferenceActivity implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(KEY_ENABLE_GESTURES)) {
             Intent intent = new Intent(ACTION_ENABLE_GESTURES_CHANGED);
+            sendBroadcast(intent);
+        } else if (key.equals(KEY_WIDGET_TRANSPARENCY)) {
+            updateWidgetsForProvider(new ComponentName(this, MediaAppWidgetProvider4x1.class));
+            updateWidgetsForProvider(new ComponentName(this, MediaAppWidgetProvider4x2.class));
+        }
+    }
+
+    private void updateWidgetsForProvider(ComponentName provider) {
+        final AppWidgetManager manager = AppWidgetManager.getInstance(this);
+        int[] appWidgetIds = manager.getAppWidgetIds(provider);
+        if (appWidgetIds != null && appWidgetIds.length > 0) {
+            Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+            intent.setComponent(provider);
             sendBroadcast(intent);
         }
     }
