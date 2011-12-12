@@ -62,4 +62,16 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/widget_category_title">
+
+        <ListPreference android:key="widget_transparency"
+            android:title="@string/widget_transparency_title"
+            android:summary="@string/widget_transparency_summary"
+            android:entries="@array/widget_transparency_entries"
+            android:entryValues="@array/widget_transparency_entryvalues"
+            android:defaultValue="0"
+            android:dialogTitle="@string/widget_transparency_title" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
