@@ -219,4 +219,10 @@
   <!-- Button text for 'customize gesture' activity -->
   <string name="button_done">Fertig</string>
   <string name="button_cancel">Abbrechen</string>
+
+  <string name="widget_category_title">Widget</string>
+
+  <string name="widget_transparency_title">Transparenz</string>
+  <string name="widget_transparency_summary">Durchsichtigkeit des Widget-Hintergrundes konfigurieren</string>
+
 </resources>
