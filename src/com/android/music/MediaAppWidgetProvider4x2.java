@@ -22,6 +22,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Environment;
@@ -73,6 +74,7 @@ public class MediaAppWidgetProvider4x2 extends AppWidgetProvider {
         views.setTextViewText(R.id.artistname, res.getText(R.string.widget_initial_text));
         views.setImageViewResource(R.id.albumart, R.drawable.albumart_mp_unknown);
 
+        applyAlphaSetting(context, views);
         linkButtons(context, views, false /* not playing */);
         pushUpdate(context, appWidgetIds, views);
     }
@@ -199,10 +201,23 @@ public class MediaAppWidgetProvider4x2 extends AppWidgetProvider {
                 views.setImageViewResource(R.id.control_shuffle, R.drawable.ic_mp_shuffle_on_btn);
                 break;
         }
+
+        applyAlphaSetting(service, views);
+
         // Link actions buttons to intents
         linkButtons(service, views, playing);
 
         pushUpdate(service, appWidgetIds, views);
+    }
+
+    private void applyAlphaSetting(Context context, RemoteViews views) {
+        SharedPreferences prefs = context.getSharedPreferences(
+                MusicSettingsActivity.PREFERENCES_FILE, Context.MODE_PRIVATE);
+        int transparency =
+            Integer.parseInt(prefs.getString(MusicSettingsActivity.KEY_WIDGET_TRANSPARENCY, "0"));
+        int alpha = 255 * (100 - transparency) / 100;
+
+        views.setDrawableParameters(R.id.widget_4x2, true, alpha, -1, null, -1);
     }
 
     /**
