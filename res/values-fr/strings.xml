@@ -35,7 +35,7 @@
     <string name="party_shuffle" msgid="8213359225506006168">"Mode DJ"</string>
     <string name="party_shuffle_off" msgid="1828744483354711679">"Désactiver le mode DJ"</string>
     <string name="delete_item" msgid="3363330144534750601">"Supprimer"</string>
-    <string name="shuffle_all" msgid="1388193611787878773">"Lecture aléatoire"</string>
+    <string name="shuffle_all">Mode aléatoire</string>
     <string name="play_all" msgid="6309622568869321842">"Tout lire"</string>
     <string name="delete_artist_desc" msgid="1843750591006508005">"Toutes les chansons de <xliff:g id="ARTIST">%s</xliff:g> seront définitivement supprimées de la carte SD."</string>
     <string name="delete_artist_desc_nosdcard" msgid="1565010405469696133">"Tous les morceaux de <xliff:g id="ARTIST">%s</xliff:g> seront définitivement supprimés de la mémoire de stockage USB."</string>
@@ -156,4 +156,80 @@
     <string name="fast_scroll_alphabet" msgid="5548732936480723311">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="widget_initial_text" msgid="6334545155963910952">"Touchez l\'écran pour sélectionner une musique."</string>
     <string name="effectspanel" msgid="8804547581593509614">"Effets sonores"</string>
+
+    <!-- Menu text for the music settings item [CHAR LIMIT=15] -->
+    <string name="settings">Paramètres</string>
+
+    <!-- Category title for audio focus in music settings -->
+    <string name="audio_focus_category_title">Focus audio</string>
+    <string name="enable_focus_loss_ducking_title">Esquiver perte de focus</string>
+    <string name="enable_focus_loss_ducking_summary">Baisser le volume de la musique plutôt que de mettre en pause lors des notifications.</string>
+    <string name="duck_attenuation_db_title">Réduction du volume</string>
+    <string name="duck_attenuation_db_summary">Niveau de réduction du volume lors de l\'esquive du focus audio</string>
+
+    <string name="gestures_category_title">Gestes</string>
+
+    <!-- Title and summary for 'enable gestures' preference checkbox -->
+    <string name="enable_gestures_title">Activer les gestes</string>
+    <string name="enable_gestures_summary">Contrôler la lecture par des gestes sur l\'écran \"En écoute\"</string>
+
+    <!-- Title and summary for 'enable haptic feedback' preference checkbox -->
+    <string name="enable_haptic_feedback_title">Retour haptique</string>
+    <string name="enable_haptic_feedback_summary">Emettre une vibration en réponse aux gestes reconnus</string>
+
+    <!-- Title for 'edit gestures' preference screen and subsequent activity -->
+    <string name="edit_gestures_title">Modifier les gestes</string>
+
+    <!-- Titles and summaries for gestures when listed in 'edit gestures' activity -->
+    <string-array name="gesture_titles">
+        <item>Lecture/Pause</item>
+        <item>Suivant</item>
+        <item>Précédent</item>
+        <item>Shuffle</item>
+        <item>Repeat</item>
+    </string-array>
+
+    <string-array name="gesture_summaries">
+        <item>Mettre en pause ou reprendre la lecture</item>
+        <item>Passer au morceau suivant dans la playlist</item>
+        <item>Redémarrer le morceau en cours ou revenir au morceau précédent</item>
+        <item>Lecture aléatoire de la playlist</item>
+        <item>Changer le mode de répétition</item>
+    </string-array>
+
+    <!-- Loading text for 'edit gestures' activity -->
+    <string name="gestures_loading">Chargement des gestes</string>
+
+    <!-- Context menu entries for 'edit gestures' activity -->
+    <string name="gestures_customize">Modifier les gestes</string>
+    <string name="gestures_reset">Remise à zéro</string>
+
+    <!-- Button text for 'edit gestures' activity -->
+    <string name="button_reload_gestures">Recharger les gestes</string>
+    <string name="button_reset_all_gestures">Gestes par défaut</string>
+
+    <!-- Alert dialog text to confirm desire to reset all gestures to default -->
+    <string name="gestures_reset_all_alert">Etes-vous certain de vouloir rétablir les gestes par défaut ?</string>
+
+    <!-- Alert dialog 'yes' and 'no' button text -->
+    <string name="button_yes">Oui</string>
+    <string name="button_no">Non</string>
+
+    <!-- Error messages for 'edit gestures' activity -->
+    <string name="gestures_error_loading">Impossible de charger la bibliothèque de gestes.</string>
+    <string name="gestures_error_library">Votre bibliothèque de gestes est corrompue. Essayez de rétablir les gestes par défaut.</string>
+
+    <!-- Title for 'customize gesture' activity -->
+    <string name="customize_gesture_title">Modifier le geste</string>
+    <string name="custimize_gesture_prompt">Dessiner le geste souhaité ci-dessous. Pour compatibilité avec le contrôle de la lecture, le geste doit être plus complexe qu\'une simple ligne horizontale.</string>
+
+    <!-- Button text for 'customize gesture' activity -->
+    <string name="button_done">Ok</string>
+    <string name="button_cancel">Annuler</string>
+
+    <!-- Widget options -->
+    <string name="widget_category_title">Widget</string>
+    <string name="widget_transparency_title">Transparence</string>
+    <string name="widget_transparency_summary">Définir le niveau de transparence pour la couleur du fond du widget</string>
+
 </resources>
