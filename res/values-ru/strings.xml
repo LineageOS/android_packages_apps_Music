@@ -240,4 +240,9 @@
     <string name="button_done">Готово</string>
     <string name="button_cancel">Отмена</string>
 
+    <string name="widget_category_title">Виджет</string>
+
+    <string name="widget_transparency_title">Прозрачность</string>
+    <string name="widget_transparency_summary">Выберите уровень прозрачности фона виджета Музыки</string>
+
 </resources>
