@@ -158,7 +158,7 @@
     <string name="effectspanel" msgid="8804547581593509614">"音效"</string>
 
     <!-- Menu text for the music settings item [CHAR LIMIT=15] -->
-    <string name="settings">音乐设置</string>
+    <string name="settings">设置</string>
 
     <!-- Category title for audio focus in music settings -->
     <string name="audio_focus_category_title">音效聚焦</string>
@@ -238,4 +238,8 @@
     <!-- Button text for 'customize gesture' activity -->
     <string name="button_done">完成</string>
     <string name="button_cancel">取消</string>
+
+    <string name="widget_category_title">小部件</string>
+    <string name="widget_transparency_title">透明度</string>
+    <string name="widget_transparency_summary">选择音乐小部件背景色的透明度</string>
 </resources>
