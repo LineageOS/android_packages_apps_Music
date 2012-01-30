@@ -203,4 +203,7 @@
   <string name="custimize_gesture_prompt">Načtrněte níže požadevané gesto. Pro zachování kompatibility s ovládacími prvky nemohou gesta obsahovat jen horizontální tahy.</string>
   <string name="button_done">Hotovo</string>
   <string name="button_cancel">Zrušit</string>
+
+  <string name="widget_transparency_title">Průhlednost</string>
+  <string name="widget_transparency_summary">Zvolte úroveň průhlednosti pozadí widgetu</string>
 </resources>
