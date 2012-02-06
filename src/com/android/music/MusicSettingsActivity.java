@@ -36,6 +36,8 @@ public class MusicSettingsActivity extends PreferenceActivity implements
     //This key has the gesture entry name (E.g. PAUSE) appended to it before use
     static final String KEY_HAS_CUSTOM_GESTURE_XXX = "has_custom_gesture_";
     static final String KEY_WIDGET_TRANSPARENCY = "widget_transparency";
+    
+    static final String KEY_ENABLE_A2DP_AUTOPLAY = "enable_a2dp_autoplay";
 
     static final String DEFAULT_DUCK_ATTENUATION_DB = "8";
 

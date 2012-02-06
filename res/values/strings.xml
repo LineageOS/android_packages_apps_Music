@@ -443,6 +443,10 @@
         <item>90</item>
         <item>100</item>
     </string-array>
+    
+    <string name="various_category_title">Various</string>
+    <string name="a2dp_autoplay_title">A2DP autoplay</string>
+    <string name="a2dp_autoplay_summary">Starts playback automatically when a Bluetooth A2DP devices is connected to the phone</string>
 
 </resources>
 
