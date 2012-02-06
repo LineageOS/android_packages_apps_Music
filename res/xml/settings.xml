@@ -74,4 +74,13 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/various_category_title">
+
+        <CheckBoxPreference android:key="enable_a2dp_autoplay"
+            android:title="@string/a2dp_autoplay_title"
+            android:summary="@string/a2dp_autoplay_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
