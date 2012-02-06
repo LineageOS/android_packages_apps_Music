@@ -27,6 +27,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <application android:icon="@drawable/app_music"
         android:label="@string/musicbrowserlabel"
@@ -51,6 +52,11 @@
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.android.music.BluetoothBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.bluetooth.headset.action.STATE_CHANGED" />
             </intent-filter>
         </receiver>
         <!-- This is the "current music playing" panel, which has special

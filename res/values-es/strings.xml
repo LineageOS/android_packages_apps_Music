@@ -258,4 +258,8 @@
         <item>100%</item>
     </string-array>
 
+    <string name="various_category_title">Varios</string>
+    <string name="a2dp_autoplay_title">Reproducción automática A2DP</string>
+    <string name="a2dp_autoplay_summary">Iniciar de forma automática la reproducción cuando un dispositivo bluetooth A2DP sea conectado</string>
+
 </resources>

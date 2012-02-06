@@ -225,4 +225,7 @@
   <string name="widget_transparency_title">Transparenz</string>
   <string name="widget_transparency_summary">Durchsichtigkeit des Widget-Hintergrundes konfigurieren</string>
 
+  <string name="various_category_title">Verschiedenes</string>
+  <string name="a2dp_autoplay_title">A2DP auto. Wiedergabe</string>
+  <string name="a2dp_autoplay_summary">Wiedergabe automatisch starten, wenn ein Bluetooth-A2DP-Gerät verbunden wird</string>
 </resources>
