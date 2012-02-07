@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQX///50\u003d",
+        "filename": "res/values-de/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1063
+      },
+      "writtenOn": "2012-02-07T16:00:03Z",
+      "side": 1,
+      "message": "\u0027autoplay\u0027 ist definitiv kein deutsches Wort. Vorschlag: \u0027A2DP automatisch starten\u0027?",
+      "revId": "ad3f83c5d2394d0b2d649134b802576b7fbda8c9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQX///5w\u003d",
+        "filename": "res/values-de/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1063
+      },
+      "writtenOn": "2012-02-07T16:00:03Z",
+      "side": 1,
+      "message": "http://de.wikipedia.org/wiki/Leerzeichen_in_Komposita ;)\n\nVorschlag: \u0027Wiedergabe automatisch starten, wenn ein Bluetooth-A2DP-Gerät verbunden wird\u0027",
+      "revId": "ad3f83c5d2394d0b2d649134b802576b7fbda8c9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQX///5s\u003d",
+        "filename": "res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1063
+      },
+      "writtenOn": "2012-02-07T16:00:03Z",
+      "side": 1,
+      "message": "Suggestion: \u0027Start playback automatically when a bluetooth A2DP device is connected\u0027",
+      "revId": "ad3f83c5d2394d0b2d649134b802576b7fbda8c9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
