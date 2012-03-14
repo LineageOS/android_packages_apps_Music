@@ -1384,10 +1384,13 @@ public class MediaPlaybackService extends Service {
         Message msg = mDelayedStopHandler.obtainMessage();
         mDelayedStopHandler.sendMessageDelayed(msg, IDLE_DELAY);
         stopForeground(false);
-        status.contentView.setImageViewResource(R.id.play, isPlaying() ?
-                R.drawable.ic_appwidget_music_play : R.drawable.ic_appwidget_music_pause);
-        NotificationManager mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mManager.notify(PLAYBACKSERVICE_STATUS, status);
+        if (status != null)
+        {
+            status.contentView.setImageViewResource(R.id.play, isPlaying() ?
+                    R.drawable.ic_appwidget_music_play : R.drawable.ic_appwidget_music_pause);
+            NotificationManager mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mManager.notify(PLAYBACKSERVICE_STATUS, status);
+        }
     }
 
     private void saveBookmarkIfNeeded() {
