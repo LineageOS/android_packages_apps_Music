@@ -21,6 +21,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -28,26 +29,25 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.BroadcastReceiver;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
-import android.media.audiofx.AudioEffect;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.RemoteControlClient;
 import android.media.RemoteControlClient.MetadataEditor;
+import android.media.audiofx.AudioEffect;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
-import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -1384,10 +1384,12 @@ public class MediaPlaybackService extends Service {
         Message msg = mDelayedStopHandler.obtainMessage();
         mDelayedStopHandler.sendMessageDelayed(msg, IDLE_DELAY);
         stopForeground(false);
-        status.contentView.setImageViewResource(R.id.play, isPlaying() ?
-                R.drawable.ic_appwidget_music_play : R.drawable.ic_appwidget_music_pause);
-        NotificationManager mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mManager.notify(PLAYBACKSERVICE_STATUS, status);
+        if (status != null) {
+            status.contentView.setImageViewResource(R.id.play, isPlaying() ?
+                    R.drawable.ic_appwidget_music_play : R.drawable.ic_appwidget_music_pause);
+            NotificationManager mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mManager.notify(PLAYBACKSERVICE_STATUS, status);
+        }
     }
 
     private void saveBookmarkIfNeeded() {
