@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAARX///5o\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1078
+      },
+      "writtenOn": "2012-03-15T23:03:05Z",
+      "side": 1,
+      "message": "Can you decrease the commit message size? Something like\n\n\"Fix crash when last played file missing\"",
+      "revId": "bde68123862244f1faaf676e1e952197a46302da",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARX///5s\u003d",
+        "filename": "src/com/android/music/MediaPlaybackService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1078
+      },
+      "writtenOn": "2012-03-15T23:03:05Z",
+      "side": 1,
+      "message": "Move the lines inside the if 4 spaces to the right.",
+      "revId": "bde68123862244f1faaf676e1e952197a46302da",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
