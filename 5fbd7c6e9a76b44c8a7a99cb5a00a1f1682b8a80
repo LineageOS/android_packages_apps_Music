@@ -16,6 +16,24 @@
       "revId": "5fbd7c6e9a76b44c8a7a99cb5a00a1f1682b8a80",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARX///co\u003d",
+        "filename": "src/com/android/music/MediaPlaybackService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1479
+      },
+      "writtenOn": "2012-03-18T13:16:38Z",
+      "side": 1,
+      "message": "Can you please check the code from http://review.cyanogenmod.com/#patch,sidebyside,13608,4,src/com/android/music/MediaPlaybackService.java\nyou should be able to see the spaces on this view.\nOtherwise as I mentioned in the previous comment, please download the file and check.\nThanks!",
+      "parentUuid": "AAAARX///nk\u003d",
+      "revId": "5fbd7c6e9a76b44c8a7a99cb5a00a1f1682b8a80",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
