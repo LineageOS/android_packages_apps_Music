@@ -34,6 +34,24 @@
       "revId": "5fbd7c6e9a76b44c8a7a99cb5a00a1f1682b8a80",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARX///Wk\u003d",
+        "filename": "src/com/android/music/MediaPlaybackService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1078
+      },
+      "writtenOn": "2012-03-18T17:56:37Z",
+      "side": 1,
+      "message": "Hmm you are right, gerrit bug...",
+      "parentUuid": "AAAARX///co\u003d",
+      "revId": "5fbd7c6e9a76b44c8a7a99cb5a00a1f1682b8a80",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
