@@ -81,6 +81,7 @@
                 <data android:mimeType="application/ogg"/>
                 <data android:mimeType="application/x-ogg"/>
                 <data android:mimeType="application/itunes"/>
+                <data android:mimeType="application/x-flac"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="com.android.music.PLAYBACK_VIEWER" />
@@ -99,6 +100,7 @@
                 <data android:mimeType="application/ogg"/>
                 <data android:mimeType="application/x-ogg"/>
                 <data android:mimeType="application/itunes"/>
+                <data android:mimeType="application/x-flac"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -109,6 +111,7 @@
                 <data android:mimeType="application/ogg"/>
                 <data android:mimeType="application/x-ogg"/>
                 <data android:mimeType="application/itunes"/>
+                <data android:mimeType="application/x-flac"/>
             </intent-filter>
             <intent-filter
                 android:priority="-1">
@@ -120,6 +123,7 @@
                 <data android:mimeType="application/ogg"/>
                 <data android:mimeType="application/x-ogg"/>
                 <data android:mimeType="application/itunes"/>
+                <data android:mimeType="application/x-flac"/>
             </intent-filter>
         </activity>
 
@@ -244,6 +248,7 @@
                 <data android:mimeType="audio/*"/>
                 <data android:mimeType="application/ogg"/>
                 <data android:mimeType="application/x-ogg"/>
+                <data android:mimeType="application/x-flac"/>
             </intent-filter>
             <!-- Second way to invoke us: someone asks to pick an item from
                  some media Uri. -->
