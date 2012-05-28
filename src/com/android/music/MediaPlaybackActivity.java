@@ -1074,12 +1074,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     private void doPrev() {
         if (mService == null) return;
         try {
-            if (mService.position() < 2000) {
-                mService.prev();
-            } else {
-                mService.seek(0);
-                mService.play();
-            }
+            mService.prev();
         } catch (RemoteException ex) {
         }
     }
