@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  Copyright (C) 2007 The Android Open Source Project
+      Copyright (C) 2012 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="weeklist">
+        <item msgid="7005918873419323862">"1 week"</item>
+        <item msgid="7487749116155425822">"2 weken"</item>
+        <item msgid="1565338360539555185">"3 weken"</item>
+        <item msgid="2142986059836933072">"4 weken"</item>
+        <item msgid="4332403875260507291">"5 weken"</item>
+        <item msgid="3847281907869868565">"6 weken"</item>
+        <item msgid="2942654998558867799">"7 weken"</item>
+        <item msgid="2115529325850052227">"8 weken"</item>
+        <item msgid="1396675336665198092">"9 weken"</item>
+        <item msgid="3178819129208998649">"10 weken"</item>
+        <item msgid="2727959579637914171">"11 weken"</item>
+        <item msgid="8708754966127584739">"12 weken"</item>
+    </string-array>
+    <string-array name="duck_attenuation_db_entries">
+        <item>Niet</item>
+        <item>4 dB</item>
+        <item>8 dB (standaard)</item>
+        <item>12 dB</item>
+    </string-array>
+    <string-array name="gesture_titles">
+        <item>Pauzeren/afspelen</item>
+        <item>Volgende</item>
+        <item>Vorige</item>
+        <item>Shuffle</item>
+        <item>Herhalen</item>
+    </string-array>
+    <string-array name="gesture_summaries">
+      <item>Huidig nummer pauzeren/hervatten</item>
+      <item>Doorspoelen naar volgend nummer in de afspeellijst</item>
+      <item>Huidig nummer herstarten/terugspoelen naar vorig nummer in afspeellijst</item>
+      <item>Shuffle in-/uitschakelen</item>
+      <item>Herhalingsmodus kiezen</item>
+    </string-array>
+</resources>

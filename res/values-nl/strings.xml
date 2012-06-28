@@ -1,35 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-/*
-** Copyright 2007, The Android Open Source Project
-**
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
-**
-**     http://www.apache.org/licenses/LICENSE-2.0 
-**
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
-** limitations under the License.
-*/
- -->
+<?xml version="1.0" encoding="utf-8"?>
+<!--  Copyright (C) 2007 The Android Open Source Project
+      Copyright (C) 2012 The CyanogenMod Project
 
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="onesong" msgid="8336826100414159413">"1 nummer"</string>
-  <plurals name="Nsongs">
-    <item quantity="other" msgid="5798230388116542981">"<xliff:g id="COUNT">%d</xliff:g> nummers"</item>
-  </plurals>
-  <plurals name="Nsongscomp">
-    <item quantity="other" msgid="7162294486622945550">"<xliff:g id="COUNT_FOR_ARTIST">%2$d</xliff:g> van <xliff:g id="TOTAL_COUNT">%1$d</xliff:g> nummers"</item>
-  </plurals>
-  <plurals name="Nalbums">
-    <item quantity="one" msgid="3798955510439465932">"1 album"</item>
-    <item quantity="other" msgid="3047615499770811984">"<xliff:g id="COUNT">%d</xliff:g> albums"</item>
-  </plurals>
     <string name="goto_start" msgid="8979658707407220934">"Bibliotheek"</string>
     <string name="goto_playback" msgid="4885216161312176550">"Afspelen"</string>
     <string name="party_shuffle" msgid="8213359225506006168">"Party shuffle"</string>
@@ -44,12 +31,8 @@
     <string name="delete_song_desc" msgid="1856800468541831408">"<xliff:g id="SONG">%s</xliff:g>\' wordt definitief van de SD-kaart verwijderd."</string>
     <string name="delete_song_desc_nosdcard" msgid="2722621774200478721">"\'<xliff:g id="SONG">%s</xliff:g>\' wordt definitief verwijderd uit de USB-opslag."</string>
     <string name="delete_confirm_button_text" msgid="7008121194944357274">"OK"</string>
-  <plurals name="NNNtracksdeleted">
-    <item quantity="one" msgid="8560276109508404217">"1 nummer is verwijderd."</item>
-    <item quantity="other" msgid="5156740163031225200">"<xliff:g id="SONGS_TO_DELETE">%d</xliff:g> nummers zijn verwijderd."</item>
-  </plurals>
-    <string name="scanning" msgid="3529383847223198502">"SD-kaart scannen..."</string>
-    <string name="scanning_nosdcard" msgid="8105284774487360148">"USB-opslag scannen…"</string>
+    <string name="scanning" msgid="3529383847223198502">"SD-kaart scannen\u2026"</string>
+    <string name="scanning_nosdcard" msgid="8105284774487360148">"USB-opslag scannen\u2026"</string>
     <string name="nowplaying_title" msgid="8342523844307751761">"Wordt nu afgespeeld"</string>
     <string name="partyshuffle_title" msgid="6582413231529992125">"Party shuffle"</string>
     <string name="artists_title" msgid="8490372367259160067">"Artiesten"</string>
@@ -102,30 +85,12 @@
     <string name="queue" msgid="2937629819482787704">"Huidige afspeellijst"</string>
     <string name="new_playlist" msgid="7588112979692632867">"Nieuw"</string>
     <string name="new_playlist_name_template" msgid="905710296728900597">"Nieuwe afspeellijst <xliff:g id="NUMBER">%d</xliff:g>"</string>
-  <plurals name="NNNtrackstoplaylist">
-    <item quantity="one" msgid="422388042993582235">"1 nummer toegevoegd aan afspeellijst."</item>
-    <item quantity="other" msgid="7662771987109627255">"<xliff:g id="NUMBER">%d</xliff:g> nummers toegevoegd aan afspeellijst."</item>
-  </plurals>
     <string name="emptyplaylist" msgid="6711555673997896344">"Geselecteerde afspeellijst is leeg."</string>
     <string name="create_playlist_create_text" msgid="8149755205483279143">"Opslaan"</string>
     <string name="create_playlist_overwrite_text" msgid="2007808383561024706">"Overschrijven"</string>
     <string name="service_start_error_title" msgid="8649916852210198813">"Probleem met afspelen"</string>
     <string name="service_start_error_msg" msgid="3880338547260838681">"Het nummer kan niet worden afgespeeld."</string>
     <string name="service_start_error_button" msgid="480888406592240723">"OK"</string>
-  <string-array name="weeklist">
-    <item msgid="7005918873419323862">"1 week"</item>
-    <item msgid="7487749116155425822">"2 weken"</item>
-    <item msgid="1565338360539555185">"3 weken"</item>
-    <item msgid="2142986059836933072">"4 weken"</item>
-    <item msgid="4332403875260507291">"5 weken"</item>
-    <item msgid="3847281907869868565">"6 weken"</item>
-    <item msgid="2942654998558867799">"7 weken"</item>
-    <item msgid="2115529325850052227">"8 weken"</item>
-    <item msgid="1396675336665198092">"9 weken"</item>
-    <item msgid="3178819129208998649">"10 weken"</item>
-    <item msgid="2727959579637914171">"11 weken"</item>
-    <item msgid="8708754966127584739">"12 weken"</item>
-  </string-array>
     <string name="weekpicker_set" msgid="7636608790418067496">"Gereed"</string>
     <string name="weekpicker_title" msgid="699535378922101701">"Tijd instellen"</string>
     <string name="save_as_playlist" msgid="5180413608901885255">"Opslaan als afspeellijst"</string>
@@ -140,10 +105,10 @@
     <string name="remove_from_playlist" msgid="2548577514849026354">"Verwijderen uit afspeellijst"</string>
     <string name="streamloadingtext" msgid="3367150884806639224">"Verbinding maken met <xliff:g id="HOST">%s</xliff:g>"</string>
     <string name="mediasearch" msgid="959222971261132292">"Zoeken naar \'<xliff:g id="TERM">%s</xliff:g>\' via:"</string>
-    <string name="working_artists" msgid="8678357432732156580">"Artiesten…"</string>
-    <string name="working_albums" msgid="8713273699401457426">"Albums…"</string>
-    <string name="working_songs" msgid="2201491972050410684">"Nummers…"</string>
-    <string name="working_playlists" msgid="4424950806134653351">"Afspeellijsten…"</string>
+    <string name="working_artists" msgid="8678357432732156580">"Artiesten\u2026"</string>
+    <string name="working_albums" msgid="8713273699401457426">"Albums\u2026"</string>
+    <string name="working_songs" msgid="2201491972050410684">"Nummers\u2026"</string>
+    <string name="working_playlists" msgid="4424950806134653351">"Afspeellijsten\u2026"</string>
     <string name="loading" msgid="3267924133697717662">"Laden"</string>
     <string name="sort_by_track" msgid="7662999005554152565">"Tracks"</string>
     <string name="sort_by_album" msgid="2912837715658975248">"Albums"</string>
@@ -156,85 +121,36 @@
     <string name="fast_scroll_alphabet" msgid="5548732936480723311">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="widget_initial_text" msgid="6334545155963910952">"Raak aan om muziek te selecteren."</string>
     <string name="effectspanel" msgid="8804547581593509614">"Geluidseffecten"</string>
-	
-  <string name="settings">Instellingen</string>
-  <string name="enable_focus_loss_ducking_title">Notificatie volume</string>
-  <string name="enable_focus_loss_ducking_summary">In plaats van het pauzeren van muziek, het volume verlagen gedurende het afspelen van een notificatie</string>
-  <string name="duck_attenuation_db_title">Demping</string>
-  <string name="duck_attenuation_db_summary">Tot welk niveau dient het volume verlaagd te worden bij het afspelen van een notificatie</string>
-  <string-array name="duck_attenuation_db_entries">
-    <item>Niet</item>
-    <item>4 dB</item>
-    <item>8 dB (Standaard)</item>
-    <item>12 dB</item>
-  </string-array>
 
-  <string name="gestures_category_title">Gestures</string>
-
-  <string name="enable_gestures_title">Gestures inschakelen</string>
-  <string name="enable_gestures_summary">Beheer het afspelen van muziek met gestures in het \'Nu afspelen\' scherm</string>
-  <string name="enable_haptic_feedback_title">Haptische feedback</string>
-  <string name="enable_haptic_feedback_summary">Vibreer bij het voltooien van een gesture</string>
-  <string name="edit_gestures_title">Gestures aanpassen</string>
-
-  <string-array name="gesture_titles">
-    <item>Pauze/Afspelen</item>
-    <item>Volgende</item>
-    <item>Vorige</item>
-    <item>Shuffle</item>
-    <item>Herhalen</item>
-  </string-array>
-
-  <string-array name="gesture_summaries">
-    <item>Pauzeer huidige nummer of hervat afspelen</item>
-    <item>Doorspoelen naar het volgende nummer in de afspeellijst</item>
-    <item>Herstart huidige nummer of spoel terug naar vorige nummer in de afspeellijst</item>
-    <item>Shuffle aan en uit zetten</item>
-    <item>Kies een herhaal modus</item>
-  </string-array>
-
-  <string name="gestures_loading">Gestures laden</string>
-  <string name="gestures_customize">Gesture aanpassen</string>
-  <string name="gestures_reset">Standaard instellingen herstellen</string>
-
-  <string name="button_reload_gestures">Gestures herladen</string>
-  <string name="button_reset_all_gestures">Alles herstellen naar standaard instellingen</string>
-
-  <string name="gestures_reset_all_alert">Weet je zeker dat je alle gestures wilt herstellen naar de standaard instellingen?</string>
-
-  <string name="button_yes">Ja</string>
-  <string name="button_no">Nee</string>
-
-  <string name="gestures_error_loading">Gestures bibliotheek kan niet geladen worden.</string>
-  <string name="gestures_error_library">Gestures bibliotheek is corrupt. Probeer alle gestures te herstellen naar de standaard instellingen.</string>
-
-  <!-- Title for 'customize gesture' activity -->
-  <string name="customize_gesture_title">Gestures aanpassen</string>
-
-  <!-- Prompt and instructions for 'customize gesture' activity -->
-  <string name="custimize_gesture_prompt">Teken je gewenste gesture hier beneden. Een gesture kan niet bestaan uit een enkele horizontale \'swype\'.</string>
-
-  <!-- Button text for 'customize gesture' activity -->
-  <string name="button_done">Klaar</string>
-  <string name="button_cancel">Annuleren</string>
-
+    <!-- CYANOGENMOD EDITS -->
+    <string name="settings">Instellingen</string>
+    <string name="enable_focus_loss_ducking_title">Gedrag bij meldingen</string>
+    <string name="enable_focus_loss_ducking_summary">Bij melding volume verlagen i.p.v. muziek pauzeren</string>
+    <string name="duck_attenuation_db_title">Dempen</string>
+    <string name="duck_attenuation_db_summary">Tot welk niveau dient het volume verlaagd te worden bij een melding</string>
+    <string name="gestures_category_title">Gebaren</string>
+    <string name="enable_gestures_title">Gebaren inschakelen</string>
+    <string name="enable_gestures_summary">Afspelen van muziek beheren met gebaren in het \'Nu afspelen\'-scherm</string>
+    <string name="enable_haptic_feedback_title">Trillen</string>
+    <string name="enable_haptic_feedback_summary">Trillen bij het voltooien van een gebaar</string>
+    <string name="edit_gestures_title">Gebaren wijzigen</string>
+    <string name="gestures_loading">Gebaren laden</string>
+    <string name="gestures_customize">Gebaar wijzigen</string>
+    <string name="gestures_reset">Standaardinstellingen herstellen</string>
+    <string name="button_reload_gestures">Gebaren herladen</string>
+    <string name="button_reset_all_gestures">Alles herstellen naar standaardinstellingen</string>
+    <string name="gestures_reset_all_alert">Weet u zeker dat u alle gebaren wilt herstellen?</string>
+    <string name="button_yes">Ja</string>
+    <string name="button_no">Nee</string>
+   <string name="gestures_error_loading">Gebarenbibliotheek kan niet worden geladen</string>
+   <string name="gestures_error_library">De gebarenbibliotheek is corrupt. Probeer alle gebaren te herstellen.</string>
+    <string name="customize_gesture_title">Gebaren wijzigen</string>
+    <string name="custimize_gesture_prompt">Teken het gewenste gebaar hier beneden. Een gebaar kan niet bestaan uit een enkele horizontale sleepactie.</string>
+    <string name="button_done">Klaar</string>
+    <string name="button_cancel">Annuleren</string>
     <string name="widget_category_title">Widget</string>
-
     <string name="widget_transparency_title">Transparantie</string>
-    <string name="widget_transparency_summary">Selecteer het niveau van transparantie van de widget</string>
-
-    <string-array name="widget_transparency_entries">
-        <item>0%</item>
-        <item>10%</item>
-        <item>20%</item>
-        <item>30%</item>
-        <item>40%</item>
-        <item>50%</item>
-        <item>60%</item>
-        <item>70%</item>
-        <item>80%</item>
-        <item>90%</item>
-        <item>100%</item>
-    </string-array>
-
+    <string name="widget_transparency_summary">Transparantieniveau van widget selecteren</string>
+    <string name="unknown_album_artist_name">Onbekende artiest</string>
+    <string name="audio_focus_category_title">Geluidsfocus</string>
 </resources>
