@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAUH//7fs\u003d",
+        "filename": "res/values-nl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 2049
+      },
+      "writtenOn": "2012-06-29T23:17:25Z",
+      "side": 1,
+      "message": "Shuffle mag van mij. Maakt niet uit.",
+      "parentUuid": "AAAAUH//7pY\u003d",
+      "revId": "1df67c4a1b3c9a17ae1965a3e4ea0e6f600699df",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAUH//7pU\u003d",
         "filename": "res/values-nl/strings.xml",
         "patchSetId": 1
