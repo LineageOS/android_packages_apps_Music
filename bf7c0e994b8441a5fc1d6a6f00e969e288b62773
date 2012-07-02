@@ -16,6 +16,24 @@
       "revId": "bf7c0e994b8441a5fc1d6a6f00e969e288b62773",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH//63k\u003d",
+        "filename": "res/values-nl/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2012-07-02T19:18:07Z",
+      "side": 1,
+      "message": "Zou prachtig zijn, maar ik weet niet of dat zomaar kan? Ik zal wel een patch maken en dan zie ik wel of er problemen zijn.",
+      "parentUuid": "AAAAUH//64c\u003d",
+      "revId": "bf7c0e994b8441a5fc1d6a6f00e969e288b62773",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
