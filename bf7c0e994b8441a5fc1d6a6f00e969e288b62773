@@ -34,6 +34,24 @@
       "revId": "bf7c0e994b8441a5fc1d6a6f00e969e288b62773",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAUH//63c\u003d",
+        "filename": "res/values-nl/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2012-07-02T19:22:37Z",
+      "side": 1,
+      "message": "https://developer.android.com/guide/topics/resources/string-resource.html\n\nMaakt niet uit. Worden meteen die lelijke meervoudsvormen netjes gesorteerd.",
+      "parentUuid": "AAAAUH//63k\u003d",
+      "revId": "bf7c0e994b8441a5fc1d6a6f00e969e288b62773",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
