@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAUH//64c\u003d",
+        "filename": "res/values-nl/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 2248
+      },
+      "writtenOn": "2012-07-02T18:55:15Z",
+      "side": 1,
+      "message": "Als je toch bezig bent, moet dit niet naar arrays.xml?",
+      "revId": "bf7c0e994b8441a5fc1d6a6f00e969e288b62773",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
