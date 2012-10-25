@@ -234,15 +234,10 @@ public class MediaPlaybackService extends Service {
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                             Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
                             if (isPlaying()) {
-                                SharedPreferences preferences = getSharedPreferences(MusicSettingsActivity.
-                                        PREFERENCES_FILE, MODE_PRIVATE);
-                                if (preferences.getBoolean(MusicSettingsActivity.KEY_ENABLE_FOCUS_LOSS_DUCKING,
-                                        false)) {
-                                    int duckAttenuationdB = Integer.valueOf(preferences.getString(
-                                            MusicSettingsActivity.KEY_DUCK_ATTENUATION_DB,
-                                            MusicSettingsActivity.DEFAULT_DUCK_ATTENUATION_DB));
+                                int focusLossAttenuation = getFocusLossAttenuation();
+                                if (focusLossAttenuation >= 0) {
                                     //Convert from decibels to volume level
-                                    float duckVolume = (float) Math.pow(10.0, -duckAttenuationdB / 20.0);
+                                    float duckVolume = (float) Math.pow(10.0, -focusLossAttenuation / 20.0);
                                     Log.v(LOGTAG, "New attentuated volume: " + duckVolume);
                                     mPlayer.setVolume(duckVolume);
                                 } else {
@@ -324,22 +319,24 @@ public class MediaPlaybackService extends Service {
 
     private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
         public void onCallStateChanged(int state, String incomingNumber) {
+            if (getFocusLossAttenuation() < 0) {
+                /* the audio focus handler will do the right thing in that case */
+                return;
+            }
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
                     Log.v(LOGTAG, "PhoneState: received CALL_STATE_RINGING");
-                    if (isPlaying()) {
-                        mPausedByTransientLossOfFocus = true;
-                        pause();
-                    }
                     break;
-
                 case TelephonyManager.CALL_STATE_OFFHOOK:
                     Log.v(LOGTAG, "PhoneState: received CALL_STATE_OFFHOOK");
-                    mPausedByTransientLossOfFocus = false;
-                    if (isPlaying()) {
-                        pause();
-                    }
                     break;
+                default:
+                    return;
+            }
+
+            if (isPlaying()) {
+                mPausedByTransientLossOfFocus = true;
+                pause();
             }
         }
     };
@@ -426,7 +423,19 @@ public class MediaPlaybackService extends Service {
         mWakeLock.release();
         super.onDestroy();
     }
-    
+
+    private int getFocusLossAttenuation() {
+        SharedPreferences prefs = getSharedPreferences(
+                MusicSettingsActivity.PREFERENCES_FILE, MODE_PRIVATE);
+        if (!prefs.getBoolean(MusicSettingsActivity.KEY_ENABLE_FOCUS_LOSS_DUCKING, false)) {
+            return -1;
+        }
+
+        return Integer.valueOf(prefs.getString(
+                MusicSettingsActivity.KEY_DUCK_ATTENUATION_DB,
+                MusicSettingsActivity.DEFAULT_DUCK_ATTENUATION_DB));
+    }
+
     private final char hexdigits [] = new char [] {
             '0', '1', '2', '3',
             '4', '5', '6', '7',
