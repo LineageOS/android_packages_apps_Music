@@ -274,7 +274,7 @@ public class AlbumBrowserActivity extends ListActivity
         SubMenu sub = menu.addSubMenu(0, ADD_TO_PLAYLIST, 0, R.string.add_to_playlist);
         MusicUtils.makePlaylistMenu(this, sub);
         menu.add(0, DELETE_ITEM, 0, R.string.delete_item);
-
+        menu.add(0, SENDING_ITEM, 0, R.string.sending_item);
         AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfoIn;
         mAlbumCursor.moveToPosition(mi.position);
         mCurrentAlbumId = mAlbumCursor.getString(mAlbumCursor.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID));
@@ -340,6 +340,11 @@ public class AlbumBrowserActivity extends ListActivity
                 intent.setClass(this, DeleteItems.class);
                 intent.putExtras(b);
                 startActivityForResult(intent, -1);
+                return true;
+            }
+            case SENDING_ITEM: {
+                long [] list = MusicUtils.getSongListForAlbum(this, Long.parseLong(mCurrentAlbumId));
+                MusicUtils.sendTracks(this, list);
                 return true;
             }
             case SEARCH:

@@ -689,6 +689,7 @@ public class TrackBrowserActivity extends ListActivity
         }
         menu.add(0, USE_AS_RINGTONE, 0, R.string.ringtone_menu);
         menu.add(0, DELETE_ITEM, 0, R.string.delete_item);
+        menu.add(0, SENDING_ITEM, 0, R.string.sending_item);
         AdapterContextMenuInfo mi = (AdapterContextMenuInfo) menuInfoIn;
         mSelectedPosition =  mi.position;
         mTrackCursor.moveToPosition(mSelectedPosition);
@@ -766,7 +767,14 @@ public class TrackBrowserActivity extends ListActivity
                 startActivityForResult(intent, -1);
                 return true;
             }
-            
+
+            case SENDING_ITEM: {
+                long [] list = new long[1];
+                list[0] = (int) mSelectedId;
+                MusicUtils.sendTracks(this, list);
+                return true;
+            }
+
             case REMOVE:
                 removePlaylistItem(mSelectedPosition);
                 return true;

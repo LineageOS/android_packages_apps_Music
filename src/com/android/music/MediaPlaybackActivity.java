@@ -621,7 +621,8 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                     .setIcon(R.drawable.ic_menu_set_as_ringtone);
             menu.add(1, DELETE_ITEM, 0, R.string.delete_item)
                     .setIcon(R.drawable.ic_menu_delete);
-
+            menu.add(1, SENDING_ITEM, 0, R.string.sending_item)
+                    .setIcon(R.drawable.ic_menu_send);
             Intent i = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
             if (getPackageManager().resolveActivity(i, 0) != null) {
                 menu.add(0, EFFECTS_PANEL, 0, R.string.effectspanel).setIcon(R.drawable.ic_menu_eq);
@@ -717,6 +718,15 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                         intent.setClass(this, DeleteItems.class);
                         intent.putExtras(b);
                         startActivityForResult(intent, -1);
+                    }
+                    return true;
+                }
+
+                case SENDING_ITEM: {
+                    if (mService != null) {
+                        long [] list = new long[1];
+                        list[0] = MusicUtils.getCurrentAudioId();
+                        MusicUtils.sendTracks(this, list);
                     }
                     return true;
                 }
