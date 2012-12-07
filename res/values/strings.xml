@@ -65,6 +65,8 @@
     <!-- Menu item that deletes the currently selected item, which might be a single song, or a collection of songs.
          The user will be prompted to confirm before deletion actually takes place -->
     <string name="delete_item">Delete</string>
+    <string name="sending_item">Send</string>
+    <string name="menu_send">Send audio file</string>
     <!-- Menu item to play back all the songs in the currently showing list in shuffle mode -->
     <string name="shuffle_all">Shuffle all</string>
     <!-- Menu item to play back all the songs in the currently showing list in list order -->

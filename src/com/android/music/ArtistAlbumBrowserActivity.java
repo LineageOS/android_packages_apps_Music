@@ -330,7 +330,7 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
         SubMenu sub = menu.addSubMenu(0, ADD_TO_PLAYLIST, 0, R.string.add_to_playlist);
         MusicUtils.makePlaylistMenu(this, sub);
         menu.add(0, DELETE_ITEM, 0, R.string.delete_item);
-        
+        menu.add(0, SENDING_ITEM, 0, R.string.sending_item);
         ExpandableListContextMenuInfo mi = (ExpandableListContextMenuInfo) menuInfoIn;
         
         int itemtype = ExpandableListView.getPackedPositionType(mi.packedPosition);
@@ -459,7 +459,18 @@ public class ArtistAlbumBrowserActivity extends ExpandableListActivity
                 startActivityForResult(intent, -1);
                 return true;
             }
-            
+
+            case SENDING_ITEM: {
+                long [] list;
+                if (mCurrentArtistId != null) {
+                    list = MusicUtils.getSongListForAlbumartist(this, Long.parseLong(mCurrentArtistId));
+                } else {
+                    list = MusicUtils.getSongListForAlbum(this, Long.parseLong(mCurrentAlbumId));
+                }
+                MusicUtils.sendTracks(this, list);
+                return true;
+            }
+
             case SEARCH:
                 doSearch();
                 return true;

@@ -17,6 +17,7 @@
 package com.android.music;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -72,6 +73,7 @@ import java.util.Locale;
 public class MusicUtils {
 
     private static final String TAG = "MusicUtils";
+    public static final String AUTHORITY = "com.android.music";
 
     public interface Defs {
         public final static int OPEN_URL = 0;
@@ -85,11 +87,12 @@ public class MusicUtils {
         public final static int PARTY_SHUFFLE = 8;
         public final static int SHUFFLE_ALL = 9;
         public final static int DELETE_ITEM = 10;
-        public final static int SCAN_DONE = 11;
-        public final static int QUEUE = 12;
-        public final static int EFFECTS_PANEL = 13;
-        public final static int SETTINGS = 14;
-        public final static int CHILD_MENU_BASE = 15; // this should be the last item
+        public final static int SENDING_ITEM = 11;
+        public final static int SCAN_DONE = 12;
+        public final static int QUEUE = 13;
+        public final static int EFFECTS_PANEL = 14;
+        public final static int SETTINGS = 15;
+        public final static int CHILD_MENU_BASE = 16; // this should be the last item
     }
 
     public static String makeAlbumsLabel(Context context, int numalbums, int numsongs, boolean isUnknown) {
@@ -546,7 +549,47 @@ public class MusicUtils {
         // in the media content domain, so update everything.
         context.getContentResolver().notifyChange(Uri.parse("content://media"), null);
     }
-    
+
+    public static void sendTracks(Context context, long [] list) {
+        
+        String [] cols = new String [] { MediaStore.Audio.Media._ID, 
+                MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ALBUM_ID };
+        StringBuilder where = new StringBuilder();
+        where.append(MediaStore.Audio.Media._ID + " IN (");
+        for (int i = 0; i < list.length; i++) {
+            where.append(list[i]);
+            if (i < list.length - 1) {
+                where.append(",");
+            }
+        }
+        where.append(")");
+        Cursor c = query(context, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, cols,
+                where.toString(), null, null);
+
+        if (c != null) {
+            c.moveToFirst();
+            while (! c.isAfterLast()) {
+                String name = c.getString(1);
+                File f = new File(name);
+                Intent i = new Intent();
+                i.setAction(Intent.ACTION_SEND);
+                i.setType("audio/*");
+                i.putExtra(Intent.EXTRA_SUBJECT, f.getName());
+                i.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + AUTHORITY + f.getAbsolutePath()));
+                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                i = Intent.createChooser(i, context.getString(R.string.menu_send));
+
+                try {
+                    context.startActivity(i);
+                    c.moveToNext();
+                } catch (ActivityNotFoundException e) {
+                    c.moveToNext();
+                }
+            }
+            c.close();
+        }
+    }
+
     public static void addToCurrentPlaylist(Context context, long [] list) {
         if (sService == null) {
             return;
