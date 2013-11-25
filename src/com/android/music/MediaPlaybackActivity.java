@@ -824,6 +824,9 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         int direction = -1;
         int repcnt = event.getRepeatCount();
 
+        if(keyCode>=KeyEvent.KEYCODE_BUTTON_2 && keyCode<=KeyEvent.KEYCODE_BUTTON_8){
+            return true;
+        }
         if((seekmethod==0)?seekMethod1(keyCode):seekMethod2(keyCode))
             return true;
 
