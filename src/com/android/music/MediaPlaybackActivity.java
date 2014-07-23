@@ -87,6 +87,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
     private Toast mToast;
     private int mTouchSlop;
     private ServiceToken mToken;
+    private boolean mReceiverUnregistered = false;
 
     public MediaPlaybackActivity()
     {
@@ -482,6 +483,8 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
         IntentFilter f = new IntentFilter();
         f.addAction(MediaPlaybackService.PLAYSTATE_CHANGED);
         f.addAction(MediaPlaybackService.META_CHANGED);
+        f.addAction(MediaPlaybackService.SHUFFLE_CHANGED);
+        f.addAction(MediaPlaybackService.REPEAT_CHANGED);
         registerReceiver(mStatusListener, new IntentFilter(f));
         updateTrackInfo();
         long next = refreshNow();
@@ -1253,6 +1256,43 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
                 queueNextRefresh(1);
             } else if (action.equals(MediaPlaybackService.PLAYSTATE_CHANGED)) {
                 setPauseButtonImage();
+            } else if (action.equals(MediaPlaybackService.SHUFFLE_CHANGED)) {
+                setShuffleButtonImage();
+            } else if (action.equals(MediaPlaybackService.REPEAT_CHANGED)) {
+                setRepeatButtonImage();
+            }
+        }
+    };
+
+    private BroadcastReceiver mScreenTimeoutListener = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
+                if (mReceiverUnregistered) {
+                    IntentFilter f = new IntentFilter();
+                    f.addAction(MediaPlaybackService.PLAYSTATE_CHANGED);
+                    f.addAction(MediaPlaybackService.META_CHANGED);
+                    f.addAction(MediaPlaybackService.SHUFFLE_CHANGED);
+                    f.addAction(MediaPlaybackService.REPEAT_CHANGED);
+                    registerReceiver(mStatusListener, f);
+                    mReceiverUnregistered = false;
+                }
+                paused = false;
+
+                if (mPosOverride > 0) {
+                    mPosOverride = -1;
+                }
+                updateTrackInfo();
+                long next = refreshNow();
+                queueNextRefresh(next);
+            } else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+                paused = false;
+
+                if (!mReceiverUnregistered) {
+                    mHandler.removeMessages(REFRESH);
+                    unregisterReceiver(mStatusListener);
+                    mReceiverUnregistered = true;
+                }
             }
         }
     };

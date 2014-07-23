@@ -47,6 +47,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.os.PowerManager.WakeLock;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -84,6 +85,8 @@ public class MediaPlaybackService extends Service {
 
     public static final String PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
     public static final String META_CHANGED = "com.android.music.metachanged";
+    public static final String SHUFFLE_CHANGED = "com.android.music.shuffle";
+    public static final String REPEAT_CHANGED = "com.android.music.repeat";
     public static final String QUEUE_CHANGED = "com.android.music.queuechanged";
 
     public static final String SERVICECMD = "com.android.music.musicservicecommand";
@@ -94,11 +97,20 @@ public class MediaPlaybackService extends Service {
     public static final String CMDPLAY = "play";
     public static final String CMDPREVIOUS = "previous";
     public static final String CMDNEXT = "next";
+    public static final String CMDGET = "get";
+    public static final String CMDSET = "set";
 
     public static final String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
     public static final String PAUSE_ACTION = "com.android.music.musicservicecommand.pause";
     public static final String PREVIOUS_ACTION = "com.android.music.musicservicecommand.previous";
     public static final String NEXT_ACTION = "com.android.music.musicservicecommand.next";
+    private static final String PLAYSTATUS_REQUEST = "org.codeaurora.android.music.playstatusrequest";
+    private static final String PLAYSTATUS_RESPONSE = "org.codeaurora.music.playstatusresponse";
+    private static final String PLAYERSETTINGS_REQUEST = "org.codeaurora.music.playersettingsrequest";
+    private static final String PLAYERSETTINGS_RESPONSE = "org.codeaurora.music.playersettingsresponse";
+    private static final String SET_ADDRESSED_PLAYER = "org.codeaurora.music.setaddressedplayer";
+    private static final String EXTRA_SHUFFLE_VAL = "shuffle";
+    private static final String EXTRA_REPEAT_VAL = "repeat";
 
     private static final int TRACK_ENDED = 1;
     private static final int RELEASE_WAKELOCK = 2;
@@ -107,8 +119,18 @@ public class MediaPlaybackService extends Service {
     private static final int FADEDOWN = 5;
     private static final int FADEUP = 6;
     private static final int TRACK_WENT_TO_NEXT = 7;
+    private static final int ERROR = 8 ;
     private static final int MAX_HISTORY_SIZE = 100;
-    
+    private static final int DEFAULT_REPEAT_VAL = 0;
+    private static final int DEFAULT_SHUFFLE_VAL = 0;
+    private static final int SET_BROWSED_PLAYER = 1001;
+    private static final int SET_PLAY_ITEM = 1002;
+    private static final int GET_NOW_PLAYING_ENTRIES = 1003;
+
+    private static final int SCOPE_FILE_SYSTEM = 0x01;
+    private static final int SCOPE_NOW_PLAYING = 0x03;
+    private static final int INVALID_SONG_UID = 0xffffffff;
+
     private MultiPlayer mPlayer;
     private String mFileToPlay;
     private int mShuffleMode = SHUFFLE_NONE;
@@ -140,6 +162,7 @@ public class MediaPlaybackService extends Service {
     private final static int PODCASTCOLIDX = 8;
     private final static int BOOKMARKCOLIDX = 9;
     private BroadcastReceiver mUnmountReceiver = null;
+    private BroadcastReceiver mA2dpReceiver = null;
     private WakeLock mWakeLock;
     private int mServiceStartId = -1;
     private boolean mServiceInUse = false;
@@ -149,6 +172,69 @@ public class MediaPlaybackService extends Service {
     private boolean mQueueIsSaveable = true;
     // used to track what type of audio focus loss caused the playback to pause
     private boolean mPausedByTransientLossOfFocus = false;
+    private SetBrowsedPlayerMonitor mSetBrowsedPlayerMonitor;
+    private SetPlayItemMonitor mSetPlayItemMonitor;
+    private GetNowPlayingEntriesMonitor mGetNowPlayingEntriesMonitor;
+
+    public static final byte ATTRIBUTE_EQUALIZER = 1;
+    public static final byte ATTRIBUTE_REPEATMODE = 2;
+    public static final byte ATTRIBUTE_SHUFFLEMODE = 3;
+    public static final byte ATTRIBUTE_SCANMODE = 4;
+
+    private byte [] supportedAttributes = new byte[] {
+                          ATTRIBUTE_REPEATMODE,
+                          ATTRIBUTE_SHUFFLEMODE
+                          };
+
+    public static final byte VALUE_REPEATMODE_OFF = 1;
+    public static final byte VALUE_REPEATMODE_SINGLE = 2;
+    public static final byte VALUE_REPEATMODE_ALL = 3;
+    public static final byte VALUE_REPEATMODE_GROUP = 4;
+
+    private byte [] supportedRepeatValues = new byte [] {
+                            VALUE_REPEATMODE_OFF,
+                            VALUE_REPEATMODE_SINGLE,
+                            VALUE_REPEATMODE_ALL
+                            };
+
+    public static final byte VALUE_SHUFFLEMODE_OFF = 1;
+    public static final byte VALUE_SHUFFLEMODE_ALL = 2;
+    public static final byte VALUE_SHUFFLEMODE_GROUP = 3;
+
+    private byte [] supportedShuffleValues = new byte [] {
+                            VALUE_SHUFFLEMODE_OFF,
+                            VALUE_SHUFFLEMODE_ALL
+                            };
+
+    String [] AttrStr = new String[] {
+                                "",
+                                "Equalizer",
+                                "Repeat Mode",
+                                "Shuffle Mode",
+                                "Scan Mode"
+                                };
+
+    private byte [] unsupportedList = new byte [] {
+                                    0
+                                    };
+    private static final String EXTRA_GET_COMMAND = "commandExtra";
+    private static final String EXTRA_GET_RESPONSE = "Response";
+    private static final int GET_ATTRIBUTE_IDS = 0;
+    private static final int GET_VALUE_IDS = 1;
+    private static final int GET_ATTRIBUTE_TEXT = 2;
+    private static final int GET_VALUE_TEXT        = 3;
+    private static final int GET_ATTRIBUTE_VALUES = 4;
+    private static final int NOTIFY_ATTRIBUTE_VALUES = 5;
+    private static final int GET_INVALID = 0xff;
+    private static final byte GET_ATTR_INVALID = 0x7f;
+
+    private static final String EXTRA_ATTRIBUTE_ID = "Attribute";
+    private static final String EXTRA_VALUE_STRING_ARRAY = "ValueStrings";
+    private static final String EXTRA_ATTRIB_VALUE_PAIRS = "AttribValuePairs";
+    private static final String EXTRA_ATTRIBUTE_STRING_ARRAY = "AttributeStrings";
+    private static final String EXTRA_VALUE_ID_ARRAY = "Values";
+    private static final String EXTRA_ATTIBUTE_ID_ARRAY = "Attributes";
+
 
     private SharedPreferences mPreferences;
     // We use this to distinguish between different cards when saving/restoring playlists.
@@ -339,10 +425,20 @@ public class MediaPlaybackService extends Service {
         mCardId = MusicUtils.getCardId(this);
         
         registerExternalStorageListener();
+        registerA2dpServiceListener();
 
         // Needs to be done in this thread, since otherwise ApplicationContext.getPowerManager() crashes.
         mPlayer = new MultiPlayer();
         mPlayer.setHandler(mMediaplayerHandler);
+
+        mSetBrowsedPlayerMonitor = new SetBrowsedPlayerMonitor();
+        mRemoteControlClient.setBrowsedPlayerUpdateListener(mSetBrowsedPlayerMonitor);
+
+        mSetPlayItemMonitor = new SetPlayItemMonitor();
+        mRemoteControlClient.setPlayItemListener(mSetPlayItemMonitor);
+
+        mGetNowPlayingEntriesMonitor = new GetNowPlayingEntriesMonitor();
+        mRemoteControlClient.setNowPlayingEntriesUpdateListener(mGetNowPlayingEntriesMonitor);
 
         reloadQueue();
         notifyChange(QUEUE_CHANGED);
@@ -397,6 +493,12 @@ public class MediaPlaybackService extends Service {
             unregisterReceiver(mUnmountReceiver);
             mUnmountReceiver = null;
         }
+
+        if (mA2dpReceiver != null) {
+            unregisterReceiver(mA2dpReceiver);
+            mA2dpReceiver = null;
+        }
+
         mWakeLock.release();
         super.onDestroy();
     }
@@ -709,7 +811,67 @@ public class MediaPlaybackService extends Service {
         stopSelf(mServiceStartId);
         return true;
     }
-    
+
+    private void getNowPlayingEntries() {
+        Log.i(LOGTAG,  "getNowPlayingEntries: num of items: " + mPlayListLen);
+        synchronized (mPlayList) {
+            mRemoteControlClient.updateNowPlayingEntries(mPlayList);
+        }
+    }
+
+    private void setBrowsedPlayer() {
+        Log.i(LOGTAG,  "setBrowsedPlayer");
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Log.i(LOGTAG, "URI: " + uri);
+        mRemoteControlClient.updateFolderInfoBrowsedPlayer(uri.toString());
+    }
+
+    private void playItem(int scope, long playItemUid) {
+        boolean success = false;
+        Log.i(LOGTAG,  "playItem uid: " + playItemUid + " scope: " + scope);
+        if (playItemUid < 0) {
+            mRemoteControlClient.playItemResponse(success);
+            return;
+        } else if (scope == SCOPE_FILE_SYSTEM) {
+            success = openItem(playItemUid);
+        } else if (scope == SCOPE_NOW_PLAYING) {
+            for (int index = 0; index < mPlayListLen; index++) {
+                if (mPlayList[index] == playItemUid) {
+                    Log.i(LOGTAG, "Now Playing list contains UID at " + index);
+                    success = true;
+                    break;
+                }
+            }
+            if (success) {
+                success = openItem(playItemUid);
+            }
+        }
+        mRemoteControlClient.playItemResponse(success);
+    }
+
+    private boolean openItem (long playItemUid) {
+        boolean isSuccess = false;
+        if (mCursor != null) {
+            mCursor.close();
+            mCursor = null;
+        }
+        if (mPlayListLen == 0) {
+            Log.e(LOGTAG, "Playlist Length = 0");
+            return isSuccess;
+        }
+        stop(false);
+        mCursor = getCursorForId(playItemUid);
+        if (mCursor != null) {
+            long [] list = new long[] { playItemUid };
+            enqueue(list, NOW);
+            Log.i(LOGTAG, "Opened UID: " + playItemUid);
+            isSuccess = true;
+        } else {
+            Log.e(LOGTAG, "Cursor could not be fetched");
+        }
+        return isSuccess;
+    }
+
     private Handler mDelayedStopHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -723,6 +885,24 @@ public class MediaPlaybackService extends Service {
             // party-shuffle or because the play-position changed)
             saveQueue(true);
             stopSelf(mServiceStartId);
+        }
+    };
+
+    private Handler mAvrcpHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SET_BROWSED_PLAYER:
+                    setBrowsedPlayer();
+                    break;
+                case SET_PLAY_ITEM:
+                    playItem(msg.arg1, ((Long)msg.obj).longValue());
+                    break;
+                case GET_NOW_PLAYING_ENTRIES:
+                    getNowPlayingEntries();
+                    break;
+                default:
+            }
         }
     };
 
@@ -771,6 +951,71 @@ public class MediaPlaybackService extends Service {
         }
     }
 
+    public void registerA2dpServiceListener() {
+        mA2dpReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                String cmd = intent.getStringExtra("command");
+                if (action.equals(SET_ADDRESSED_PLAYER)) {
+                    play(); // this ensures audio focus change is called and play the media
+                } else if (action.equals(PLAYSTATUS_REQUEST)) {
+                    notifyChange(PLAYSTATUS_RESPONSE);
+                } else if (PLAYERSETTINGS_REQUEST.equals(action)) {
+                    if (CMDGET.equals(cmd)) {
+                        int getCommand = intent.getIntExtra(EXTRA_GET_COMMAND,
+                                                            GET_INVALID);
+                        byte attribute;
+                        byte [] attrIds; byte [] valIds;
+                        switch (getCommand) {
+                            case GET_ATTRIBUTE_IDS:
+                                notifyAttributeIDs(PLAYERSETTINGS_RESPONSE);
+                            break;
+                            case GET_VALUE_IDS:
+                                attribute =
+                                    intent.getByteExtra(EXTRA_ATTRIBUTE_ID,
+                                                        GET_ATTR_INVALID);
+                                notifyValueIDs(PLAYERSETTINGS_RESPONSE, attribute);
+                            break;
+                            case GET_ATTRIBUTE_TEXT:
+                                attrIds = intent.getByteArrayExtra(
+                                                     EXTRA_ATTIBUTE_ID_ARRAY);
+                                notifyAttributesText(PLAYERSETTINGS_RESPONSE, attrIds);
+                            break;
+                            case GET_VALUE_TEXT:
+                                 attribute =
+                                 intent.getByteExtra(EXTRA_ATTRIBUTE_ID,
+                                                    GET_ATTR_INVALID);
+                                 valIds = intent.getByteArrayExtra(
+                                                     EXTRA_VALUE_ID_ARRAY);
+                                 notifyAttributeValuesText(
+                                     PLAYERSETTINGS_RESPONSE, attribute, valIds);
+                            break;
+                            case GET_ATTRIBUTE_VALUES:
+                                 attrIds = intent.getByteArrayExtra(
+                                                     EXTRA_ATTIBUTE_ID_ARRAY);
+                                 notifyAttributeValues(PLAYERSETTINGS_RESPONSE,
+                                             attrIds, GET_ATTRIBUTE_VALUES);
+                            break;
+                            default:
+                               Log.e(LOGTAG, "invalid getCommand"+getCommand);
+                            break;
+                        }
+                    } else if (CMDSET.equals(cmd)){
+                        byte[] attribValuePairs = intent.getByteArrayExtra(
+                                                    EXTRA_ATTRIB_VALUE_PAIRS);
+                        setValidAttributes(attribValuePairs);
+                    }
+                }
+            }
+        };
+        IntentFilter iFilter = new IntentFilter();
+        iFilter.addAction(SET_ADDRESSED_PLAYER);
+        iFilter.addAction(PLAYSTATUS_REQUEST);
+        iFilter.addAction(PLAYERSETTINGS_REQUEST);
+        registerReceiver(mA2dpReceiver, iFilter);
+    }
+
     /**
      * Notify the change-receivers that something has changed.
      * The intent that is sent contains the following data
@@ -801,19 +1046,34 @@ public class MediaPlaybackService extends Service {
         sendStickyBroadcast(i);
 
         if (what.equals(PLAYSTATE_CHANGED)) {
-            mRemoteControlClient.setPlaybackState(isPlaying() ?
-                    RemoteControlClient.PLAYSTATE_PLAYING : RemoteControlClient.PLAYSTATE_PAUSED);
+            mRemoteControlClient.setPlaybackState((isPlaying() ?
+                    RemoteControlClient.PLAYSTATE_PLAYING : RemoteControlClient.PLAYSTATE_PAUSED),
+                    position() , RemoteControlClient.PLAYBACK_SPEED_1X);
         } else if (what.equals(META_CHANGED)) {
             RemoteControlClient.MetadataEditor ed = mRemoteControlClient.editMetadata(true);
             ed.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, getTrackName());
             ed.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, getAlbumName());
-            ed.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, getArtistName());
+            ed.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, getArtistName());
             ed.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, duration());
+            if ((mPlayList != null) && (mPlayPos >= 0) && (mPlayPos < mPlayList.length)) {
+                ed.putLong(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER,
+                                                            mPlayList[mPlayPos]);
+            } else {
+                ed.putLong(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER,
+                                                                INVALID_SONG_UID);
+            }
+            try {
+                ed.putLong(MediaMetadataRetriever.METADATA_KEY_NUM_TRACKS, mPlayListLen);
+            } catch (IllegalArgumentException e) {
+                Log.e(LOGTAG, "METADATA_KEY_NUM_TRACKS: failed: " + e);
+            }
             Bitmap b = MusicUtils.getArtwork(this, getAudioId(), getAlbumId(), false);
             if (b != null) {
                 ed.putBitmap(MetadataEditor.BITMAP_KEY_ARTWORK, b);
             }
             ed.apply();
+        } else if (what.equals(QUEUE_CHANGED)) {
+            mRemoteControlClient.updateNowPlayingContentChange();
         }
 
         if (what.equals(QUEUE_CHANGED)) {
@@ -1085,12 +1345,14 @@ public class MediaPlaybackService extends Service {
     }
 
     private void setNextTrack() {
-        mNextPlayPos = getNextPosition(false);
-        if (mNextPlayPos >= 0) {
-            long id = mPlayList[mNextPlayPos];
-            mPlayer.setNextDataSource(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/" + id);
-        } else {
-            mPlayer.setNextDataSource(null);
+        if(SystemProperties.getBoolean("gapless.audio.decode", false)) {
+            mNextPlayPos = getNextPosition(false);
+            if (mNextPlayPos >= 0) {
+                long id = mPlayList[mNextPlayPos];
+                mPlayer.setNextDataSource(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/" + id);
+            } else {
+                mPlayer.setNextDataSource(null);
+            }
         }
     }
 
@@ -1158,6 +1420,7 @@ public class MediaPlaybackService extends Service {
                 AudioManager.AUDIOFOCUS_GAIN);
         mAudioManager.registerMediaButtonEventReceiver(new ComponentName(this.getPackageName(),
                 MediaButtonIntentReceiver.class.getName()));
+        mAudioManager.registerRemoteControlClient(mRemoteControlClient);
 
         if (mPlayer.isInitialized()) {
             // if we are at the end of the song, go to the next song first
@@ -1527,6 +1790,33 @@ public class MediaPlaybackService extends Service {
         return false;
     }
 
+    private class SetBrowsedPlayerMonitor implements
+                        RemoteControlClient.OnSetBrowsedPlayerListener{
+        @Override
+        public void onSetBrowsedPlayer() {
+            Log.d(LOGTAG, "onSetBrowsedPlayer");
+            mAvrcpHandler.obtainMessage(SET_BROWSED_PLAYER).sendToTarget();
+        }
+    };
+
+    private class SetPlayItemMonitor implements
+                        RemoteControlClient.OnSetPlayItemListener{
+        @Override
+        public void onSetPlayItem(int scope, long uid) {
+            Log.d(LOGTAG, "onSetPlayItem");
+            mAvrcpHandler.obtainMessage(SET_PLAY_ITEM, scope, 0, new Long(uid)).sendToTarget();
+        }
+    };
+
+    private class GetNowPlayingEntriesMonitor implements
+                        RemoteControlClient.OnGetNowPlayingEntriesListener{
+        @Override
+        public void onGetNowPlayingEntries() {
+            Log.d(LOGTAG, "onGetNowPlayingEntries");
+            mAvrcpHandler.obtainMessage(GET_NOW_PLAYING_ENTRIES).sendToTarget();
+        }
+    };
+
     // A simple variation of Random that makes sure that the
     // value it returns is not equal to the value it returned
     // previously, unless the interval is 1.
@@ -1658,6 +1948,8 @@ public class MediaPlaybackService extends Service {
                 return;
             }
             mShuffleMode = shufflemode;
+            notifyAttributeValues(PLAYERSETTINGS_RESPONSE,
+                            supportedAttributes, NOTIFY_ATTRIBUTE_VALUES);
             if (mShuffleMode == SHUFFLE_AUTO) {
                 if (makeAutoShuffleList()) {
                     mPlayListLen = 0;
@@ -1672,6 +1964,7 @@ public class MediaPlaybackService extends Service {
                     mShuffleMode = SHUFFLE_NONE;
                 }
             }
+            notifyChange(SHUFFLE_CHANGED);
             saveQueue(false);
         }
     }
@@ -1683,6 +1976,9 @@ public class MediaPlaybackService extends Service {
         synchronized(this) {
             mRepeatMode = repeatmode;
             setNextTrack();
+            notifyAttributeValues(PLAYERSETTINGS_RESPONSE,
+                            supportedAttributes, NOTIFY_ATTRIBUTE_VALUES);
+            notifyChange(REPEAT_CHANGED);
             saveQueue(false);
         }
     }
@@ -1858,6 +2154,240 @@ public class MediaPlaybackService extends Service {
         synchronized (this) {
             return mPlayer.getAudioSessionId();
         }
+    }
+
+    /**
+     * Returns the player supported attribute IDs.
+     */
+    private void notifyAttributeIDs(String what) {
+        Intent i = new Intent(what);
+        i.putExtra(EXTRA_GET_RESPONSE, GET_ATTRIBUTE_IDS);
+        i.putExtra(EXTRA_ATTIBUTE_ID_ARRAY, supportedAttributes);
+        Log.e(LOGTAG, "notifying attributes");
+        sendBroadcast(i);
+    }
+
+    /**
+     * Returns the player supported value IDs for given attrib.
+     */
+    private void notifyValueIDs(String what, byte attribute) {
+        Intent intent = new Intent(what);
+        intent.putExtra(EXTRA_GET_RESPONSE, GET_VALUE_IDS);
+        intent.putExtra(EXTRA_ATTRIBUTE_ID, attribute);
+        switch (attribute) {
+            case ATTRIBUTE_REPEATMODE:
+                intent.putExtra(EXTRA_VALUE_ID_ARRAY, supportedRepeatValues);
+            break;
+            case ATTRIBUTE_SHUFFLEMODE:
+                intent.putExtra(EXTRA_VALUE_ID_ARRAY, supportedShuffleValues);
+            break;
+            default:
+                Log.e(LOGTAG,"unsupported attribute"+attribute);
+                intent.putExtra(EXTRA_VALUE_ID_ARRAY, unsupportedList);
+            break;
+        }
+        sendBroadcast(intent);
+    }
+
+    /**
+     * Returns the player supported attrib text for given IDs.
+     */
+    private void notifyAttributesText(String what, byte [] attrIds) {
+        String [] AttribStrings = new String [attrIds.length];
+        Intent intent = new Intent(what);
+        intent.putExtra(EXTRA_GET_RESPONSE, GET_ATTRIBUTE_TEXT);
+        for (int i = 0; i < attrIds.length; i++) {
+            if (attrIds[i] >= AttrStr.length) {
+                Log.e(LOGTAG, "attrib id is"+attrIds[i]+"which is not supported");
+                AttribStrings[i] = "";
+            } else {
+                AttribStrings[i] = AttrStr[attrIds[i]];
+            }
+        }
+        intent.putExtra(EXTRA_ATTRIBUTE_STRING_ARRAY, AttribStrings);
+        sendBroadcast(intent);
+    }
+
+    /**
+     * Returns the player supported value text for given IDs.
+     */
+    private void notifyAttributeValuesText(String what, int attribute,
+                                           byte [] valIds) {
+        Intent intent = new Intent(what);
+        String [] ValueStrings = new String [valIds.length];
+        intent.putExtra(EXTRA_GET_RESPONSE,GET_VALUE_TEXT);
+        intent.putExtra(EXTRA_ATTRIBUTE_ID, attribute);
+        Log.e(LOGTAG, "attrib is "+ attribute);
+        String [] valueStrs = null;
+        switch (attribute) {
+            case ATTRIBUTE_REPEATMODE:
+                valueStrs = new String[] {
+                                             "",
+                                             getString(R.string.repeat_off_notif),
+                                             getString(R.string.repeat_current_notif),
+                                             getString(R.string.repeat_all_notif),
+                                          };
+            break;
+            case ATTRIBUTE_SHUFFLEMODE:
+                valueStrs = new String[] {
+                                           "",
+                                           getString(R.string.shuffle_off_notif),
+                                           getString(R.string.shuffle_on_notif),
+                                          };
+            break;
+        }
+        for (int i = 0; i < valIds.length; i++) {
+            if ((valueStrs == null) ||
+                (valIds[i] >= valueStrs.length)) {
+                Log.e(LOGTAG, "value id is" + valIds[i] + "which is not supported");
+                ValueStrings[i] = "";
+            } else {
+                ValueStrings[i] = valueStrs[valIds[i]];
+            }
+        }
+        intent.putExtra(EXTRA_VALUE_STRING_ARRAY, ValueStrings);
+        sendBroadcast(intent);
+    }
+
+    /**
+     * Returns the player current values for given attrib IDs.
+     */
+    private void notifyAttributeValues(String what, byte [] attrIds, int extra) {
+        Intent intent = new Intent(what);
+        intent.putExtra(EXTRA_GET_RESPONSE, extra);
+        int j = 0;
+        byte [] retValarray = new byte [attrIds.length*2];
+        for (int i = 0; i < attrIds.length*2; i++) {
+            retValarray[i] = 0x0;
+        }
+
+        for (int i = 0; i < attrIds.length; i++) {
+            switch(attrIds[i]) {
+                case ATTRIBUTE_REPEATMODE:
+                    retValarray[j] = attrIds[i];
+                    retValarray[j+1] = getMappingRepeatVal(mRepeatMode);
+                    j += 2;
+                break;
+                case ATTRIBUTE_SHUFFLEMODE:
+                    retValarray[j] = attrIds[i];
+                    retValarray[j+1] = getMappingShuffleVal(mShuffleMode);
+                    j += 2;
+                break;
+                default:
+                   Log.e(LOGTAG,"Unknown attribute"+attrIds[i]);
+                break;
+            }
+        }
+        intent.putExtra(EXTRA_ATTRIB_VALUE_PAIRS, retValarray);
+        sendBroadcast(intent);
+    }
+
+    /**
+     * Sets the values to current player for given attrib IDs.
+     */
+    private void setValidAttributes(byte [] attribValuePairs) {
+        byte attrib, value;
+
+        for (int i = 0; i < (attribValuePairs.length-1); i += 2) {
+           attrib = attribValuePairs[i];
+           value = attribValuePairs[i+1];
+           switch(attrib) {
+                case ATTRIBUTE_REPEATMODE:
+                    if (isValidRepeatMode(value)) {
+                        setRepeatMode(getMappingRepeatMode(value));
+                    }
+                break;
+                case ATTRIBUTE_SHUFFLEMODE:
+                    if (isValidShuffleMode(value)) {
+                        setShuffleMode(getMappingShuffleMode(value));
+                    }
+                break;
+                default:
+                   Log.e(LOGTAG,"Unknown attribute"+attrib);
+                break;
+           }
+        }
+    }
+
+    byte getMappingRepeatVal (int repeatMode) {
+        switch (repeatMode) {
+            case REPEAT_NONE:
+                return VALUE_REPEATMODE_OFF;
+            case REPEAT_CURRENT:
+                return VALUE_REPEATMODE_SINGLE;
+            case REPEAT_ALL:
+                return VALUE_REPEATMODE_ALL;
+            default:
+                return VALUE_REPEATMODE_OFF;
+        }
+    }
+
+    byte getMappingShuffleVal (int shuffleMode) {
+        switch (shuffleMode) {
+            case SHUFFLE_NONE:
+                return VALUE_SHUFFLEMODE_OFF;
+            case SHUFFLE_NORMAL:
+                return VALUE_SHUFFLEMODE_ALL;
+            case SHUFFLE_AUTO:
+                return VALUE_SHUFFLEMODE_ALL;
+            default:
+                return VALUE_SHUFFLEMODE_OFF;
+        }
+    }
+
+    int getMappingRepeatMode (byte repeatVal) {
+        switch (repeatVal) {
+            case VALUE_REPEATMODE_OFF:
+                return REPEAT_NONE;
+            case VALUE_REPEATMODE_SINGLE:
+                return REPEAT_CURRENT;
+            case VALUE_REPEATMODE_ALL:
+            case VALUE_REPEATMODE_GROUP:
+                return REPEAT_ALL;
+            default:
+                return REPEAT_NONE;
+        }
+    }
+
+    int getMappingShuffleMode (byte shuffleVal) {
+        switch (shuffleVal) {
+            case VALUE_SHUFFLEMODE_OFF:
+                return SHUFFLE_NONE;
+            case VALUE_SHUFFLEMODE_ALL:
+            case VALUE_SHUFFLEMODE_GROUP:
+                return SHUFFLE_NORMAL;
+            default:
+                return SHUFFLE_NONE;
+        }
+    }
+
+    /**
+     * Validates the value with CMDSET for Repeat mode.
+     */
+    private boolean isValidRepeatMode(byte value) {
+        if (value == 0) {
+            return false;
+        }
+        value--;
+        if ((value >= REPEAT_NONE) && ( value <= REPEAT_ALL)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Validates the value with CMDSET for Shuffle mode.
+     */
+    private boolean isValidShuffleMode(byte value) {
+        if (value == 0) {
+            return false;
+        }
+        value--;
+        // check the mapping for local suffle and argument
+        if ((value >= SHUFFLE_NONE) && ( value <= SHUFFLE_AUTO)) {
+            return true;
+        }
+        return false;
     }
 
     /**
