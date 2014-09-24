@@ -60,6 +60,7 @@ import java.io.PrintWriter;
 import java.lang.ref.WeakReference;
 import java.util.Random;
 import java.util.Vector;
+import java.util.HashMap;
 
 /**
  * Provides "background" audio playback capabilities, allowing the
@@ -82,6 +83,7 @@ public class MediaPlaybackService extends Service {
     public static final int REPEAT_NONE = 0;
     public static final int REPEAT_CURRENT = 1;
     public static final int REPEAT_ALL = 2;
+    private HashMap<Byte, Boolean> mAttributePairs = new HashMap<Byte, Boolean>();
 
     public static final String PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
     public static final String META_CHANGED = "com.android.music.metachanged";
@@ -175,7 +177,8 @@ public class MediaPlaybackService extends Service {
     private SetBrowsedPlayerMonitor mSetBrowsedPlayerMonitor;
     private SetPlayItemMonitor mSetPlayItemMonitor;
     private GetNowPlayingEntriesMonitor mGetNowPlayingEntriesMonitor;
-
+    public static final byte ATTRIBUTE_ALL = -1;
+    public static final byte ERROR_NOTSUPPORTED = -1;
     public static final byte ATTRIBUTE_EQUALIZER = 1;
     public static final byte ATTRIBUTE_REPEATMODE = 2;
     public static final byte ATTRIBUTE_SHUFFLEMODE = 3;
@@ -225,6 +228,7 @@ public class MediaPlaybackService extends Service {
     private static final int GET_VALUE_TEXT        = 3;
     private static final int GET_ATTRIBUTE_VALUES = 4;
     private static final int NOTIFY_ATTRIBUTE_VALUES = 5;
+    private static final int SET_ATTRIBUTE_VALUES  = 6;
     private static final int GET_INVALID = 0xff;
     private static final byte GET_ATTR_INVALID = 0x7f;
 
@@ -444,6 +448,10 @@ public class MediaPlaybackService extends Service {
         notifyChange(QUEUE_CHANGED);
         notifyChange(META_CHANGED);
 
+        mAttributePairs.put(ATTRIBUTE_EQUALIZER, false);
+        mAttributePairs.put(ATTRIBUTE_REPEATMODE, true);
+        mAttributePairs.put(ATTRIBUTE_SHUFFLEMODE, true);
+
         IntentFilter commandFilter = new IntentFilter();
         commandFilter.addAction(SERVICECMD);
         commandFilter.addAction(TOGGLEPAUSE_ACTION);
@@ -497,6 +505,10 @@ public class MediaPlaybackService extends Service {
         if (mA2dpReceiver != null) {
             unregisterReceiver(mA2dpReceiver);
             mA2dpReceiver = null;
+        }
+
+        if (mAttributePairs != null) {
+            mAttributePairs.clear();
         }
 
         mWakeLock.release();
@@ -992,10 +1004,9 @@ public class MediaPlaybackService extends Service {
                                      PLAYERSETTINGS_RESPONSE, attribute, valIds);
                             break;
                             case GET_ATTRIBUTE_VALUES:
-                                 attrIds = intent.getByteArrayExtra(
-                                                     EXTRA_ATTIBUTE_ID_ARRAY);
                                  notifyAttributeValues(PLAYERSETTINGS_RESPONSE,
-                                             attrIds, GET_ATTRIBUTE_VALUES);
+                                             mAttributePairs, GET_ATTRIBUTE_VALUES,
+                                             ATTRIBUTE_ALL);
                             break;
                             default:
                                Log.e(LOGTAG, "invalid getCommand"+getCommand);
@@ -1942,7 +1953,8 @@ public class MediaPlaybackService extends Service {
             }
             mShuffleMode = shufflemode;
             notifyAttributeValues(PLAYERSETTINGS_RESPONSE,
-                            supportedAttributes, NOTIFY_ATTRIBUTE_VALUES);
+                            mAttributePairs, SET_ATTRIBUTE_VALUES,
+                            ATTRIBUTE_SHUFFLEMODE);
             if (mShuffleMode == SHUFFLE_AUTO) {
                 if (makeAutoShuffleList()) {
                     mPlayListLen = 0;
@@ -1970,7 +1982,8 @@ public class MediaPlaybackService extends Service {
             mRepeatMode = repeatmode;
             setNextTrack();
             notifyAttributeValues(PLAYERSETTINGS_RESPONSE,
-                            supportedAttributes, NOTIFY_ATTRIBUTE_VALUES);
+                            mAttributePairs, SET_ATTRIBUTE_VALUES,
+                            ATTRIBUTE_REPEATMODE);
             notifyChange(REPEAT_CHANGED);
             saveQueue(false);
         }
@@ -2245,30 +2258,36 @@ public class MediaPlaybackService extends Service {
     /**
      * Returns the player current values for given attrib IDs.
      */
-    private void notifyAttributeValues(String what, byte [] attrIds, int extra) {
+    private void notifyAttributeValues(String what, HashMap<Byte, Boolean> attrIds,
+                                       int extra, byte currentAttrb) {
         Intent intent = new Intent(what);
         intent.putExtra(EXTRA_GET_RESPONSE, extra);
         int j = 0;
-        byte [] retValarray = new byte [attrIds.length*2];
-        for (int i = 0; i < attrIds.length*2; i++) {
+        byte [] retValarray = new byte [attrIds.size()*2];
+        for (int i = 0; i < attrIds.size()*2; i++) {
             retValarray[i] = 0x0;
         }
 
-        for (int i = 0; i < attrIds.length; i++) {
-            switch(attrIds[i]) {
-                case ATTRIBUTE_REPEATMODE:
-                    retValarray[j] = attrIds[i];
+        for (Byte attribute : attrIds.keySet()) {
+            if(attrIds.get(attribute)) {
+                retValarray[j] = attribute;
+                if ((attribute == ATTRIBUTE_REPEATMODE) &&
+                    (currentAttrb == ATTRIBUTE_REPEATMODE ||
+                     currentAttrb == ATTRIBUTE_ALL)) {
                     retValarray[j+1] = getMappingRepeatVal(mRepeatMode);
                     j += 2;
-                break;
-                case ATTRIBUTE_SHUFFLEMODE:
-                    retValarray[j] = attrIds[i];
+                } else if ((attribute == ATTRIBUTE_SHUFFLEMODE) &&
+                    (currentAttrb == ATTRIBUTE_SHUFFLEMODE ||
+                     currentAttrb == ATTRIBUTE_ALL)) {
                     retValarray[j+1] = getMappingShuffleVal(mShuffleMode);
                     j += 2;
-                break;
-                default:
-                   Log.e(LOGTAG,"Unknown attribute"+attrIds[i]);
-                break;
+                }
+            } else {
+                if (currentAttrb == ATTRIBUTE_EQUALIZER) {
+                    retValarray[j] = attribute;
+                    retValarray[j+1] = ERROR_NOTSUPPORTED;
+                    j += 2;
+                }
             }
         }
         intent.putExtra(EXTRA_ATTRIB_VALUE_PAIRS, retValarray);
@@ -2297,6 +2316,9 @@ public class MediaPlaybackService extends Service {
                 break;
                 default:
                    Log.e(LOGTAG,"Unknown attribute"+attrib);
+                   notifyAttributeValues(PLAYERSETTINGS_RESPONSE,
+                            mAttributePairs, SET_ATTRIBUTE_VALUES,
+                            ATTRIBUTE_EQUALIZER);
                 break;
            }
         }
