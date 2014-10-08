@@ -1053,7 +1053,7 @@ public class MediaPlaybackService extends Service {
             RemoteControlClient.MetadataEditor ed = mRemoteControlClient.editMetadata(true);
             ed.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, getTrackName());
             ed.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, getAlbumName());
-            ed.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, getArtistName());
+            ed.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, getArtistName());
             ed.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, duration());
             if ((mPlayList != null) && (mPlayPos >= 0) && (mPlayPos < mPlayList.length)) {
                 ed.putLong(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER,
